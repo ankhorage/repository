@@ -1,6 +1,6 @@
 {
   "name": "@ankhorage/repository",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Standalone repository capability for connecting and managing an app project's source repository.",
   "type": "module",
   "license": "MIT",
