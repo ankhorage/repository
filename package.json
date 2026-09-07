@@ -81,7 +81,7 @@
     "@types/node": "^24.13.3",
     "typescript": "~6.0.3"
   },
-  "packageManager": "bun@1.4.1",
+  "packageManager": "bun@1.4.2",
   "dependencies": {
     "@ankhorage/contracts": "^11.0.0",
     "ignore": "^7.0.8"
