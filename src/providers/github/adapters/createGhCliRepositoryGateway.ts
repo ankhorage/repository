@@ -279,7 +279,10 @@ async function verifyPublishedSnapshotAsync(
           .filter(isString)
       : [];
   const expected = getProjectSnapshotPaths(snapshot.entries);
-  if (JSON.stringify(paths.sort()) !== JSON.stringify(expected)) {
+  if (
+    JSON.stringify(paths.sort((left, right) => left.localeCompare(right))) !==
+    JSON.stringify(expected)
+  ) {
     throw new Error('Published tree does not match the complete project snapshot.');
   }
 }
