@@ -1,5 +1,12 @@
 # @ankhorage/repository
 
+## 0.4.5
+
+### Patch Changes
+
+- 71cddbf: Resume partial GitHub publishes by switching `main` to the default branch before bootstrap cleanup.
+- d6e6d54: Verify published snapshot paths with the same deterministic ordering as local snapshots.
+
 ## 0.4.4
 
 ### Patch Changes
