@@ -31,6 +31,18 @@ If `hexagonal-architecture` is missing or unreadable, stop immediately and repor
 Cannot continue: the required repository skill `hexagonal-architecture` is missing or unreadable at `.agents/skills/hexagonal-architecture/SKILL.md`. Synchronize the repository skills from `@ankhorage/devtools` and retry.
 ```
 
+## Repository-root examples
+
+`examples/` is a generally valid repository-root folder in every repository covered by this skill.
+Use it for complete, intentional, user-facing examples that people can inspect, copy, install, and
+run independently of a monorepo or internal fixture layout.
+
+Each example lives in a named subdirectory, such as `examples/basic-usage/*.ts`. Do not put example
+source files directly under `examples/`.
+
+Test-only fixtures remain owned by the applicable test structure. Do not relabel fixtures as public
+examples merely to bypass repository structure rules.
+
 ## Required source layout
 
 Every repository provides `src/features/`. It lists the repository's actual product capabilities;
@@ -64,6 +76,7 @@ src/
       utils/
   types/
     <topic>.ts
+  constants.ts
   utils/
 ```
 
@@ -141,6 +154,26 @@ explicitly instead of claiming the migration is complete.
 For example, `selectRoute.ts` can own a non-exported `SelectRouteInput` directly below `selectRoute`.
 Types used by several local navigation operations belong together in `src/types/navigation.ts`.
 A navigation binding exchanged by Studio and Navigator belongs in `@ankhorage/contracts/navigator`.
+
+## Constant ownership
+
+Constants are static declarations, not utility implementations. Do not create one exported
+constant per constant-named file under `utils/`.
+
+1. **Used by one implementation module:** keep the constant private in the module that owns it.
+2. **Reused only inside a feature:** group related constants in that feature's `constants.ts`.
+3. **Shared across features in one package:** group related package metadata, static policy values,
+   and other constants in `src/constants.ts`.
+
+A `constants.ts` module may export multiple related constants. Keep it cohesive by ownership and
+purpose; it is not a package-wide catch-all. Split constants when they have different owners, not
+merely to create one file per export.
+
+For example, Navigator's
+[`src/utils/NAVIGATOR_PACKAGE_METADATA.ts`](https://github.com/ankhorage/navigator/blob/main/src/utils/NAVIGATOR_PACKAGE_METADATA.ts)
+and
+[`src/utils/NAVIGATOR_ROUTER_POLICY.ts`](https://github.com/ankhorage/navigator/blob/main/src/utils/NAVIGATOR_ROUTER_POLICY.ts)
+belong together in `ankhorage/navigator/src/constants.ts`.
 
 ## Utilities
 
