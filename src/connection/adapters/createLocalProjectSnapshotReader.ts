@@ -96,9 +96,6 @@ async function visitDirectory(
     if (!stats.isDirectory() && !stats.isFile()) {
       throw new Error(`Unsupported filesystem entry in project snapshot: ${path}`);
     }
-    if (stats.isFile() && isSecretPath(path) && path !== '.env.example') {
-      throw new Error(`Secret-like file is not allowed in project snapshots: ${path}`);
-    }
     if (isHardExcluded(path, child.isDirectory())) continue;
     if (matcher.ignores(path) || matcher.ignores(`${path}/`)) continue;
     if (stats.isDirectory()) {
@@ -106,6 +103,9 @@ async function visitDirectory(
       continue;
     }
     if (isSecretPath(path)) {
+      if (path !== '.env.example') {
+        throw new Error(`Secret-like file is not allowed in project snapshots: ${path}`);
+      }
       continue;
     }
     const bytes = await readFile(absolutePath);
