@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.4.3
+
+### Patch Changes
+
+- 068fb15: Allow source files with secret-like names while retaining credential artifact validation.
+
 ## 0.4.2
 
 ### Patch Changes
