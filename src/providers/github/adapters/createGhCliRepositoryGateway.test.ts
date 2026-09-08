@@ -96,6 +96,51 @@ test('verifies snapshot files while ignoring recursive tree directory entries', 
   expect(result).toBeUndefined();
 });
 
+test('verifies equivalent path sets with locale-sensitive path ordering', async () => {
+  const localeSensitiveSnapshot: ProjectSnapshot = {
+    ...snapshot,
+    entries: [
+      ...snapshot.entries,
+      {
+        path: 'infra/minikube/README.md',
+        mode: '100644',
+        content: '# Minikube\n',
+        encoding: 'utf-8',
+      },
+      {
+        path: 'infra/minikube/app-image/Dockerfile',
+        mode: '100644',
+        content: 'FROM scratch\n',
+        encoding: 'utf-8',
+      },
+    ],
+  };
+  const gateway = createVerificationGateway([
+    {
+      path: '.ankhorage/repository.json',
+      mode: '100644',
+      type: 'blob',
+      sha: 'blob-1',
+    },
+    { path: 'infra/minikube/README.md', mode: '100644', type: 'blob', sha: 'blob-2' },
+    {
+      path: 'infra/minikube/app-image/Dockerfile',
+      mode: '100644',
+      type: 'blob',
+      sha: 'blob-3',
+    },
+    { path: 'src/index.ts', mode: '100644', type: 'blob', sha: 'blob-4' },
+  ]);
+
+  const result = await gateway.verifyPublishedSnapshotAsync(
+    target,
+    localeSensitiveSnapshot,
+    'commit-sha',
+  );
+
+  expect(result).toBeUndefined();
+});
+
 test('rejects an unexpected bootstrap blob in the published snapshot', async () => {
   const gateway = createVerificationGateway([
     {
