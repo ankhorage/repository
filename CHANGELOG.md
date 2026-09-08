@@ -1,5 +1,13 @@
 # @ankhorage/repository
 
+## 0.4.2
+
+### Patch Changes
+
+- f5858b8: Honor project ignore rules before rejecting secret-like snapshot candidates while retaining strict validation for non-ignored secret files.
+- 993e453: Update Ankhorage dependencies: `@ankhorage/contracts`.
+- c3848e1: Update Ankhorage dependencies: `@ankhorage/contracts`.
+
 ## 0.4.1
 
 ### Patch Changes
