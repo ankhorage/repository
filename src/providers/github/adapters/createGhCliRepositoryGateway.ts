@@ -229,7 +229,7 @@ async function publishSnapshotAsync(
   const tree = await runGhJsonAsync(
     runner,
     ['api', `${prefix}/git/trees`, '--method', 'POST', '--input', '-'],
-    JSON.stringify({ base_tree: parentCommitSha, tree: blobs }),
+    JSON.stringify({ tree: blobs }),
   );
   const treeSha = isRecord(tree) && typeof tree.sha === 'string' ? tree.sha : undefined;
   if (!treeSha) throw new Error('GitHub did not return a tree SHA.');
@@ -274,6 +274,7 @@ async function verifyPublishedSnapshotAsync(
     isRecord(tree) && Array.isArray(tree.tree)
       ? tree.tree
           .filter(isRecord)
+          .filter((entry) => entry.type === 'blob')
           .map((entry) => entry.path)
           .filter(isString)
       : [];
