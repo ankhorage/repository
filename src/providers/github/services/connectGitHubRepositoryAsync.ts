@@ -76,6 +76,7 @@ async function finishAlreadyConnectedAsync(
     return undefined;
   }
   if (remote.bootstrapCommitSha) {
+    await gateway.setDefaultBranchAsync(target);
     await gateway.deleteBootstrapAsync(target, {
       branch: 'ankh-bootstrap',
       commitSha: remote.bootstrapCommitSha,
