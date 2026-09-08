@@ -1,5 +1,5 @@
 import { lstat, readdir, readFile } from 'node:fs/promises';
-import { join, relative, resolve, sep } from 'node:path';
+import { extname, join, relative, resolve, sep } from 'node:path';
 
 import type { RepositoryManifest } from '@ankhorage/contracts/repository';
 import ignore, { type Ignore } from 'ignore';
@@ -22,8 +22,22 @@ const HARD_EXCLUDED_DIRECTORIES = new Set([
 const SECRET_FILE_PATTERNS = [
   /^\.env(?:\..+)?$/u,
   /(?:^|\.)(?:pem|key|p12|pfx|keystore|mobileprovision)$/iu,
-  /(?:credentials?|secrets?|service-account)/iu,
 ];
+const SECRET_DATA_FILE_EXTENSIONS = new Set([
+  '',
+  '.conf',
+  '.config',
+  '.ini',
+  '.json',
+  '.plist',
+  '.properties',
+  '.toml',
+  '.txt',
+  '.xml',
+  '.yaml',
+  '.yml',
+]);
+const SECRET_DATA_FILE_NAME_PATTERN = /(?:credentials?|secrets?|service-account)/iu;
 
 /** Create a deterministic, ignore-aware reader for standalone project snapshots. */
 export function createLocalProjectSnapshotReader(): ProjectSnapshotReader {
@@ -122,7 +136,11 @@ function isHardExcluded(path: string, directory: boolean): boolean {
 /** Identify credentials and private signing material by filename. */
 function isSecretPath(path: string): boolean {
   const name = path.split('/').at(-1) ?? path;
-  return SECRET_FILE_PATTERNS.some((pattern) => pattern.test(name));
+  return (
+    SECRET_FILE_PATTERNS.some((pattern) => pattern.test(name)) ||
+    (SECRET_DATA_FILE_EXTENSIONS.has(extname(name).toLowerCase()) &&
+      SECRET_DATA_FILE_NAME_PATTERN.test(name))
+  );
 }
 
 /** Encode text and binary files in the representation required by Git blobs. */
