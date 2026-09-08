@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.4.4
+
+### Patch Changes
+
+- 89ee4ac: Publish exact project snapshot trees without inheriting bootstrap files and verify only file entries.
+
 ## 0.4.3
 
 ### Patch Changes
