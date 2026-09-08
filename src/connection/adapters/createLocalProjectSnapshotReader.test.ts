@@ -1,4 +1,4 @@
-import { mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -37,6 +37,29 @@ test('excludes an ignored secret-like file before validating snapshot candidates
   }
 });
 
+test('includes application source whose filename describes secret administration', async () => {
+  const projectPath = await mkdtemp(join(tmpdir(), 'repository-snapshot-reader-'));
+  const sourceDirectory = join(projectPath, 'src', 'app', 'ankh');
+
+  try {
+    await mkdir(sourceDirectory, { recursive: true });
+    await writeFile(
+      join(sourceDirectory, 'secrets.tsx'),
+      'export default function SecretsScreen() { return null; }\n',
+      'utf8',
+    );
+
+    const snapshot = await createLocalProjectSnapshotReader().readAsync(projectPath, REPOSITORY);
+
+    expect(snapshot.entries.map((entry) => entry.path)).toEqual([
+      '.ankhorage/repository.json',
+      'src/app/ankh/secrets.tsx',
+    ]);
+  } finally {
+    await rm(projectPath, { recursive: true, force: true });
+  }
+});
+
 test('rejects a non-ignored secret-like snapshot candidate', async () => {
   const projectPath = await mkdtemp(join(tmpdir(), 'repository-snapshot-reader-'));
 
@@ -61,3 +84,20 @@ test('rejects a non-ignored secret-like snapshot candidate', async () => {
     await rm(projectPath, { recursive: true, force: true });
   }
 });
+
+test.each(['secrets.json', 'credentials.yaml', 'google-service-account.json'])(
+  'rejects a non-ignored credential data file named %s',
+  async (filename) => {
+    const projectPath = await mkdtemp(join(tmpdir(), 'repository-snapshot-reader-'));
+
+    try {
+      await writeFile(join(projectPath, filename), 'blocked fixture\n', { mode: 0o600 });
+
+      expect(createLocalProjectSnapshotReader().readAsync(projectPath, REPOSITORY)).rejects.toThrow(
+        `Secret-like file is not allowed in project snapshots: ${filename}`,
+      );
+    } finally {
+      await rm(projectPath, { recursive: true, force: true });
+    }
+  },
+);
