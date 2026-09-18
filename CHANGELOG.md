@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.4.7
+
+### Patch Changes
+
+- 076cdb1: Update Ankhorage dependencies: `@ankhorage/contracts`.
+
 ## 0.4.6
 
 ### Patch Changes
