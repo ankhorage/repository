@@ -11,8 +11,13 @@
       "line": 27,
       "column": 1
     },
-    "exportPaths": ["src/github/index.ts"],
-    "relatedSymbols": ["GitHubRepositoryConnectionOptions", "GitHubRepositoryConnectionResult"],
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [
+      "GitHubRepositoryConnectionOptions",
+      "GitHubRepositoryConnectionResult"
+    ],
     "signatures": [
       {
         "label": "(options?: GitHubRepositoryConnectionOptions, dependencies?: GitHubRepositoryConnectionDependencies) => Promise<GitHubRepositoryConnectionResult>",
@@ -49,8 +54,13 @@
       "line": 71,
       "column": 1
     },
-    "exportPaths": ["src/index.ts"],
-    "relatedSymbols": ["RepositoryConnectionOptions", "RepositoryConnectionResult"],
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [
+      "RepositoryConnectionOptions",
+      "RepositoryConnectionResult"
+    ],
     "signatures": [
       {
         "label": "(options: RepositoryConnectionOptions) => Promise<RepositoryConnectionResult>",
@@ -81,7 +91,9 @@
       "line": 18,
       "column": 1
     },
-    "exportPaths": ["src/github/index.ts"],
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
     "relatedSymbols": [],
     "signatures": [],
     "members": [
@@ -135,8 +147,12 @@
       "line": 6,
       "column": 1
     },
-    "exportPaths": ["src/github/index.ts"],
-    "relatedSymbols": ["GitHubRepositoryVisibility"],
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [
+      "GitHubRepositoryVisibility"
+    ],
     "signatures": [],
     "members": [
       {
@@ -182,7 +198,9 @@
       "line": 26,
       "column": 1
     },
-    "exportPaths": ["src/github/index.ts"],
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
     "relatedSymbols": [],
     "signatures": [],
     "members": [],
@@ -200,7 +218,9 @@
       "line": 1,
       "column": 1
     },
-    "exportPaths": ["src/github/index.ts"],
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
     "relatedSymbols": [],
     "signatures": [],
     "members": [],
@@ -218,7 +238,9 @@
       "line": 1,
       "column": 1
     },
-    "exportPaths": ["src/github/index.ts"],
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
     "relatedSymbols": [],
     "signatures": [],
     "members": [],
@@ -236,7 +258,9 @@
       "line": 1,
       "column": 14
     },
-    "exportPaths": ["src/metadata/index.ts"],
+    "exportPaths": [
+      "src/metadata/index.ts"
+    ],
     "relatedSymbols": [],
     "signatures": [],
     "members": [],
@@ -254,7 +278,9 @@
       "line": 11,
       "column": 1
     },
-    "exportPaths": ["src/index.ts"],
+    "exportPaths": [
+      "src/index.ts"
+    ],
     "relatedSymbols": [],
     "signatures": [],
     "members": [
@@ -308,8 +334,12 @@
       "line": 5,
       "column": 1
     },
-    "exportPaths": ["src/index.ts"],
-    "relatedSymbols": ["RepositoryVisibility"],
+    "exportPaths": [
+      "src/index.ts"
+    ],
+    "relatedSymbols": [
+      "RepositoryVisibility"
+    ],
     "signatures": [],
     "members": [
       {
@@ -348,7 +378,9 @@
       "line": 19,
       "column": 1
     },
-    "exportPaths": ["src/index.ts"],
+    "exportPaths": [
+      "src/index.ts"
+    ],
     "relatedSymbols": [],
     "signatures": [],
     "members": [],
@@ -366,7 +398,9 @@
       "line": 3,
       "column": 1
     },
-    "exportPaths": ["src/index.ts"],
+    "exportPaths": [
+      "src/index.ts"
+    ],
     "relatedSymbols": [],
     "signatures": [],
     "members": [],
@@ -384,7 +418,9 @@
       "line": 3,
       "column": 1
     },
-    "exportPaths": ["src/index.ts"],
+    "exportPaths": [
+      "src/index.ts"
+    ],
     "relatedSymbols": [],
     "signatures": [],
     "members": [],

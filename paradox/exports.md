@@ -35,13 +35,13 @@ Source: `src/providers/github/definitions/GitHubRepositoryConnectionResult.ts:18
 
 ### Members
 
-| Name       | Kind     | Type                                              | Required | Description |
-| ---------- | -------- | ------------------------------------------------- | -------- | ----------- |
-| code       | property | `string`                                          | yes      |             |
-| message    | property | `string`                                          | yes      |             |
-| repository | property | `GitHubRepositoryConnectionIdentity \| undefined` | no       |             |
-| stage      | property | `string`                                          | yes      |             |
-| status     | property | `GitHubRepositoryConnectionFailureKind`           | yes      |             |
+| Name | Kind | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| code | property | `string` | yes |  |
+| message | property | `string` | yes |  |
+| repository | property | `GitHubRepositoryConnectionIdentity \| undefined` | no |  |
+| stage | property | `string` | yes |  |
+| status | property | `GitHubRepositoryConnectionFailureKind` | yes |  |
 
 ## GitHubRepositoryConnectionOptions
 
@@ -51,12 +51,12 @@ Source: `src/providers/github/definitions/GitHubRepositoryConnectionOptions.ts:6
 
 ### Members
 
-| Name        | Kind     | Type                                      | Required | Description |
-| ----------- | -------- | ----------------------------------------- | -------- | ----------- |
-| name        | property | `string \| undefined`                     | no       |             |
-| owner       | property | `string \| undefined`                     | no       |             |
-| projectPath | property | `string \| undefined`                     | no       |             |
-| visibility  | property | `GitHubRepositoryVisibility \| undefined` | no       |             |
+| Name | Kind | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| name | property | `string \| undefined` | no |  |
+| owner | property | `string \| undefined` | no |  |
+| projectPath | property | `string \| undefined` | no |  |
+| visibility | property | `GitHubRepositoryVisibility \| undefined` | no |  |
 
 ## GitHubRepositoryConnectionResult
 
@@ -90,13 +90,13 @@ Source: `src/connection/definitions/RepositoryConnectionResult.ts:11:1`
 
 ### Members
 
-| Name       | Kind     | Type                                  | Required | Description |
-| ---------- | -------- | ------------------------------------- | -------- | ----------- |
-| code       | property | `string`                              | yes      |             |
-| message    | property | `string`                              | yes      |             |
-| repository | property | `RepositoryManifest \| undefined`     | no       |             |
-| stage      | property | `string`                              | yes      |             |
-| status     | property | `"recoverable-failure" \| "conflict"` | yes      |             |
+| Name | Kind | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| code | property | `string` | yes |  |
+| message | property | `string` | yes |  |
+| repository | property | `RepositoryManifest \| undefined` | no |  |
+| stage | property | `string` | yes |  |
+| status | property | `"recoverable-failure" \| "conflict"` | yes |  |
 
 ## RepositoryConnectionOptions
 
@@ -106,11 +106,11 @@ Source: `src/connection/definitions/RepositoryConnectionOptions.ts:5:1`
 
 ### Members
 
-| Name        | Kind     | Type                                | Required | Description |
-| ----------- | -------- | ----------------------------------- | -------- | ----------- |
-| projectPath | property | `string \| undefined`               | no       |             |
-| repository  | property | `RepositoryManifest`                | yes      |             |
-| visibility  | property | `RepositoryVisibility \| undefined` | no       |             |
+| Name | Kind | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| projectPath | property | `string \| undefined` | no |  |
+| repository | property | `RepositoryManifest` | yes |  |
+| visibility | property | `RepositoryVisibility \| undefined` | no |  |
 
 ## RepositoryConnectionResult
 
