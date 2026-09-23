@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.4.18
+
+### Patch Changes
+
+- a814df8: Update Ankhorage dependencies: `@ankhorage/contracts`.
+
 ## 0.4.17
 
 ### Patch Changes
