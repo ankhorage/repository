@@ -83,7 +83,7 @@
   },
   "packageManager": "bun@1.4.2",
   "dependencies": {
-    "@ankhorage/contracts": "^22.8.22",
+    "@ankhorage/contracts": "^22.8.24",
     "ignore": "^7.0.11"
   }
 }
