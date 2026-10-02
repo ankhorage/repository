@@ -76,14 +76,14 @@
   },
   "devDependencies": {
     "@ankhorage/devtools": "^1.21.3",
-    "@ankhorage/paradox": "^0.2.20",
+    "@ankhorage/paradox": "^0.2.21",
     "@types/bun": "^1.4.2",
     "@types/node": "^26.6.4",
     "typescript": "~6.0.3"
   },
   "packageManager": "bun@1.4.2",
   "dependencies": {
-    "@ankhorage/contracts": "^22.8.57",
+    "@ankhorage/contracts": "^22.8.58",
     "ignore": "^7.0.11"
   }
 }
