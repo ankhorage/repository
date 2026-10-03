@@ -4,5 +4,8 @@ export type {
   GitHubRepositoryConnectionResult,
   GitHubRepositoryConnectionStatus,
 } from '../providers/github/definitions/GitHubRepositoryConnectionResult.js';
+export type { GitHubRepositoryMaterializationOptions } from '../providers/github/definitions/GitHubRepositoryMaterializationOptions.js';
+export type { GitHubRepositoryMaterializationResult } from '../providers/github/definitions/GitHubRepositoryMaterializationResult.js';
 export type { GitHubRepositoryVisibility } from '../providers/github/definitions/GitHubRepositoryVisibility.js';
 export { connectGitHubRepositoryAsync } from '../providers/github/services/connectGitHubRepositoryAsync.js';
+export { materializeGitHubRepositoryAsync } from '../providers/github/services/materializeGitHubRepositoryAsync.js';

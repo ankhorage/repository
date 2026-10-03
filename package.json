@@ -54,7 +54,8 @@
     "category": "repository",
     "provider": "./dist/cli/index.js",
     "capabilities": [
-      "repository.connect"
+      "repository.connect",
+      "repository.materialize"
     ]
   },
   "publishConfig": {
