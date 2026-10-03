@@ -4,7 +4,7 @@
 
 Kind: `function`
 Module: `src/providers/github/services/connectGitHubRepositoryAsync.ts`
-Source: `src/providers/github/services/connectGitHubRepositoryAsync.ts:27:1`
+Source: `src/providers/github/services/connectGitHubRepositoryAsync.ts:31:1`
 
 ### Signatures
 
@@ -47,7 +47,7 @@ Source: `src/providers/github/definitions/GitHubRepositoryConnectionResult.ts:18
 
 Kind: `type`
 Module: `src/providers/github/definitions/GitHubRepositoryConnectionOptions.ts`
-Source: `src/providers/github/definitions/GitHubRepositoryConnectionOptions.ts:6:1`
+Source: `src/providers/github/definitions/GitHubRepositoryConnectionOptions.ts:3:1`
 
 ### Members
 
@@ -70,11 +70,54 @@ Kind: `unknown`
 Module: `src/providers/github/definitions/GitHubRepositoryConnectionResult.ts`
 Source: `src/providers/github/definitions/GitHubRepositoryConnectionResult.ts:1:1`
 
+## GitHubRepositoryMaterializationOptions
+
+Kind: `type`
+Module: `src/providers/github/definitions/GitHubRepositoryMaterializationOptions.ts`
+Source: `src/providers/github/definitions/GitHubRepositoryMaterializationOptions.ts:1:1`
+
+### Members
+
+| Name | Kind | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| destinationPath | property | `string \| undefined` | no |  |
+| ref | property | `string \| undefined` | no |  |
+| url | property | `string` | yes |  |
+
+## GitHubRepositoryMaterializationResult
+
+Kind: `type`
+Module: `src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts`
+Source: `src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts:1:1`
+
+### Members
+
+| Name | Kind | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| cleanupAsync | property | `() => Promise<void>` | yes |  |
+| repository | property | `{ readonly owner: string; readonly name: string; readonly url: string; readonly defaultBranch: string; }` | yes |  |
+| revision | property | `string` | yes |  |
+| rootPath | property | `string` | yes |  |
+
 ## GitHubRepositoryVisibility
 
 Kind: `unknown`
 Module: `src/providers/github/definitions/GitHubRepositoryVisibility.ts`
 Source: `src/providers/github/definitions/GitHubRepositoryVisibility.ts:1:1`
+
+## materializeGitHubRepositoryAsync
+
+Kind: `function`
+Module: `src/providers/github/services/materializeGitHubRepositoryAsync.ts`
+Source: `src/providers/github/services/materializeGitHubRepositoryAsync.ts:7:1`
+
+Materialize one GitHub repository URL into an isolated local filesystem snapshot.
+
+### Signatures
+
+- `(options: GitHubRepositoryMaterializationOptions) => Promise<GitHubRepositoryMaterializationResult>`
+  - options: `GitHubRepositoryMaterializationOptions`
+  - returns: `Promise<GitHubRepositoryMaterializationResult>`
 
 ## REPOSITORY_PACKAGE_METADATA
 

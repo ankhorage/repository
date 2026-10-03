@@ -3,44 +3,33 @@
 
 # @ankhorage/repository
 
-![license: MIT](./paradox/badges/license.svg) ![npm: v0.4.19](./paradox/badges/npm.svg) ![runtime: bun](./paradox/badges/runtime.svg) ![typescript: strict](./paradox/badges/typescript.svg) ![eslint: checked](./paradox/badges/eslint.svg) ![prettier: checked](./paradox/badges/prettier.svg) ![build: checked](./paradox/badges/build.svg) ![tests: checked](./paradox/badges/tests.svg) ![docs: paradox](./paradox/badges/docs.svg)
+![license: MIT](./paradox/badges/license.svg) ![npm: v0.5.0](./paradox/badges/npm.svg) ![runtime: bun](./paradox/badges/runtime.svg) ![typescript: strict](./paradox/badges/typescript.svg) ![eslint: checked](./paradox/badges/eslint.svg) ![prettier: checked](./paradox/badges/prettier.svg) ![build: checked](./paradox/badges/build.svg) ![tests: checked](./paradox/badges/tests.svg) ![paradox: warnings](./paradox/badges/docs.svg)
 
 Standalone repository capability for connecting and managing an app project's source repository.
 
 ## Usage
 
-### Connect a project folder to its source repository
+### CLI
 
-`@ankhorage/repository` consumes only the project's `RepositoryManifest` slice and delegates
-GitHub operations to the local authenticated `gh` adapter. It creates a missing repository,
-publishes the project snapshot to `main`, stores only the repository slice in
-`.ankhorage/repository.json`, and refuses unrelated existing repositories.
+Ankhorage packages expose their command-line interface through `ankh`. Use `ankh --help` to discover available package commands, or run a package command with `--help` for package-specific usage.
 
-See [`examples/basic-usage.ts`](../examples/basic-usage.ts) for a complete programmatic example.
+```zsh
+# Install the Ankhorage CLI
+bun add --global @ankhorage/ankh
 
-Source: `src/readme-usage.ts`
+# Show usage information for repository
+ankh repository --help
+```
+
+### Connect a repository
+
+Connect a project folder to its source repository.
+
+This example creates a missing GitHub repository, publishes the project snapshot, and reports
+whether the repository is ready for use.
 
 ```ts
 import { connectRepositoryAsync } from '@ankhorage/repository';
-
-const result = await connectRepositoryAsync({
-  projectPath: './my-project',
-  repository: {
-    provider: 'github',
-    owner: 'ankhorage',
-    name: 'my-project',
-    url: 'https://github.com/ankhorage/my-project',
-    defaultBranch: 'main',
-  },
-  visibility: 'private',
-});
-
-if (result.status === 'conflict' || result.status === 'recoverable-failure') {
-  console.error(`${result.status}: ${result.message}`);
-  process.exitCode = 1;
-} else {
-  console.log(JSON.stringify(result));
-}
 ```
 
 ## Generated documentation

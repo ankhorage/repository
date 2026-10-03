@@ -1,14 +1,16 @@
 [
   {
     "name": "connectGitHubRepositoryAsync",
+    "title": null,
     "description": null,
     "isReadme": false,
-    "examples": [],
+    "see": [],
+    "security": [],
     "kind": "function",
     "modulePath": "src/providers/github/services/connectGitHubRepositoryAsync.ts",
     "sourceLocation": {
       "filePath": "src/providers/github/services/connectGitHubRepositoryAsync.ts",
-      "line": 27,
+      "line": 31,
       "column": 1
     },
     "exportPaths": [
@@ -44,9 +46,11 @@
   },
   {
     "name": "connectRepositoryAsync",
+    "title": null,
     "description": "Connect the app project repository using only the standalone `RepositoryManifest` slice.",
     "isReadme": false,
-    "examples": [],
+    "see": [],
+    "security": [],
     "kind": "function",
     "modulePath": "src/connection/services/connectRepositoryAsync.ts",
     "sourceLocation": {
@@ -81,9 +85,11 @@
   },
   {
     "name": "GitHubRepositoryConnectionFailure",
+    "title": null,
     "description": null,
     "isReadme": false,
-    "examples": [],
+    "see": [],
+    "security": [],
     "kind": "type",
     "modulePath": "src/providers/github/definitions/GitHubRepositoryConnectionResult.ts",
     "sourceLocation": {
@@ -137,14 +143,16 @@
   },
   {
     "name": "GitHubRepositoryConnectionOptions",
+    "title": null,
     "description": null,
     "isReadme": false,
-    "examples": [],
+    "see": [],
+    "security": [],
     "kind": "type",
     "modulePath": "src/providers/github/definitions/GitHubRepositoryConnectionOptions.ts",
     "sourceLocation": {
       "filePath": "src/providers/github/definitions/GitHubRepositoryConnectionOptions.ts",
-      "line": 6,
+      "line": 3,
       "column": 1
     },
     "exportPaths": [
@@ -188,9 +196,11 @@
   },
   {
     "name": "GitHubRepositoryConnectionResult",
+    "title": null,
     "description": null,
     "isReadme": false,
-    "examples": [],
+    "see": [],
+    "security": [],
     "kind": "unknown",
     "modulePath": "src/providers/github/definitions/GitHubRepositoryConnectionResult.ts",
     "sourceLocation": {
@@ -208,9 +218,11 @@
   },
   {
     "name": "GitHubRepositoryConnectionStatus",
+    "title": null,
     "description": null,
     "isReadme": false,
-    "examples": [],
+    "see": [],
+    "security": [],
     "kind": "unknown",
     "modulePath": "src/providers/github/definitions/GitHubRepositoryConnectionResult.ts",
     "sourceLocation": {
@@ -227,10 +239,107 @@
     "structuredRows": []
   },
   {
-    "name": "GitHubRepositoryVisibility",
+    "name": "GitHubRepositoryMaterializationOptions",
+    "title": null,
     "description": null,
     "isReadme": false,
-    "examples": [],
+    "see": [],
+    "security": [],
+    "kind": "type",
+    "modulePath": "src/providers/github/definitions/GitHubRepositoryMaterializationOptions.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/definitions/GitHubRepositoryMaterializationOptions.ts",
+      "line": 1,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [
+      {
+        "name": "destinationPath",
+        "kind": "property",
+        "type": "string | undefined",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "ref",
+        "kind": "property",
+        "type": "string | undefined",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "url",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
+    "name": "GitHubRepositoryMaterializationResult",
+    "title": null,
+    "description": null,
+    "isReadme": false,
+    "see": [],
+    "security": [],
+    "kind": "type",
+    "modulePath": "src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts",
+      "line": 1,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [
+      {
+        "name": "cleanupAsync",
+        "kind": "property",
+        "type": "() => Promise<void>",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "repository",
+        "kind": "property",
+        "type": "{ readonly owner: string; readonly name: string; readonly url: string; readonly defaultBranch: string; }",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "revision",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "rootPath",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
+    "name": "GitHubRepositoryVisibility",
+    "title": null,
+    "description": null,
+    "isReadme": false,
+    "see": [],
+    "security": [],
     "kind": "unknown",
     "modulePath": "src/providers/github/definitions/GitHubRepositoryVisibility.ts",
     "sourceLocation": {
@@ -247,10 +356,51 @@
     "structuredRows": []
   },
   {
+    "name": "materializeGitHubRepositoryAsync",
+    "title": null,
+    "description": "Materialize one GitHub repository URL into an isolated local filesystem snapshot.",
+    "isReadme": false,
+    "see": [],
+    "security": [],
+    "kind": "function",
+    "modulePath": "src/providers/github/services/materializeGitHubRepositoryAsync.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/services/materializeGitHubRepositoryAsync.ts",
+      "line": 7,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [
+      "GitHubRepositoryMaterializationOptions",
+      "GitHubRepositoryMaterializationResult"
+    ],
+    "signatures": [
+      {
+        "label": "(options: GitHubRepositoryMaterializationOptions) => Promise<GitHubRepositoryMaterializationResult>",
+        "parameters": [
+          {
+            "name": "options",
+            "type": "GitHubRepositoryMaterializationOptions",
+            "required": true,
+            "description": null
+          }
+        ],
+        "returnType": "Promise<GitHubRepositoryMaterializationResult>",
+        "returnDescription": null
+      }
+    ],
+    "members": [],
+    "structuredRows": []
+  },
+  {
     "name": "REPOSITORY_PACKAGE_METADATA",
+    "title": null,
     "description": null,
     "isReadme": false,
-    "examples": [],
+    "see": [],
+    "security": [],
     "kind": "value",
     "modulePath": "src/metadata/index.ts",
     "sourceLocation": {
@@ -268,9 +418,11 @@
   },
   {
     "name": "RepositoryConnectionFailure",
+    "title": null,
     "description": null,
     "isReadme": false,
-    "examples": [],
+    "see": [],
+    "security": [],
     "kind": "type",
     "modulePath": "src/connection/definitions/RepositoryConnectionResult.ts",
     "sourceLocation": {
@@ -324,9 +476,11 @@
   },
   {
     "name": "RepositoryConnectionOptions",
+    "title": null,
     "description": null,
     "isReadme": false,
-    "examples": [],
+    "see": [],
+    "security": [],
     "kind": "type",
     "modulePath": "src/connection/definitions/RepositoryConnectionOptions.ts",
     "sourceLocation": {
@@ -368,9 +522,11 @@
   },
   {
     "name": "RepositoryConnectionResult",
+    "title": null,
     "description": null,
     "isReadme": false,
-    "examples": [],
+    "see": [],
+    "security": [],
     "kind": "unknown",
     "modulePath": "src/connection/definitions/RepositoryConnectionResult.ts",
     "sourceLocation": {
@@ -388,9 +544,11 @@
   },
   {
     "name": "RepositoryConnectionStatus",
+    "title": null,
     "description": null,
     "isReadme": false,
-    "examples": [],
+    "see": [],
+    "security": [],
     "kind": "unknown",
     "modulePath": "src/connection/definitions/RepositoryConnectionResult.ts",
     "sourceLocation": {
@@ -408,9 +566,11 @@
   },
   {
     "name": "RepositoryVisibility",
+    "title": null,
     "description": null,
     "isReadme": false,
-    "examples": [],
+    "see": [],
+    "security": [],
     "kind": "unknown",
     "modulePath": "src/connection/definitions/RepositoryConnectionOptions.ts",
     "sourceLocation": {
