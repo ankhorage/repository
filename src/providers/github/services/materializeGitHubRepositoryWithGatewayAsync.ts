@@ -72,14 +72,12 @@ function parseGitHubRepositoryUrl(value: string): ParsedGitHubRepositoryUrl {
     throw invalidRepositoryUrl();
   }
 
-  const owner = segments[0] ?? '';
-  const repositorySegment = segments[1] ?? '';
+  const [owner = '', repositorySegment = '', route] = segments;
   const name = repositorySegment.endsWith('.git')
     ? repositorySegment.slice(0, -4)
     : repositorySegment;
   assertRepositoryIdentity(owner, name);
 
-  const route = segments[2];
   const routeSegments = segments.slice(3);
   if (route === undefined) {
     return {
@@ -165,9 +163,7 @@ async function resolveUrlRevisionAsync(
 
 /*** Create the consistent public error for unsupported GitHub URL shapes. */
 function invalidRepositoryUrl(): Error {
-  return new Error(
-    'Repository URL must be a GitHub repository, tree, blob, or commit HTTPS URL.',
-  );
+  return new Error('Repository URL must be a GitHub repository, tree, blob, or commit HTTPS URL.');
 }
 
 /*** Validate canonical GitHub owner and repository path segments. */
