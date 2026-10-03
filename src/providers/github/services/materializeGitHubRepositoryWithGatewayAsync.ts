@@ -154,10 +154,8 @@ async function writeFileBatchesAsync(
   rootPath: string,
   entries: readonly GitHubRepositoryTreeEntry[],
 ): Promise<void> {
-  const batches = Array.from(
-    { length: Math.ceil(entries.length / WRITE_BATCH_SIZE) },
-    (_, index) =>
-      entries.slice(index * WRITE_BATCH_SIZE, (index + 1) * WRITE_BATCH_SIZE),
+  const batches = Array.from({ length: Math.ceil(entries.length / WRITE_BATCH_SIZE) }, (_, index) =>
+    entries.slice(index * WRITE_BATCH_SIZE, (index + 1) * WRITE_BATCH_SIZE),
   );
   for (const batch of batches) {
     await Promise.all(

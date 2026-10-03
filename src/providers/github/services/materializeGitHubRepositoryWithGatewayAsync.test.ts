@@ -148,7 +148,7 @@ function createGateway(options: {
   };
 }
 
-async function expectFailureAsync(operation: () => Promise<unknown>, message: string): Promise<void> {
+async function expectFailureAsync(\n  operation: () => Promise<unknown>,\n  message: string,\n): Promise<void> {
   try {
     await operation();
     throw new Error('Expected operation to fail.');

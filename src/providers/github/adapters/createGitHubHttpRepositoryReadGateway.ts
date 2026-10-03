@@ -127,7 +127,7 @@ async function requestJsonAsync(fetcher: typeof fetch, url: string): Promise<unk
   });
   if (!response.ok) throw requestError(response, 'repository metadata');
   try {
-    return (await response.json()) as unknown;
+    return await response.json();
   } catch (error) {
     throw new Error('GitHub returned malformed JSON.', { cause: error });
   }
