@@ -154,7 +154,7 @@ function requireRecord(value: unknown, subject: string): Record<string, unknown>
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
     throw new Error(`GitHub returned invalid ${subject}.`);
   }
-  return value;
+  return Object.fromEntries(Object.entries(value));
 }
 
 /*** Require a non-empty provider string field. */
