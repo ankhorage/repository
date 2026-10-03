@@ -3,7 +3,7 @@ export const REPOSITORY_PACKAGE_METADATA = {
   manifestProperty: 'repository',
   contractSubpath: '@ankhorage/contracts/repository',
   providers: ['github'],
-  capabilities: ['repository.connect'],
+  capabilities: ['repository.connect', 'repository.materialize'],
   github: {
     cli: 'gh',
     defaultBranch: 'main',
