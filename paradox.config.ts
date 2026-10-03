@@ -7,7 +7,7 @@ export default defineParadoxConfig({
     description:
       "Standalone repository capability for connecting and managing an app project's source repository.",
     usage: {
-      entrypoints: ['src/readme-usage.ts'],
+      entrypoints: ['examples/basic-usage/main.ts'],
     },
   },
   package: {
