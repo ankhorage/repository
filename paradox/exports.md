@@ -70,6 +70,21 @@ Kind: `unknown`
 Module: `src/providers/github/definitions/GitHubRepositoryConnectionResult.ts`
 Source: `src/providers/github/definitions/GitHubRepositoryConnectionResult.ts:1:1`
 
+## GitHubRepositoryMaterializationDiagnostic
+
+Kind: `type`
+Module: `src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts`
+Source: `src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts:14:1`
+
+### Members
+
+| Name | Kind | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| code | property | `"symlink-skipped"` | yes |  |
+| message | property | `string` | yes |  |
+| path | property | `string` | yes |  |
+| severity | property | `"warning"` | yes |  |
+
 ## GitHubRepositoryMaterializationOptions
 
 Kind: `type`
@@ -95,6 +110,7 @@ Source: `src/providers/github/definitions/GitHubRepositoryMaterializationResult.
 | Name | Kind | Type | Required | Description |
 | --- | --- | --- | --- | --- |
 | cleanupAsync | property | `() => Promise<void>` | yes |  |
+| diagnostics | property | `readonly GitHubRepositoryMaterializationDiagnostic[]` | yes |  |
 | repository | property | `{ readonly owner: string; readonly name: string; readonly url: string; readonly defaultBranch: string; }` | yes |  |
 | revision | property | `string` | yes |  |
 | rootPath | property | `string` | yes |  |

@@ -239,6 +239,57 @@
     "structuredRows": []
   },
   {
+    "name": "GitHubRepositoryMaterializationDiagnostic",
+    "title": null,
+    "description": null,
+    "isReadme": false,
+    "see": [],
+    "security": [],
+    "kind": "type",
+    "modulePath": "src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts",
+      "line": 14,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [
+      {
+        "name": "code",
+        "kind": "property",
+        "type": "\"symlink-skipped\"",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "message",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "path",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "severity",
+        "kind": "property",
+        "type": "\"warning\"",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
     "name": "GitHubRepositoryMaterializationOptions",
     "title": null,
     "description": null,
@@ -299,13 +350,22 @@
     "exportPaths": [
       "src/github/index.ts"
     ],
-    "relatedSymbols": [],
+    "relatedSymbols": [
+      "GitHubRepositoryMaterializationDiagnostic"
+    ],
     "signatures": [],
     "members": [
       {
         "name": "cleanupAsync",
         "kind": "property",
         "type": "() => Promise<void>",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "diagnostics",
+        "kind": "property",
+        "type": "readonly GitHubRepositoryMaterializationDiagnostic[]",
         "required": true,
         "description": null
       },

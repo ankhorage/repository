@@ -14,7 +14,7 @@
     {
       "id": "npm",
       "label": "npm",
-      "value": "v0.5.0",
+      "value": "v0.5.1",
       "color": "cb3837"
     },
     {
@@ -336,6 +336,7 @@
         "GitHubRepositoryConnectionOptions",
         "GitHubRepositoryConnectionResult",
         "GitHubRepositoryConnectionStatus",
+        "GitHubRepositoryMaterializationDiagnostic",
         "GitHubRepositoryMaterializationOptions",
         "GitHubRepositoryMaterializationResult",
         "GitHubRepositoryVisibility",
@@ -472,6 +473,7 @@
       "isEntrypoint": false,
       "dependencies": [],
       "exports": [
+        "GitHubRepositoryMaterializationDiagnostic",
         "GitHubRepositoryMaterializationResult"
       ]
     },
@@ -854,6 +856,57 @@
       "structuredRows": []
     },
     {
+      "name": "GitHubRepositoryMaterializationDiagnostic",
+      "title": null,
+      "description": null,
+      "isReadme": false,
+      "see": [],
+      "security": [],
+      "kind": "type",
+      "modulePath": "src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts",
+      "sourceLocation": {
+        "filePath": "src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts",
+        "line": 14,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/github/index.ts"
+      ],
+      "relatedSymbols": [],
+      "signatures": [],
+      "members": [
+        {
+          "name": "code",
+          "kind": "property",
+          "type": "\"symlink-skipped\"",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "message",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "path",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "severity",
+          "kind": "property",
+          "type": "\"warning\"",
+          "required": true,
+          "description": null
+        }
+      ],
+      "structuredRows": []
+    },
+    {
       "name": "GitHubRepositoryMaterializationOptions",
       "title": null,
       "description": null,
@@ -914,13 +967,22 @@
       "exportPaths": [
         "src/github/index.ts"
       ],
-      "relatedSymbols": [],
+      "relatedSymbols": [
+        "GitHubRepositoryMaterializationDiagnostic"
+      ],
       "signatures": [],
       "members": [
         {
           "name": "cleanupAsync",
           "kind": "property",
           "type": "() => Promise<void>",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "diagnostics",
+          "kind": "property",
+          "type": "readonly GitHubRepositoryMaterializationDiagnostic[]",
           "required": true,
           "description": null
         },
@@ -2014,7 +2076,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.test.ts",
-        "line": 112,
+        "line": 178,
         "column": 1
       }
     },
@@ -2025,7 +2087,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.test.ts",
-        "line": 151,
+        "line": 223,
         "column": 1
       }
     },
@@ -2036,7 +2098,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.test.ts",
-        "line": 164,
+        "line": 236,
         "column": 1
       }
     },
@@ -2047,18 +2109,18 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 14,
+        "line": 15,
         "column": 1
       }
     },
     {
       "name": "parseGitHubRepositoryUrl",
-      "description": "Parse the canonical GitHub repository URL accepted by repository materialization.",
+      "description": "Parse a normal GitHub repository, tree, blob, or commit URL into repository and ref intent.",
       "see": [],
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 51,
+        "line": 67,
         "column": 1
       }
     },
@@ -2069,18 +2131,62 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 69,
+        "line": 105,
         "column": 1
       }
     },
     {
       "name": "assertGitHubRepositoryUrl",
-      "description": "Reject non-GitHub origins, credentials, query strings, and fragments.",
+      "description": "Reject non-GitHub origins and embedded credentials while ignoring normal page query/anchor state.",
       "see": [],
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 78,
+        "line": 114,
+        "column": 1
+      }
+    },
+    {
+      "name": "decodePathSegments",
+      "description": "Decode normal GitHub path segments and reject malformed encoded paths.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
+        "line": 126,
+        "column": 1
+      }
+    },
+    {
+      "name": "createRefCandidates",
+      "description": "Build longest-first ref candidates so slash-containing branch/tag names resolve like GitHub URLs.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
+        "line": 138,
+        "column": 1
+      }
+    },
+    {
+      "name": "resolveUrlRevisionAsync",
+      "description": "Resolve URL-derived ref candidates, falling back to the repository default branch.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
+        "line": 145,
+        "column": 1
+      }
+    },
+    {
+      "name": "invalidRepositoryUrl",
+      "description": "Create the consistent public error for unsupported GitHub URL shapes.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
+        "line": 165,
         "column": 1
       }
     },
@@ -2091,7 +2197,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 92,
+        "line": 170,
         "column": 1
       }
     },
@@ -2102,18 +2208,18 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 102,
+        "line": 180,
         "column": 1
       }
     },
     {
       "name": "validateTree",
-      "description": "Reject incomplete or unexpectedly large remote trees before downloading source bytes.",
+      "description": "Reject incomplete or unexpectedly large remote trees while safely omitting symbolic links.",
       "see": [],
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 110,
+        "line": 188,
         "column": 1
       }
     },
@@ -2124,7 +2230,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 137,
+        "line": 224,
         "column": 1
       }
     },
@@ -2135,7 +2241,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 150,
+        "line": 237,
         "column": 1
       }
     },
@@ -2146,7 +2252,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 168,
+        "line": 255,
         "column": 1
       }
     },
@@ -2157,7 +2263,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 186,
+        "line": 273,
         "column": 1
       }
     },
@@ -3901,6 +4007,12 @@
         "sourcePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.test.ts"
       },
       {
+        "fromSymbol": "readFileAsync",
+        "toSymbol": "onReadPath",
+        "callExpression": "options.onReadPath",
+        "sourcePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.test.ts"
+      },
+      {
         "fromSymbol": "expectFailureAsync",
         "toSymbol": "operation",
         "callExpression": "operation",
@@ -3940,6 +4052,12 @@
         "fromSymbol": "materializeGitHubRepositoryWithGatewayAsync",
         "toSymbol": "normalizeRef",
         "callExpression": "normalizeRef",
+        "sourcePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts"
+      },
+      {
+        "fromSymbol": "materializeGitHubRepositoryWithGatewayAsync",
+        "toSymbol": "resolveUrlRevisionAsync",
+        "callExpression": "resolveUrlRevisionAsync",
         "sourcePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts"
       },
       {
@@ -3998,8 +4116,38 @@
       },
       {
         "fromSymbol": "parseGitHubRepositoryUrl",
+        "toSymbol": "decodePathSegments",
+        "callExpression": "decodePathSegments",
+        "sourcePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts"
+      },
+      {
+        "fromSymbol": "parseGitHubRepositoryUrl",
+        "toSymbol": "invalidRepositoryUrl",
+        "callExpression": "invalidRepositoryUrl",
+        "sourcePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts"
+      },
+      {
+        "fromSymbol": "parseGitHubRepositoryUrl",
         "toSymbol": "assertRepositoryIdentity",
         "callExpression": "assertRepositoryIdentity",
+        "sourcePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts"
+      },
+      {
+        "fromSymbol": "parseGitHubRepositoryUrl",
+        "toSymbol": "createRefCandidates",
+        "callExpression": "createRefCandidates",
+        "sourcePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts"
+      },
+      {
+        "fromSymbol": "assertGitHubRepositoryUrl",
+        "toSymbol": "invalidRepositoryUrl",
+        "callExpression": "invalidRepositoryUrl",
+        "sourcePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts"
+      },
+      {
+        "fromSymbol": "resolveUrlRevisionAsync",
+        "toSymbol": "resolveRevisionAsync",
+        "callExpression": "gateway.resolveRevisionAsync",
         "sourcePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts"
       },
       {
@@ -4169,6 +4317,11 @@
         "fromSymbol": "GitHubRepositoryConnectionFailure",
         "toType": "GitHubRepositoryConnectionIdentity",
         "sourcePath": "src/providers/github/definitions/GitHubRepositoryConnectionResult.ts"
+      },
+      {
+        "fromSymbol": "GitHubRepositoryMaterializationResult",
+        "toType": "GitHubRepositoryMaterializationDiagnostic",
+        "sourcePath": "src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts"
       },
       {
         "fromSymbol": "connectGitHubRepositoryAsync",

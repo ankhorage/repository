@@ -229,7 +229,7 @@
   </li><li>
     <button class="nav-button" type="button" data-target="src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts">
       src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts
-      <small>11 functions</small>
+      <small>15 functions</small>
     </button>
   </li><li>
     <button class="nav-button" type="button" data-target="src/providers/github/services/publishGitHubProjectSnapshotAsync.ts">
@@ -246,7 +246,7 @@
     <section class="panel">
       <h2>Package overview</h2>
       <div class="summary">
-        <div><strong>16</strong><span class="muted">public exports</span></div>
+        <div><strong>17</strong><span class="muted">public exports</span></div>
         <div><strong>0</strong><span class="muted">components</span></div>
         <div><strong>49</strong><span class="muted">modules</span></div>
         <div><strong>3</strong><span class="muted">entrypoints</span></div>
@@ -403,11 +403,11 @@ whether the repository is ready for use.</p>
     <p class="muted">Referenced module</p>
     <p><strong>Dependencies:</strong> <span class="empty">None</span></p>
     <p><strong>Exports:</strong> <code>getProjectSnapshotPaths</code></p>
-  </article><article class="item" data-search="src/github/index.ts connectGitHubRepositoryAsync GitHubRepositoryConnectionFailure GitHubRepositoryConnectionOptions GitHubRepositoryConnectionResult GitHubRepositoryConnectionStatus GitHubRepositoryMaterializationOptions GitHubRepositoryMaterializationResult GitHubRepositoryVisibility materializeGitHubRepositoryAsync">
+  </article><article class="item" data-search="src/github/index.ts connectGitHubRepositoryAsync GitHubRepositoryConnectionFailure GitHubRepositoryConnectionOptions GitHubRepositoryConnectionResult GitHubRepositoryConnectionStatus GitHubRepositoryMaterializationDiagnostic GitHubRepositoryMaterializationOptions GitHubRepositoryMaterializationResult GitHubRepositoryVisibility materializeGitHubRepositoryAsync">
     <h3>src/github/index.ts</h3>
     <p class="muted">Configured entrypoint</p>
     <p><strong>Dependencies:</strong> <span class="empty">None</span></p>
-    <p><strong>Exports:</strong> <code>connectGitHubRepositoryAsync</code>, <code>GitHubRepositoryConnectionFailure</code>, <code>GitHubRepositoryConnectionOptions</code>, <code>GitHubRepositoryConnectionResult</code>, <code>GitHubRepositoryConnectionStatus</code>, <code>GitHubRepositoryMaterializationOptions</code>, <code>GitHubRepositoryMaterializationResult</code>, <code>GitHubRepositoryVisibility</code>, <code>materializeGitHubRepositoryAsync</code></p>
+    <p><strong>Exports:</strong> <code>connectGitHubRepositoryAsync</code>, <code>GitHubRepositoryConnectionFailure</code>, <code>GitHubRepositoryConnectionOptions</code>, <code>GitHubRepositoryConnectionResult</code>, <code>GitHubRepositoryConnectionStatus</code>, <code>GitHubRepositoryMaterializationDiagnostic</code>, <code>GitHubRepositoryMaterializationOptions</code>, <code>GitHubRepositoryMaterializationResult</code>, <code>GitHubRepositoryVisibility</code>, <code>materializeGitHubRepositoryAsync</code></p>
   </article><article class="item" data-search="src/index.test.ts src/index.ts src/metadata/index.ts">
     <h3>src/index.test.ts</h3>
     <p class="muted">Referenced module</p>
@@ -468,11 +468,11 @@ whether the repository is ready for use.</p>
     <p class="muted">Referenced module</p>
     <p><strong>Dependencies:</strong> <span class="empty">None</span></p>
     <p><strong>Exports:</strong> <code>GitHubRepositoryMaterializationOptions</code></p>
-  </article><article class="item" data-search="src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts GitHubRepositoryMaterializationResult">
+  </article><article class="item" data-search="src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts GitHubRepositoryMaterializationDiagnostic GitHubRepositoryMaterializationResult">
     <h3>src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts</h3>
     <p class="muted">Referenced module</p>
     <p><strong>Dependencies:</strong> <span class="empty">None</span></p>
-    <p><strong>Exports:</strong> <code>GitHubRepositoryMaterializationResult</code></p>
+    <p><strong>Exports:</strong> <code>GitHubRepositoryMaterializationDiagnostic</code>, <code>GitHubRepositoryMaterializationResult</code></p>
   </article><article class="item" data-search="src/providers/github/definitions/GitHubRepositoryVisibility.ts GitHubRepositoryVisibility">
     <h3>src/providers/github/definitions/GitHubRepositoryVisibility.ts</h3>
     <p class="muted">Referenced module</p>
@@ -843,10 +843,10 @@ whether the repository is ready for use.</p>
             </section>
             <section>
               <h3>src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts</h3>
-              <article class="item" id="symbol-githubrepositorymaterializationresult" data-search="GitHubRepositoryMaterializationResult  type src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts ">
-    <h4>GitHubRepositoryMaterializationResult</h4>
+              <article class="item" id="symbol-githubrepositorymaterializationdiagnostic" data-search="GitHubRepositoryMaterializationDiagnostic  type src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts ">
+    <h4>GitHubRepositoryMaterializationDiagnostic</h4>
     
-    <p class="muted">type • <code>src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts:1:1</code></p>
+    <p class="muted">type • <code>src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts:14:1</code></p>
     
     
     <p><strong>Export paths:</strong> <code>src/github/index.ts</code></p>
@@ -856,9 +856,54 @@ whether the repository is ready for use.</p>
     <thead><tr><th>Member</th><th>Kind</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
     <tbody>
       <tr>
+            <td><code>code</code></td>
+            <td>property</td>
+            <td><code>&quot;symlink-skipped&quot;</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>message</code></td>
+            <td>property</td>
+            <td><code>string</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>path</code></td>
+            <td>property</td>
+            <td><code>string</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>severity</code></td>
+            <td>property</td>
+            <td><code>&quot;warning&quot;</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr>
+    </tbody>
+  </table>
+  </article><article class="item" id="symbol-githubrepositorymaterializationresult" data-search="GitHubRepositoryMaterializationResult  type src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts  GitHubRepositoryMaterializationDiagnostic">
+    <h4>GitHubRepositoryMaterializationResult</h4>
+    
+    <p class="muted">type • <code>src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts:1:1</code></p>
+    
+    
+    <p><strong>Export paths:</strong> <code>src/github/index.ts</code></p>
+    <div><strong>Related symbols:</strong> <ul class="chips"><li class="chip">GitHubRepositoryMaterializationDiagnostic</li></ul></div>
+    
+    <table>
+    <thead><tr><th>Member</th><th>Kind</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
             <td><code>cleanupAsync</code></td>
             <td>property</td>
             <td><code>() =&gt; Promise&lt;void&gt;</code></td>
+            <td>yes</td>
+            <td></td>
+          </tr><tr>
+            <td><code>diagnostics</code></td>
+            <td>property</td>
+            <td><code>readonly GitHubRepositoryMaterializationDiagnostic[]</code></td>
             <td>yes</td>
             <td></td>
           </tr><tr>
@@ -1652,10 +1697,13 @@ whether the repository is ready for use.</p>
   module_src_providers_github_definitions_GitHubRepositoryConnectionResult_ts --&gt; export_GitHubRepositoryConnectionResult
   export_GitHubRepositoryConnectionStatus[&quot;GitHubRepositoryConnectionStatus&quot;]
   module_src_providers_github_definitions_GitHubRepositoryConnectionResult_ts --&gt; export_GitHubRepositoryConnectionStatus
+  export_GitHubRepositoryMaterializationDiagnostic[&quot;GitHubRepositoryMaterializationDiagnostic&quot;]
+  module_src_providers_github_definitions_GitHubRepositoryMaterializationResult_ts --&gt; export_GitHubRepositoryMaterializationDiagnostic
   export_GitHubRepositoryMaterializationOptions[&quot;GitHubRepositoryMaterializationOptions&quot;]
   module_src_providers_github_definitions_GitHubRepositoryMaterializationOptions_ts --&gt; export_GitHubRepositoryMaterializationOptions
   export_GitHubRepositoryMaterializationResult[&quot;GitHubRepositoryMaterializationResult&quot;]
   module_src_providers_github_definitions_GitHubRepositoryMaterializationResult_ts --&gt; export_GitHubRepositoryMaterializationResult
+  export_GitHubRepositoryMaterializationResult -.-&gt; export_GitHubRepositoryMaterializationDiagnostic
   export_GitHubRepositoryVisibility[&quot;GitHubRepositoryVisibility&quot;]
   module_src_providers_github_definitions_GitHubRepositoryVisibility_ts --&gt; export_GitHubRepositoryVisibility
   export_materializeGitHubRepositoryAsync[&quot;materializeGitHubRepositoryAsync&quot;]
@@ -1745,10 +1793,13 @@ whether the repository is ready for use.</p>
   module_src_providers_github_definitions_GitHubRepositoryConnectionResult_ts --&gt; export_GitHubRepositoryConnectionResult
   export_GitHubRepositoryConnectionStatus[&quot;GitHubRepositoryConnectionStatus&quot;]
   module_src_providers_github_definitions_GitHubRepositoryConnectionResult_ts --&gt; export_GitHubRepositoryConnectionStatus
+  export_GitHubRepositoryMaterializationDiagnostic[&quot;GitHubRepositoryMaterializationDiagnostic&quot;]
+  module_src_providers_github_definitions_GitHubRepositoryMaterializationResult_ts --&gt; export_GitHubRepositoryMaterializationDiagnostic
   export_GitHubRepositoryMaterializationOptions[&quot;GitHubRepositoryMaterializationOptions&quot;]
   module_src_providers_github_definitions_GitHubRepositoryMaterializationOptions_ts --&gt; export_GitHubRepositoryMaterializationOptions
   export_GitHubRepositoryMaterializationResult[&quot;GitHubRepositoryMaterializationResult&quot;]
   module_src_providers_github_definitions_GitHubRepositoryMaterializationResult_ts --&gt; export_GitHubRepositoryMaterializationResult
+  export_GitHubRepositoryMaterializationResult -.-&gt; export_GitHubRepositoryMaterializationDiagnostic
   export_GitHubRepositoryVisibility[&quot;GitHubRepositoryVisibility&quot;]
   module_src_providers_github_definitions_GitHubRepositoryVisibility_ts --&gt; export_GitHubRepositoryVisibility
   export_materializeGitHubRepositoryAsync[&quot;materializeGitHubRepositoryAsync&quot;]
@@ -2238,17 +2289,17 @@ whether the repository is ready for use.</p>
       <h2>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.test.ts</h2>
       <article class="item" data-search="createGateway src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.test.ts ">
     <h3>createGateway</h3>
-    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.test.ts:112:1</code></p>
+    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.test.ts:178:1</code></p>
     <p class="empty">No description available.</p>
     
   </article><article class="item" data-search="expectFailureAsync src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.test.ts ">
     <h3>expectFailureAsync</h3>
-    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.test.ts:151:1</code></p>
+    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.test.ts:223:1</code></p>
     <p class="empty">No description available.</p>
     
   </article><article class="item" data-search="expectMissingPathAsync src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.test.ts ">
     <h3>expectMissingPathAsync</h3>
-    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.test.ts:164:1</code></p>
+    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.test.ts:236:1</code></p>
     <p class="empty">No description available.</p>
     
   </article>
@@ -2258,57 +2309,77 @@ whether the repository is ready for use.</p>
       <h2>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts</h2>
       <article class="item" data-search="materializeGitHubRepositoryWithGatewayAsync src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts Materialize a GitHub repository through an injected read gateway for deterministic testing.">
     <h3>materializeGitHubRepositoryWithGatewayAsync</h3>
-    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:14:1</code></p>
+    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:15:1</code></p>
     <p>Materialize a GitHub repository through an injected read gateway for deterministic testing.</p>
     
-  </article><article class="item" data-search="parseGitHubRepositoryUrl src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts Parse the canonical GitHub repository URL accepted by repository materialization.">
+  </article><article class="item" data-search="parseGitHubRepositoryUrl src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts Parse a normal GitHub repository, tree, blob, or commit URL into repository and ref intent.">
     <h3>parseGitHubRepositoryUrl</h3>
-    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:51:1</code></p>
-    <p>Parse the canonical GitHub repository URL accepted by repository materialization.</p>
+    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:67:1</code></p>
+    <p>Parse a normal GitHub repository, tree, blob, or commit URL into repository and ref intent.</p>
     
   </article><article class="item" data-search="parseRepositoryUrl src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts Parse a repository URL while preserving the original parsing failure as the cause.">
     <h3>parseRepositoryUrl</h3>
-    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:69:1</code></p>
+    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:105:1</code></p>
     <p>Parse a repository URL while preserving the original parsing failure as the cause.</p>
     
-  </article><article class="item" data-search="assertGitHubRepositoryUrl src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts Reject non-GitHub origins, credentials, query strings, and fragments.">
+  </article><article class="item" data-search="assertGitHubRepositoryUrl src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts Reject non-GitHub origins and embedded credentials while ignoring normal page query/anchor state.">
     <h3>assertGitHubRepositoryUrl</h3>
-    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:78:1</code></p>
-    <p>Reject non-GitHub origins, credentials, query strings, and fragments.</p>
+    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:114:1</code></p>
+    <p>Reject non-GitHub origins and embedded credentials while ignoring normal page query/anchor state.</p>
+    
+  </article><article class="item" data-search="decodePathSegments src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts Decode normal GitHub path segments and reject malformed encoded paths.">
+    <h3>decodePathSegments</h3>
+    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:126:1</code></p>
+    <p>Decode normal GitHub path segments and reject malformed encoded paths.</p>
+    
+  </article><article class="item" data-search="createRefCandidates src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts Build longest-first ref candidates so slash-containing branch/tag names resolve like GitHub URLs.">
+    <h3>createRefCandidates</h3>
+    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:138:1</code></p>
+    <p>Build longest-first ref candidates so slash-containing branch/tag names resolve like GitHub URLs.</p>
+    
+  </article><article class="item" data-search="resolveUrlRevisionAsync src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts Resolve URL-derived ref candidates, falling back to the repository default branch.">
+    <h3>resolveUrlRevisionAsync</h3>
+    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:145:1</code></p>
+    <p>Resolve URL-derived ref candidates, falling back to the repository default branch.</p>
+    
+  </article><article class="item" data-search="invalidRepositoryUrl src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts Create the consistent public error for unsupported GitHub URL shapes.">
+    <h3>invalidRepositoryUrl</h3>
+    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:165:1</code></p>
+    <p>Create the consistent public error for unsupported GitHub URL shapes.</p>
     
   </article><article class="item" data-search="assertRepositoryIdentity src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts Validate canonical GitHub owner and repository path segments.">
     <h3>assertRepositoryIdentity</h3>
-    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:92:1</code></p>
+    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:170:1</code></p>
     <p>Validate canonical GitHub owner and repository path segments.</p>
     
   </article><article class="item" data-search="normalizeRef src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts Normalize an optional requested ref while rejecting an explicitly empty value.">
     <h3>normalizeRef</h3>
-    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:102:1</code></p>
+    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:180:1</code></p>
     <p>Normalize an optional requested ref while rejecting an explicitly empty value.</p>
     
-  </article><article class="item" data-search="validateTree src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts Reject incomplete or unexpectedly large remote trees before downloading source bytes.">
+  </article><article class="item" data-search="validateTree src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts Reject incomplete or unexpectedly large remote trees while safely omitting symbolic links.">
     <h3>validateTree</h3>
-    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:110:1</code></p>
-    <p>Reject incomplete or unexpectedly large remote trees before downloading source bytes.</p>
+    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:188:1</code></p>
+    <p>Reject incomplete or unexpectedly large remote trees while safely omitting symbolic links.</p>
     
   </article><article class="item" data-search="createMaterializationRootAsync src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts Create either an isolated temporary root or one explicitly requested empty destination.">
     <h3>createMaterializationRootAsync</h3>
-    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:137:1</code></p>
+    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:224:1</code></p>
     <p>Create either an isolated temporary root or one explicitly requested empty destination.</p>
     
   </article><article class="item" data-search="writeFileBatchesAsync src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts Download and write bounded groups so large repositories do not fan out unbounded requests.">
     <h3>writeFileBatchesAsync</h3>
-    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:150:1</code></p>
+    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:237:1</code></p>
     <p>Download and write bounded groups so large repositories do not fan out unbounded requests.</p>
     
   </article><article class="item" data-search="materializeFileAsync src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts Materialize one ordinary Git blob beneath the isolated root and preserve executable mode.">
     <h3>materializeFileAsync</h3>
-    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:168:1</code></p>
+    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:255:1</code></p>
     <p>Materialize one ordinary Git blob beneath the isolated root and preserve executable mode.</p>
     
   </article><article class="item" data-search="resolveMaterializationPath src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts Resolve one provider path while rejecting traversal outside the materialization root.">
     <h3>resolveMaterializationPath</h3>
-    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:186:1</code></p>
+    <p class="muted"><code>src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts:273:1</code></p>
     <p>Resolve one provider path while rejecting traversal outside the materialization root.</p>
     
   </article>
