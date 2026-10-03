@@ -7,9 +7,6 @@ import type {
   GitHubRepositoryTreeEntry,
 } from '../ports/GitHubRepositoryReadGateway.js';
 
-const API_ORIGIN = 'https://api.github.com';
-const RAW_ORIGIN = 'https://raw.githubusercontent.com';
-
 /*** Create the read-only GitHub gateway used to materialize repository snapshots over HTTPS. */
 export function createGitHubHttpRepositoryReadGateway(
   fetcher: typeof fetch = fetch,
@@ -22,6 +19,9 @@ export function createGitHubHttpRepositoryReadGateway(
       readFileAsync(fetcher, target, revision, path),
   };
 }
+
+const API_ORIGIN = 'https://api.github.com';
+const RAW_ORIGIN = 'https://raw.githubusercontent.com';
 
 /*** Read repository metadata without mutating provider state. */
 async function inspectRepositoryAsync(

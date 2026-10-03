@@ -10,10 +10,6 @@ import type {
   GitHubRepositoryTreeEntry,
 } from '../ports/GitHubRepositoryReadGateway.js';
 
-const MAX_FILE_COUNT = 20_000;
-const MAX_TOTAL_BYTES = 256 * 1024 * 1024;
-const WRITE_BATCH_SIZE = 8;
-
 /*** Materialize a GitHub repository through an injected read gateway for deterministic testing. */
 export async function materializeGitHubRepositoryWithGatewayAsync(
   options: GitHubRepositoryMaterializationOptions,
@@ -46,6 +42,10 @@ export async function materializeGitHubRepositoryWithGatewayAsync(
     cleanupAsync: () => rm(rootPath, { force: true, recursive: true }),
   };
 }
+
+const MAX_FILE_COUNT = 20_000;
+const MAX_TOTAL_BYTES = 256 * 1024 * 1024;
+const WRITE_BATCH_SIZE = 8;
 
 /*** Parse the canonical GitHub repository URL accepted by repository materialization. */
 function parseGitHubRepositoryUrl(value: string): GitHubRepositoryReadTarget {
