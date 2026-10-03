@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.5.2
+
+### Patch Changes
+
+- d9e6067: Update dependencies: `@ankhorage/contracts`.
+
 ## 0.5.1
 
 ### Patch Changes
