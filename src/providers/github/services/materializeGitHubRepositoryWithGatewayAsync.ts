@@ -7,6 +7,7 @@ import type { GitHubRepositoryMaterializationResult } from '../definitions/GitHu
 import type {
   GitHubRepositoryReadGateway,
   GitHubRepositoryReadTarget,
+  GitHubRepositoryRevision,
   GitHubRepositoryTreeEntry,
 } from '../ports/GitHubRepositoryReadGateway.js';
 
@@ -15,16 +16,25 @@ export async function materializeGitHubRepositoryWithGatewayAsync(
   options: GitHubRepositoryMaterializationOptions,
   gateway: GitHubRepositoryReadGateway,
 ): Promise<GitHubRepositoryMaterializationResult> {
-  const target = parseGitHubRepositoryUrl(options.url);
-  const repository = await gateway.inspectRepositoryAsync(target);
-  const ref = normalizeRef(options.ref) ?? repository.defaultBranch;
-  const revision = await gateway.resolveRevisionAsync(target, ref);
-  const tree = await gateway.readTreeAsync(target, revision.treeSha);
-  const files = validateTree(tree.entries, tree.truncated);
+  const parsed = parseGitHubRepositoryUrl(options.url);
+  const repository = await gateway.inspectRepositoryAsync(parsed.target);
+  const explicitRef = normalizeRef(options.ref);
+  const revision =
+    explicitRef === undefined
+      ? await resolveUrlRevisionAsync(gateway, parsed, repository.defaultBranch)
+      : await gateway.resolveRevisionAsync(parsed.target, explicitRef);
+  const tree = await gateway.readTreeAsync(parsed.target, revision.treeSha);
+  const validated = validateTree(tree.entries, tree.truncated);
   const rootPath = await createMaterializationRootAsync(options.destinationPath);
 
   try {
-    await writeFileBatchesAsync(gateway, target, revision.commitSha, rootPath, files);
+    await writeFileBatchesAsync(
+      gateway,
+      parsed.target,
+      revision.commitSha,
+      rootPath,
+      validated.files,
+    );
   } catch (error) {
     await rm(rootPath, { force: true, recursive: true });
     throw error;
@@ -33,9 +43,10 @@ export async function materializeGitHubRepositoryWithGatewayAsync(
   return {
     rootPath,
     revision: revision.commitSha,
+    diagnostics: validated.diagnostics,
     repository: {
-      owner: target.owner,
-      name: target.name,
+      owner: parsed.target.owner,
+      name: parsed.target.name,
       url: repository.url,
       defaultBranch: repository.defaultBranch,
     },
@@ -47,22 +58,47 @@ const MAX_FILE_COUNT = 20_000;
 const MAX_TOTAL_BYTES = 256 * 1024 * 1024;
 const WRITE_BATCH_SIZE = 8;
 
-/*** Parse the canonical GitHub repository URL accepted by repository materialization. */
-function parseGitHubRepositoryUrl(value: string): GitHubRepositoryReadTarget {
+interface ParsedGitHubRepositoryUrl {
+  readonly target: GitHubRepositoryReadTarget;
+  readonly refCandidates: readonly string[];
+}
+
+/*** Parse a normal GitHub repository, tree, blob, or commit URL into repository and ref intent. */
+function parseGitHubRepositoryUrl(value: string): ParsedGitHubRepositoryUrl {
   const url = parseRepositoryUrl(value);
   assertGitHubRepositoryUrl(url);
-  const segments = url.pathname.split('/').filter(Boolean);
-  if (segments.length !== 2) {
-    throw new Error('Repository URL must use https://github.com/<owner>/<repository>.');
+  const segments = decodePathSegments(url);
+  if (segments.length < 2) {
+    throw invalidRepositoryUrl();
   }
 
-  const owner = segments[0] ?? '';
-  const repositorySegment = segments[1] ?? '';
+  const [owner = '', repositorySegment = '', route] = segments;
   const name = repositorySegment.endsWith('.git')
     ? repositorySegment.slice(0, -4)
     : repositorySegment;
   assertRepositoryIdentity(owner, name);
-  return { owner, name, url: `https://github.com/${owner}/${name}` };
+
+  const routeSegments = segments.slice(3);
+  if (route === undefined) {
+    return {
+      target: { owner, name, url: `https://github.com/${owner}/${name}` },
+      refCandidates: [],
+    };
+  }
+  if (route === 'commit') {
+    if (routeSegments.length !== 1) throw invalidRepositoryUrl();
+    return {
+      target: { owner, name, url: `https://github.com/${owner}/${name}` },
+      refCandidates: [routeSegments[0] ?? ''],
+    };
+  }
+  if (route !== 'tree' && route !== 'blob') throw invalidRepositoryUrl();
+  if (routeSegments.length === 0) throw invalidRepositoryUrl();
+
+  return {
+    target: { owner, name, url: `https://github.com/${owner}/${name}` },
+    refCandidates: createRefCandidates(routeSegments),
+  };
 }
 
 /*** Parse a repository URL while preserving the original parsing failure as the cause. */
@@ -74,18 +110,60 @@ function parseRepositoryUrl(value: string): URL {
   }
 }
 
-/*** Reject non-GitHub origins, credentials, query strings, and fragments. */
+/*** Reject non-GitHub origins and embedded credentials while ignoring normal page query/anchor state. */
 function assertGitHubRepositoryUrl(url: URL): void {
   if (
     url.protocol !== 'https:' ||
     url.hostname.toLowerCase() !== 'github.com' ||
     url.username !== '' ||
-    url.password !== '' ||
-    url.search !== '' ||
-    url.hash !== ''
+    url.password !== ''
   ) {
-    throw new Error('Repository URL must use https://github.com/<owner>/<repository>.');
+    throw invalidRepositoryUrl();
   }
+}
+
+/*** Decode normal GitHub path segments and reject malformed encoded paths. */
+function decodePathSegments(url: URL): readonly string[] {
+  try {
+    return url.pathname
+      .split('/')
+      .filter(Boolean)
+      .map((segment) => decodeURIComponent(segment));
+  } catch (error) {
+    throw new Error('Repository URL contains an invalid encoded path.', { cause: error });
+  }
+}
+
+/*** Build longest-first ref candidates so slash-containing branch/tag names resolve like GitHub URLs. */
+function createRefCandidates(segments: readonly string[]): readonly string[] {
+  return Array.from({ length: segments.length }, (_, index) =>
+    segments.slice(0, segments.length - index).join('/'),
+  );
+}
+
+/*** Resolve URL-derived ref candidates, falling back to the repository default branch. */
+async function resolveUrlRevisionAsync(
+  gateway: GitHubRepositoryReadGateway,
+  parsed: ParsedGitHubRepositoryUrl,
+  defaultBranch: string,
+): Promise<GitHubRepositoryRevision> {
+  if (parsed.refCandidates.length === 0) {
+    return gateway.resolveRevisionAsync(parsed.target, defaultBranch);
+  }
+
+  for (const candidate of parsed.refCandidates) {
+    try {
+      return await gateway.resolveRevisionAsync(parsed.target, candidate);
+    } catch {
+      // GitHub tree/blob URLs can contain both slash-containing refs and trailing repository paths.
+    }
+  }
+  throw new Error('GitHub repository URL does not resolve to a branch, tag, or commit.');
+}
+
+/*** Create the consistent public error for unsupported GitHub URL shapes. */
+function invalidRepositoryUrl(): Error {
+  return new Error('Repository URL must be a GitHub repository, tree, blob, or commit HTTPS URL.');
 }
 
 /*** Validate canonical GitHub owner and repository path segments. */
@@ -106,20 +184,21 @@ function normalizeRef(value: string | undefined): string | undefined {
   return normalized;
 }
 
-/*** Reject incomplete or unexpectedly large remote trees before downloading source bytes. */
+/*** Reject incomplete or unexpectedly large remote trees while safely omitting symbolic links. */
 function validateTree(
   entries: readonly GitHubRepositoryTreeEntry[],
   truncated: boolean,
-): readonly GitHubRepositoryTreeEntry[] {
+): {
+  readonly files: readonly GitHubRepositoryTreeEntry[];
+  readonly diagnostics: GitHubRepositoryMaterializationResult['diagnostics'];
+} {
   if (truncated) {
     throw new Error('GitHub repository tree is truncated and cannot be materialized safely.');
   }
-  const files = entries.filter((entry) => entry.type === 'blob');
+  const symlinks = entries.filter((entry) => entry.type === 'blob' && entry.mode === '120000');
+  const files = entries.filter((entry) => entry.type === 'blob' && entry.mode !== '120000');
   if (files.length > MAX_FILE_COUNT) {
     throw new Error(`GitHub repository exceeds the ${MAX_FILE_COUNT} file materialization limit.`);
-  }
-  if (files.some((entry) => entry.mode === '120000')) {
-    throw new Error('GitHub repository symbolic links are not supported by safe materialization.');
   }
   const totalBytes = files.reduce((sum, entry) => {
     if (entry.size === undefined) {
@@ -130,7 +209,15 @@ function validateTree(
   if (totalBytes > MAX_TOTAL_BYTES) {
     throw new Error('GitHub repository exceeds the 256 MiB materialization limit.');
   }
-  return files;
+  return {
+    files,
+    diagnostics: symlinks.map((entry) => ({
+      code: 'symlink-skipped',
+      severity: 'warning',
+      path: entry.path,
+      message: 'Symbolic link skipped during safe GitHub repository materialization.',
+    })),
+  };
 }
 
 /*** Create either an isolated temporary root or one explicitly requested empty destination. */
