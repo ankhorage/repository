@@ -1,7 +1,7 @@
 import { createKnipConfig } from '@ankhorage/devtools/knip';
 
 export default createKnipConfig({
-  entry: ['examples/basic-usage.ts', 'src/readme-usage.ts', 'eslint.examples.config.mjs'],
+  entry: ['examples/basic-usage/main.ts', 'eslint.examples.config.mjs'],
   ignoreFiles: [
     '.prettierrc.js',
     'eslint.config.mjs',

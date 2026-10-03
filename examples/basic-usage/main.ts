@@ -1,3 +1,13 @@
+/***
+ * Connect a project folder to its source repository.
+ *
+ * This example creates a missing GitHub repository, publishes the project snapshot, and reports
+ * whether the repository is ready for use.
+ *
+ * @title Connect a repository
+ * @usage
+ * @readme
+ */
 import { connectRepositoryAsync } from '@ankhorage/repository';
 
 const result = await connectRepositoryAsync({
