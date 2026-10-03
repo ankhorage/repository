@@ -1,12 +1,10 @@
 import { createLocalProjectSnapshotReader } from '../../../connection/adapters/createLocalProjectSnapshotReader.js';
 import { createLocalRepositoryManifestStore } from '../../../connection/adapters/createLocalRepositoryManifestStore.js';
 import type { ProjectSnapshot } from '../../../connection/definitions/ProjectSnapshot.js';
+import type { ProjectSnapshotReader } from '../../../connection/ports/ProjectSnapshotReader.js';
 import type { RepositoryManifestStore } from '../../../connection/ports/RepositoryManifestStore.js';
 import { createGhCliRepositoryGateway } from '../adapters/createGhCliRepositoryGateway.js';
-import type {
-  GitHubRepositoryConnectionDependencies,
-  GitHubRepositoryConnectionOptions,
-} from '../definitions/GitHubRepositoryConnectionOptions.js';
+import type { GitHubRepositoryConnectionOptions } from '../definitions/GitHubRepositoryConnectionOptions.js';
 import type {
   GitHubRepositoryConnectionFailure,
   GitHubRepositoryConnectionIdentity,
@@ -22,6 +20,12 @@ import {
   PreflightError,
 } from './inspectGitHubRepositoryPreflightAsync.js';
 import { publishGitHubProjectSnapshotAsync } from './publishGitHubProjectSnapshotAsync.js';
+
+interface GitHubRepositoryConnectionDependencies {
+  readonly gateway?: GitHubRepositoryGateway;
+  readonly snapshotReader?: ProjectSnapshotReader;
+  readonly manifestStore?: RepositoryManifestStore;
+}
 
 /** Connect a standalone app to GitHub and publish its complete snapshot on `main`. */
 export async function connectGitHubRepositoryAsync(
