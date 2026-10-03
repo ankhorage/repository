@@ -46,10 +46,7 @@ export function createRepositoryRuntimeProvider(): RepositoryRuntimeProvider {
     category: repositoryPackageMetadata.category,
     version: repositoryPackageMetadata.version,
     capabilities: repositoryPackageMetadata.capabilities,
-    commands: [
-      repositoryPackageMetadata.command,
-      repositoryPackageMetadata.materializeCommand,
-    ],
+    commands: [repositoryPackageMetadata.command, repositoryPackageMetadata.materializeCommand],
     handlers: [
       { path: ['connect'], handler: runConnectCommandAsync },
       { path: ['materialize'], handler: runMaterializeCommandAsync },

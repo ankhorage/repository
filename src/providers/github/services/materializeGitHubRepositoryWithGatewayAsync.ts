@@ -49,12 +49,33 @@ const WRITE_BATCH_SIZE = 8;
 
 /*** Parse the canonical GitHub repository URL accepted by repository materialization. */
 function parseGitHubRepositoryUrl(value: string): GitHubRepositoryReadTarget {
-  let url: URL;
+  const url = parseRepositoryUrl(value);
+  assertGitHubRepositoryUrl(url);
+  const segments = url.pathname.split('/').filter(Boolean);
+  if (segments.length !== 2) {
+    throw new Error('Repository URL must use https://github.com/<owner>/<repository>.');
+  }
+
+  const owner = segments[0] ?? '';
+  const repositorySegment = segments[1] ?? '';
+  const name = repositorySegment.endsWith('.git')
+    ? repositorySegment.slice(0, -4)
+    : repositorySegment;
+  assertRepositoryIdentity(owner, name);
+  return { owner, name, url: `https://github.com/${owner}/${name}` };
+}
+
+/*** Parse a repository URL while preserving the original parsing failure as the cause. */
+function parseRepositoryUrl(value: string): URL {
   try {
-    url = new URL(value);
+    return new URL(value);
   } catch (error) {
     throw new Error('Repository URL must be a valid GitHub HTTPS URL.', { cause: error });
   }
+}
+
+/*** Reject non-GitHub origins, credentials, query strings, and fragments. */
+function assertGitHubRepositoryUrl(url: URL): void {
   if (
     url.protocol !== 'https:' ||
     url.hostname.toLowerCase() !== 'github.com' ||
@@ -65,23 +86,16 @@ function parseGitHubRepositoryUrl(value: string): GitHubRepositoryReadTarget {
   ) {
     throw new Error('Repository URL must use https://github.com/<owner>/<repository>.');
   }
+}
 
-  const segments = url.pathname.split('/').filter(Boolean);
-  if (segments.length !== 2) {
-    throw new Error('Repository URL must use https://github.com/<owner>/<repository>.');
-  }
-  const owner = segments[0] ?? '';
-  const repositorySegment = segments[1] ?? '';
-  const name = repositorySegment.endsWith('.git')
-    ? repositorySegment.slice(0, -4)
-    : repositorySegment;
+/*** Validate canonical GitHub owner and repository path segments. */
+function assertRepositoryIdentity(owner: string, name: string): void {
   if (!/^[A-Za-z0-9](?:[A-Za-z0-9-]{0,98}[A-Za-z0-9])?$/u.test(owner)) {
     throw new Error('GitHub repository owner is invalid.');
   }
   if (!/^[A-Za-z0-9._-]{1,100}$/u.test(name) || name === '.' || name === '..') {
     throw new Error('GitHub repository name is invalid.');
   }
-  return { owner, name, url: `https://github.com/${owner}/${name}` };
 }
 
 /*** Normalize an optional requested ref while rejecting an explicitly empty value. */
@@ -100,11 +114,11 @@ function validateTree(
   if (truncated) {
     throw new Error('GitHub repository tree is truncated and cannot be materialized safely.');
   }
-  const files = entries.filter(entry => entry.type === 'blob');
+  const files = entries.filter((entry) => entry.type === 'blob');
   if (files.length > MAX_FILE_COUNT) {
     throw new Error(`GitHub repository exceeds the ${MAX_FILE_COUNT} file materialization limit.`);
   }
-  if (files.some(entry => entry.mode === '120000')) {
+  if (files.some((entry) => entry.mode === '120000')) {
     throw new Error('GitHub repository symbolic links are not supported by safe materialization.');
   }
   const totalBytes = files.reduce((sum, entry) => {
@@ -120,7 +134,9 @@ function validateTree(
 }
 
 /*** Create either an isolated temporary root or one explicitly requested empty destination. */
-async function createMaterializationRootAsync(destinationPath: string | undefined): Promise<string> {
+async function createMaterializationRootAsync(
+  destinationPath: string | undefined,
+): Promise<string> {
   if (destinationPath === undefined) {
     return mkdtemp(join(tmpdir(), 'ankhorage-repository-'));
   }
@@ -140,11 +156,12 @@ async function writeFileBatchesAsync(
 ): Promise<void> {
   const batches = Array.from(
     { length: Math.ceil(entries.length / WRITE_BATCH_SIZE) },
-    (_, index) => entries.slice(index * WRITE_BATCH_SIZE, (index + 1) * WRITE_BATCH_SIZE),
+    (_, index) =>
+      entries.slice(index * WRITE_BATCH_SIZE, (index + 1) * WRITE_BATCH_SIZE),
   );
   for (const batch of batches) {
     await Promise.all(
-      batch.map(entry => materializeFileAsync(gateway, target, revision, rootPath, entry)),
+      batch.map((entry) => materializeFileAsync(gateway, target, revision, rootPath, entry)),
     );
   }
 }
@@ -173,7 +190,7 @@ function resolveMaterializationPath(rootPath: string, repositoryPath: string): s
     repositoryPath.trim() === '' ||
     repositoryPath.includes('\\') ||
     repositoryPath.startsWith('/') ||
-    repositoryPath.split('/').some(segment => segment === '..' || segment === '')
+    repositoryPath.split('/').some((segment) => segment === '..' || segment === '')
   ) {
     throw new Error(`Unsafe GitHub repository path: ${repositoryPath}.`);
   }

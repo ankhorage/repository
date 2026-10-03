@@ -12,11 +12,10 @@ export function createGitHubHttpRepositoryReadGateway(
   fetcher: typeof fetch = fetch,
 ): GitHubRepositoryReadGateway {
   return {
-    inspectRepositoryAsync: target => inspectRepositoryAsync(fetcher, target),
+    inspectRepositoryAsync: (target) => inspectRepositoryAsync(fetcher, target),
     resolveRevisionAsync: (target, ref) => resolveRevisionAsync(fetcher, target, ref),
     readTreeAsync: (target, treeSha) => readTreeAsync(fetcher, target, treeSha),
-    readFileAsync: (target, revision, path) =>
-      readFileAsync(fetcher, target, revision, path),
+    readFileAsync: (target, revision, path) => readFileAsync(fetcher, target, revision, path),
   };
 }
 
@@ -74,7 +73,7 @@ async function readTreeAsync(
   const record = requireRecord(value, 'repository tree');
   if (!Array.isArray(record.tree)) throw new Error('GitHub returned an invalid repository tree.');
   return {
-    entries: record.tree.map(entry => parseTreeEntry(entry)),
+    entries: record.tree.map((entry) => parseTreeEntry(entry)),
     truncated: record.truncated === true,
   };
 }
@@ -88,7 +87,7 @@ async function readFileAsync(
 ): Promise<Uint8Array> {
   const encodedPath = path
     .split('/')
-    .map(segment => encodeURIComponent(segment))
+    .map((segment) => encodeURIComponent(segment))
     .join('/');
   const response = await fetcher(
     `${RAW_ORIGIN}/${encodeURIComponent(target.owner)}/${encodeURIComponent(
@@ -107,7 +106,7 @@ function parseTreeEntry(value: unknown): GitHubRepositoryTreeEntry {
   if (type !== 'blob' && type !== 'tree' && type !== 'commit') {
     throw new Error(`GitHub returned an unsupported repository tree entry type: ${type}.`);
   }
-  const size = record.size;
+  const { size } = record;
   if (size !== undefined && (typeof size !== 'number' || !Number.isSafeInteger(size) || size < 0)) {
     throw new Error('GitHub returned an invalid repository tree entry size.');
   }
@@ -155,7 +154,7 @@ function requireRecord(value: unknown, subject: string): Record<string, unknown>
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
     throw new Error(`GitHub returned invalid ${subject}.`);
   }
-  return value as Record<string, unknown>;
+  return value;
 }
 
 /*** Require a non-empty provider string field. */

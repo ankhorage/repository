@@ -1,18 +1,16 @@
 import type { MaterializeCommandOptions } from './definitions/MaterializeCommandOptions.js';
 
 /*** Parse `ankh repository materialize <github-url>` and its optional ref/output flags. */
-export function parseMaterializeCommandOptions(
-  argv: readonly string[],
-): MaterializeCommandOptions {
+export function parseMaterializeCommandOptions(argv: readonly string[]): MaterializeCommandOptions {
   let repositoryUrl: string | undefined;
   let ref: string | undefined;
   let destinationPath: string | undefined;
 
   for (let index = 0; index < argv.length; index += 1) {
-    const argument = argv[index];
+    const [argument] = argv.slice(index);
     if (argument === undefined) continue;
     if (argument === '--ref' || argument === '--out') {
-      const value = argv[index + 1];
+      const [value] = argv.slice(index + 1);
       if (!value || value.startsWith('--')) throw new Error(`${argument} requires a value.`);
       index += 1;
       if (argument === '--ref') ref = value;

@@ -34,7 +34,7 @@ test('materializes an exact GitHub revision and cleans up the isolated root', as
   );
 
   await result.cleanupAsync();
-  await expect(access(result.rootPath)).rejects.toThrow();
+  await expectMissingPathAsync(result.rootPath);
 });
 
 test('uses the remote default branch when no ref is supplied', async () => {
@@ -57,49 +57,56 @@ test('rejects traversal before downloading an unsafe repository file', async () 
     },
   });
 
-  await expect(
-    materializeGitHubRepositoryWithGatewayAsync(
-      { url: 'https://github.com/ankhorage/demo' },
-      gateway,
-    ),
-  ).rejects.toThrow('Unsafe GitHub repository path');
+  await expectFailureAsync(
+    () =>
+      materializeGitHubRepositoryWithGatewayAsync(
+        { url: 'https://github.com/ankhorage/demo' },
+        gateway,
+      ),
+    'Unsafe GitHub repository path',
+  );
   expect(reads).toBe(0);
 });
 
 test('rejects truncated GitHub trees before materialization', async () => {
   const gateway = createGateway({ files: {}, truncated: true });
 
-  await expect(
-    materializeGitHubRepositoryWithGatewayAsync(
-      { url: 'https://github.com/ankhorage/demo' },
-      gateway,
-    ),
-  ).rejects.toThrow('repository tree is truncated');
+  await expectFailureAsync(
+    () =>
+      materializeGitHubRepositoryWithGatewayAsync(
+        { url: 'https://github.com/ankhorage/demo' },
+        gateway,
+      ),
+    'repository tree is truncated',
+  );
 });
 
 test('rejects unsafe symbolic links rather than following provider paths', async () => {
   const gateway: GitHubRepositoryReadGateway = {
     ...createGateway({ files: {} }),
-    readTreeAsync: async () => ({
-      truncated: false,
-      entries: [
-        {
-          mode: '120000',
-          path: 'outside',
-          sha: 'link-sha',
-          size: 10,
-          type: 'blob',
-        },
-      ],
-    }),
+    readTreeAsync: () =>
+      Promise.resolve({
+        truncated: false,
+        entries: [
+          {
+            mode: '120000',
+            path: 'outside',
+            sha: 'link-sha',
+            size: 10,
+            type: 'blob',
+          },
+        ],
+      }),
   };
 
-  await expect(
-    materializeGitHubRepositoryWithGatewayAsync(
-      { url: 'https://github.com/ankhorage/demo' },
-      gateway,
-    ),
-  ).rejects.toThrow('symbolic links are not supported');
+  await expectFailureAsync(
+    () =>
+      materializeGitHubRepositoryWithGatewayAsync(
+        { url: 'https://github.com/ankhorage/demo' },
+        gateway,
+      ),
+    'symbolic links are not supported',
+  );
 });
 
 function createGateway(options: {
@@ -109,7 +116,8 @@ function createGateway(options: {
   readonly truncated?: boolean;
   readonly onRead?: () => void;
 }): GitHubRepositoryReadGateway {
-  const entries = Object.entries(options.files).map(([path, content], index) => ({
+  const files = new Map(Object.entries(options.files));
+  const entries = [...files].map(([path, content], index) => ({
     mode: '100644',
     path,
     sha: `blob-${index}`,
@@ -117,23 +125,44 @@ function createGateway(options: {
     type: 'blob' as const,
   }));
   return {
-    inspectRepositoryAsync: async target => ({
-      defaultBranch: options.defaultBranch ?? 'main',
-      url: target.url,
-    }),
-    resolveRevisionAsync: async (_target, ref) => {
+    inspectRepositoryAsync: (target) =>
+      Promise.resolve({
+        defaultBranch: options.defaultBranch ?? 'main',
+        url: target.url,
+      }),
+    resolveRevisionAsync: (_target, ref) => {
       options.requestedRefs?.push(ref);
-      return { commitSha: 'commit-sha', treeSha: 'tree-sha' };
+      return Promise.resolve({ commitSha: 'commit-sha', treeSha: 'tree-sha' });
     },
-    readTreeAsync: async () => ({
-      entries,
-      truncated: options.truncated ?? false,
-    }),
-    readFileAsync: async (_target, _revision, path) => {
+    readTreeAsync: () =>
+      Promise.resolve({
+        entries,
+        truncated: options.truncated ?? false,
+      }),
+    readFileAsync: (_target, _revision, path) => {
       options.onRead?.();
-      const content = options.files[path];
+      const content = files.get(path);
       if (content === undefined) throw new Error(`Missing fixture: ${path}`);
-      return Buffer.from(content);
+      return Promise.resolve(Buffer.from(content));
     },
   };
+}
+
+async function expectFailureAsync(operation: () => Promise<unknown>, message: string): Promise<void> {
+  try {
+    await operation();
+    throw new Error('Expected operation to fail.');
+  } catch (error) {
+    expect(error).toBeInstanceOf(Error);
+    expect((error as Error).message).toContain(message);
+  }
+}
+
+async function expectMissingPathAsync(path: string): Promise<void> {
+  try {
+    await access(path);
+    throw new Error('Expected path to be missing.');
+  } catch (error) {
+    expect(error).toBeInstanceOf(Error);
+  }
 }

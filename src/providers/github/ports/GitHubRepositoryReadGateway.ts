@@ -28,17 +28,12 @@ export interface GitHubRepositoryTree {
 }
 
 export interface GitHubRepositoryReadGateway {
-  inspectRepositoryAsync(
-    target: GitHubRepositoryReadTarget,
-  ): Promise<GitHubRepositoryReadMetadata>;
+  inspectRepositoryAsync(target: GitHubRepositoryReadTarget): Promise<GitHubRepositoryReadMetadata>;
   resolveRevisionAsync(
     target: GitHubRepositoryReadTarget,
     ref: string,
   ): Promise<GitHubRepositoryRevision>;
-  readTreeAsync(
-    target: GitHubRepositoryReadTarget,
-    treeSha: string,
-  ): Promise<GitHubRepositoryTree>;
+  readTreeAsync(target: GitHubRepositoryReadTarget, treeSha: string): Promise<GitHubRepositoryTree>;
   readFileAsync(
     target: GitHubRepositoryReadTarget,
     revision: string,
