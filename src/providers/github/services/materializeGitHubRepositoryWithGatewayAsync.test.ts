@@ -117,11 +117,11 @@ function createGateway(options: {
   readonly onRead?: () => void;
 }): GitHubRepositoryReadGateway {
   const files = new Map(Object.entries(options.files));
-  const entries = [...files].map(([path, content], index) => ({
+  const entries = [...files].map(([path, fileContent], index) => ({
     mode: '100644',
     path,
     sha: `blob-${index}`,
-    size: Buffer.byteLength(content),
+    size: Buffer.byteLength(fileContent),
     type: 'blob' as const,
   }));
   return {
@@ -141,14 +141,17 @@ function createGateway(options: {
       }),
     readFileAsync: (_target, _revision, path) => {
       options.onRead?.();
-      const content = files.get(path);
-      if (content === undefined) throw new Error(`Missing fixture: ${path}`);
-      return Promise.resolve(Buffer.from(content));
+      const fileContent = files.get(path);
+      if (fileContent === undefined) throw new Error(`Missing fixture: ${path}`);
+      return Promise.resolve(Buffer.from(fileContent));
     },
   };
 }
 
-async function expectFailureAsync(\n  operation: () => Promise<unknown>,\n  message: string,\n): Promise<void> {
+async function expectFailureAsync(
+  operation: () => Promise<unknown>,
+  message: string,
+): Promise<void> {
   try {
     await operation();
     throw new Error('Expected operation to fail.');
