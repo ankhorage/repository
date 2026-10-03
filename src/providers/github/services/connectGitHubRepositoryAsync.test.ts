@@ -2,7 +2,6 @@ import type { RepositoryManifest } from '@ankhorage/contracts/repository';
 import { expect, test } from 'bun:test';
 
 import type { ProjectSnapshot } from '../../../connection/definitions/ProjectSnapshot.js';
-import type { GitHubRepositoryConnectionDependencies } from '../definitions/GitHubRepositoryConnectionOptions.js';
 import type { GitHubRepositoryGateway } from '../ports/GitHubRepositoryGateway.js';
 import { connectGitHubRepositoryAsync } from './connectGitHubRepositoryAsync.js';
 
@@ -41,9 +40,7 @@ test('sets main as default before cleaning bootstrap during partial-publish resu
   expect(calls).toEqual(['set-default', 'delete-bootstrap']);
 });
 
-function createExistingConnectionDependencies(
-  calls: string[],
-): GitHubRepositoryConnectionDependencies {
+function createExistingConnectionDependencies(calls: string[]) {
   return {
     gateway: createExistingGateway(calls),
     snapshotReader: { readAsync: () => Promise.resolve(snapshot) },
