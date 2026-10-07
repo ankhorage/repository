@@ -1,17 +1,22 @@
 import { expect, test } from 'bun:test';
 
 import packageJson from '../../../package.json';
+import { CAPABILITIES } from '../../capabilities/index.js';
 import { createRepositoryRuntimeProvider } from './createRepositoryRuntimeProvider.js';
 
-test('reports the installed package version and canonical repository capabilities', () => {
-  expect(createRepositoryRuntimeProvider()).toMatchObject({
+test('uses the canonical catalog and exposes only catalog command capabilities', () => {
+  const provider = createRepositoryRuntimeProvider();
+
+  expect(provider).toMatchObject({
     id: 'repository',
     category: 'repository',
     version: packageJson.version,
-    capabilities: ['repository.connect', 'repository.materialize'],
-    commands: [
-      { path: ['connect'], capability: 'repository.connect' },
-      { path: ['materialize'], capability: 'repository.materialize' },
-    ],
   });
+  expect(provider.capabilities).toBe(CAPABILITIES);
+  const commandCapabilityIds = provider.commands.map(({ capability }) => capability);
+  const catalogCapabilityIds = CAPABILITIES.map(({ id }) => id);
+
+  expect(commandCapabilityIds).toHaveLength(catalogCapabilityIds.length);
+  expect(new Set(commandCapabilityIds).size).toBe(commandCapabilityIds.length);
+  expect(new Set(commandCapabilityIds)).toEqual(new Set(catalogCapabilityIds));
 });
