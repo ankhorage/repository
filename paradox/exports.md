@@ -139,7 +139,7 @@ Materialize one GitHub repository URL into an isolated local filesystem snapshot
 
 Kind: `value`
 Module: `src/metadata/index.ts`
-Source: `src/metadata/index.ts:3:14`
+Source: `src/metadata/index.ts:1:14`
 
 ## RepositoryConnectionFailure
 

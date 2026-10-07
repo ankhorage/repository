@@ -1,7 +1,5 @@
 graph LR
   module_package_json["package.json"]
-  module_src_capabilities_index_test_ts["src/capabilities/index.test.ts"]
-  module_src_capabilities_index_ts["src/capabilities/index.ts"]
   module_src_cli_commands_connect_definitions_ConnectCommandOptions_ts["src/cli/commands/connect/definitions/ConnectCommandOptions.ts"]
   module_src_cli_commands_connect_parseConnectCommandOptions_ts["src/cli/commands/connect/parseConnectCommandOptions.ts"]
   module_src_cli_commands_connect_runConnectCommandAsync_ts["src/cli/commands/connect/runConnectCommandAsync.ts"]
@@ -29,7 +27,7 @@ graph LR
   module_src_index_test_ts["src/index.test.ts"]
   module_src_index_ts["src/index.ts"]
   module_src_metadata_index_ts["src/metadata/index.ts"]
-  module_src_package_test_ts["src/package.test.ts"]
+  module_src_metadata_repositoryPackageMetadata_ts["src/metadata/repositoryPackageMetadata.ts"]
   module_src_providers_github_adapters_createGhCliRepositoryGateway_test_ts["src/providers/github/adapters/createGhCliRepositoryGateway.test.ts"]
   module_src_providers_github_adapters_createGhCliRepositoryGateway_ts["src/providers/github/adapters/createGhCliRepositoryGateway.ts"]
   module_src_providers_github_adapters_createGitHubHttpRepositoryReadGateway_test_ts["src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts"]
@@ -50,7 +48,6 @@ graph LR
   module_src_providers_github_services_materializeGitHubRepositoryWithGatewayAsync_test_ts["src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.test.ts"]
   module_src_providers_github_services_materializeGitHubRepositoryWithGatewayAsync_ts["src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts"]
   module_src_providers_github_services_publishGitHubProjectSnapshotAsync_ts["src/providers/github/services/publishGitHubProjectSnapshotAsync.ts"]
-  module_src_capabilities_index_test_ts --> module_src_capabilities_index_ts
   module_src_cli_commands_connect_definitions_ConnectCommandOptions_ts --> module_src_providers_github_definitions_GitHubRepositoryVisibility_ts
   module_src_cli_commands_connect_parseConnectCommandOptions_ts --> module_src_cli_commands_connect_definitions_ConnectCommandOptions_ts
   module_src_cli_commands_connect_runConnectCommandAsync_ts --> module_src_cli_commands_connect_parseConnectCommandOptions_ts
@@ -62,12 +59,10 @@ graph LR
   module_src_cli_commands_materialize_runMaterializeCommandAsync_ts --> module_src_providers_github_services_materializeGitHubRepositoryAsync_ts
   module_src_cli_index_ts --> module_src_cli_provider_createRepositoryRuntimeProvider_ts
   module_src_cli_provider_createRepositoryRuntimeProvider_test_ts --> module_package_json
-  module_src_cli_provider_createRepositoryRuntimeProvider_test_ts --> module_src_capabilities_index_ts
   module_src_cli_provider_createRepositoryRuntimeProvider_test_ts --> module_src_cli_provider_createRepositoryRuntimeProvider_ts
-  module_src_cli_provider_createRepositoryRuntimeProvider_ts --> module_package_json
-  module_src_cli_provider_createRepositoryRuntimeProvider_ts --> module_src_capabilities_index_ts
   module_src_cli_provider_createRepositoryRuntimeProvider_ts --> module_src_cli_commands_connect_runConnectCommandAsync_ts
   module_src_cli_provider_createRepositoryRuntimeProvider_ts --> module_src_cli_commands_materialize_runMaterializeCommandAsync_ts
+  module_src_cli_provider_createRepositoryRuntimeProvider_ts --> module_src_metadata_repositoryPackageMetadata_ts
   module_src_connection_adapters_createLocalProjectSnapshotReader_test_ts --> module_src_connection_adapters_createLocalProjectSnapshotReader_ts
   module_src_connection_adapters_createLocalProjectSnapshotReader_ts --> module_src_connection_definitions_ProjectSnapshot_ts
   module_src_connection_adapters_createLocalProjectSnapshotReader_ts --> module_src_connection_definitions_ProjectSnapshotEntry_ts
@@ -81,12 +76,9 @@ graph LR
   module_src_connection_services_connectRepositoryAsync_ts --> module_src_connection_definitions_RepositoryConnectionResult_ts
   module_src_connection_services_connectRepositoryAsync_ts --> module_src_providers_github_definitions_GitHubRepositoryConnectionResult_ts
   module_src_connection_services_connectRepositoryAsync_ts --> module_src_providers_github_services_connectGitHubRepositoryAsync_ts
-  module_src_index_test_ts --> module_src_capabilities_index_ts
   module_src_index_test_ts --> module_src_index_ts
   module_src_index_test_ts --> module_src_metadata_index_ts
-  module_src_metadata_index_ts --> module_src_capabilities_index_ts
-  module_src_package_test_ts --> module_package_json
-  module_src_package_test_ts --> module_src_capabilities_index_ts
+  module_src_metadata_repositoryPackageMetadata_ts --> module_package_json
   module_src_providers_github_adapters_createGhCliRepositoryGateway_test_ts --> module_src_connection_definitions_ProjectSnapshot_ts
   module_src_providers_github_adapters_createGhCliRepositoryGateway_test_ts --> module_src_providers_github_adapters_createGhCliRepositoryGateway_ts
   module_src_providers_github_adapters_createGhCliRepositoryGateway_test_ts --> module_src_providers_github_ports_GitHubRepositoryGateway_ts

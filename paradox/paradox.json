@@ -101,22 +101,6 @@
       "exports": []
     },
     {
-      "path": "src/capabilities/index.test.ts",
-      "isEntrypoint": false,
-      "dependencies": [
-        "src/capabilities/index.ts"
-      ],
-      "exports": []
-    },
-    {
-      "path": "src/capabilities/index.ts",
-      "isEntrypoint": false,
-      "dependencies": [],
-      "exports": [
-        "CAPABILITIES"
-      ]
-    },
-    {
       "path": "src/cli/commands/connect/definitions/ConnectCommandOptions.ts",
       "isEntrypoint": false,
       "dependencies": [
@@ -203,7 +187,6 @@
       "isEntrypoint": false,
       "dependencies": [
         "package.json",
-        "src/capabilities/index.ts",
         "src/cli/provider/createRepositoryRuntimeProvider.ts"
       ],
       "exports": []
@@ -212,13 +195,13 @@
       "path": "src/cli/provider/createRepositoryRuntimeProvider.ts",
       "isEntrypoint": false,
       "dependencies": [
-        "package.json",
-        "src/capabilities/index.ts",
         "src/cli/commands/connect/runConnectCommandAsync.ts",
-        "src/cli/commands/materialize/runMaterializeCommandAsync.ts"
+        "src/cli/commands/materialize/runMaterializeCommandAsync.ts",
+        "src/metadata/repositoryPackageMetadata.ts"
       ],
       "exports": [
-        "createRepositoryRuntimeProvider"
+        "createRepositoryRuntimeProvider",
+        "RepositoryRuntimeProvider"
       ]
     },
     {
@@ -364,7 +347,6 @@
       "path": "src/index.test.ts",
       "isEntrypoint": false,
       "dependencies": [
-        "src/capabilities/index.ts",
         "src/index.ts",
         "src/metadata/index.ts"
       ],
@@ -386,21 +368,20 @@
     {
       "path": "src/metadata/index.ts",
       "isEntrypoint": true,
-      "dependencies": [
-        "src/capabilities/index.ts"
-      ],
+      "dependencies": [],
       "exports": [
         "REPOSITORY_PACKAGE_METADATA"
       ]
     },
     {
-      "path": "src/package.test.ts",
+      "path": "src/metadata/repositoryPackageMetadata.ts",
       "isEntrypoint": false,
       "dependencies": [
-        "package.json",
-        "src/capabilities/index.ts"
+        "package.json"
       ],
-      "exports": []
+      "exports": [
+        "repositoryPackageMetadata"
+      ]
     },
     {
       "path": "src/providers/github/adapters/createGhCliRepositoryGateway.test.ts",
@@ -1101,7 +1082,7 @@
       "modulePath": "src/metadata/index.ts",
       "sourceLocation": {
         "filePath": "src/metadata/index.ts",
-        "line": 3,
+        "line": 1,
         "column": 14
       },
       "exportPaths": [
@@ -1347,7 +1328,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/cli/provider/createRepositoryRuntimeProvider.ts",
-        "line": 9,
+        "line": 43,
         "column": 1
       }
     },
@@ -1611,7 +1592,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/index.test.ts",
-        "line": 24,
+        "line": 22,
         "column": 1
       }
     },
@@ -2328,11 +2309,6 @@
     "imports": [
       {
         "fromPath": "src/index.test.ts",
-        "toPath": "src/capabilities/index.ts",
-        "sourcePath": "src/index.test.ts"
-      },
-      {
-        "fromPath": "src/index.test.ts",
         "toPath": "src/index.ts",
         "sourcePath": "src/index.test.ts"
       },
@@ -2355,21 +2331,6 @@
         "fromPath": "src/index.ts",
         "toPath": "src/connection/services/connectRepositoryAsync.ts",
         "sourcePath": "src/index.ts"
-      },
-      {
-        "fromPath": "src/package.test.ts",
-        "toPath": "package.json",
-        "sourcePath": "src/package.test.ts"
-      },
-      {
-        "fromPath": "src/package.test.ts",
-        "toPath": "src/capabilities/index.ts",
-        "sourcePath": "src/package.test.ts"
-      },
-      {
-        "fromPath": "src/capabilities/index.test.ts",
-        "toPath": "src/capabilities/index.ts",
-        "sourcePath": "src/capabilities/index.test.ts"
       },
       {
         "fromPath": "src/cli/index.ts",
@@ -2412,18 +2373,13 @@
         "sourcePath": "src/github/index.ts"
       },
       {
-        "fromPath": "src/metadata/index.ts",
-        "toPath": "src/capabilities/index.ts",
-        "sourcePath": "src/metadata/index.ts"
+        "fromPath": "src/metadata/repositoryPackageMetadata.ts",
+        "toPath": "package.json",
+        "sourcePath": "src/metadata/repositoryPackageMetadata.ts"
       },
       {
         "fromPath": "src/cli/provider/createRepositoryRuntimeProvider.test.ts",
         "toPath": "package.json",
-        "sourcePath": "src/cli/provider/createRepositoryRuntimeProvider.test.ts"
-      },
-      {
-        "fromPath": "src/cli/provider/createRepositoryRuntimeProvider.test.ts",
-        "toPath": "src/capabilities/index.ts",
         "sourcePath": "src/cli/provider/createRepositoryRuntimeProvider.test.ts"
       },
       {
@@ -2433,12 +2389,7 @@
       },
       {
         "fromPath": "src/cli/provider/createRepositoryRuntimeProvider.ts",
-        "toPath": "package.json",
-        "sourcePath": "src/cli/provider/createRepositoryRuntimeProvider.ts"
-      },
-      {
-        "fromPath": "src/cli/provider/createRepositoryRuntimeProvider.ts",
-        "toPath": "src/capabilities/index.ts",
+        "toPath": "src/metadata/repositoryPackageMetadata.ts",
         "sourcePath": "src/cli/provider/createRepositoryRuntimeProvider.ts"
       },
       {
@@ -2826,54 +2777,6 @@
         "sourcePath": "src/index.test.ts"
       },
       {
-        "fromSymbol": "src/package.test.ts",
-        "toSymbol": "describe",
-        "callExpression": "describe",
-        "sourcePath": "src/package.test.ts"
-      },
-      {
-        "fromSymbol": "src/package.test.ts",
-        "toSymbol": "test",
-        "callExpression": "test",
-        "sourcePath": "src/package.test.ts"
-      },
-      {
-        "fromSymbol": "src/package.test.ts",
-        "toSymbol": "expect",
-        "callExpression": "expect",
-        "sourcePath": "src/package.test.ts"
-      },
-      {
-        "fromSymbol": "src/package.test.ts",
-        "toSymbol": "isCapability",
-        "callExpression": "isCapability",
-        "sourcePath": "src/package.test.ts"
-      },
-      {
-        "fromSymbol": "src/package.test.ts",
-        "toSymbol": "areCapabilitiesEqual",
-        "callExpression": "areCapabilitiesEqual",
-        "sourcePath": "src/package.test.ts"
-      },
-      {
-        "fromSymbol": "src/capabilities/index.test.ts",
-        "toSymbol": "describe",
-        "callExpression": "describe",
-        "sourcePath": "src/capabilities/index.test.ts"
-      },
-      {
-        "fromSymbol": "src/capabilities/index.test.ts",
-        "toSymbol": "test",
-        "callExpression": "test",
-        "sourcePath": "src/capabilities/index.test.ts"
-      },
-      {
-        "fromSymbol": "src/capabilities/index.test.ts",
-        "toSymbol": "expect",
-        "callExpression": "expect",
-        "sourcePath": "src/capabilities/index.test.ts"
-      },
-      {
         "fromSymbol": "src/cli/index.ts",
         "toSymbol": "createRepositoryRuntimeProvider",
         "callExpression": "createRepositoryRuntimeProvider",
@@ -2887,14 +2790,14 @@
       },
       {
         "fromSymbol": "src/cli/provider/createRepositoryRuntimeProvider.test.ts",
-        "toSymbol": "createRepositoryRuntimeProvider",
-        "callExpression": "createRepositoryRuntimeProvider",
+        "toSymbol": "expect",
+        "callExpression": "expect",
         "sourcePath": "src/cli/provider/createRepositoryRuntimeProvider.test.ts"
       },
       {
         "fromSymbol": "src/cli/provider/createRepositoryRuntimeProvider.test.ts",
-        "toSymbol": "expect",
-        "callExpression": "expect",
+        "toSymbol": "createRepositoryRuntimeProvider",
+        "callExpression": "createRepositoryRuntimeProvider",
         "sourcePath": "src/cli/provider/createRepositoryRuntimeProvider.test.ts"
       },
       {
