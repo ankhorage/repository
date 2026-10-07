@@ -465,7 +465,7 @@
     "modulePath": "src/metadata/index.ts",
     "sourceLocation": {
       "filePath": "src/metadata/index.ts",
-      "line": 1,
+      "line": 3,
       "column": 14
     },
     "exportPaths": [

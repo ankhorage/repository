@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.6.0
+
+### Minor Changes
+
+- 56ed0be: Publish canonical Repository capability descriptors and use them for Ankh provider discovery.
+
 ## 0.5.8
 
 ### Patch Changes
