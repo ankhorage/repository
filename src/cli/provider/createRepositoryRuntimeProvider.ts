@@ -1,55 +1,32 @@
-import { repositoryPackageMetadata } from '../../metadata/repositoryPackageMetadata.js';
-import {
-  type ConnectCommandRequest,
-  runConnectCommandAsync,
-} from '../commands/connect/runConnectCommandAsync.js';
-import {
-  type MaterializeCommandRequest,
-  runMaterializeCommandAsync,
-} from '../commands/materialize/runMaterializeCommandAsync.js';
+import type { AnkhRuntimeCommandProvider } from '@ankhorage/ankh';
 
-export interface RepositoryRuntimeProvider {
-  readonly id: 'repository';
-  readonly category: 'repository';
-  readonly version: string;
-  readonly capabilities: readonly ['repository.connect', 'repository.materialize'];
-  readonly commands: readonly [
-    {
-      readonly path: readonly ['connect'];
-      readonly capability: 'repository.connect';
-      readonly summary: string;
-    },
-    {
-      readonly path: readonly ['materialize'];
-      readonly capability: 'repository.materialize';
-      readonly summary: string;
-    },
-  ];
-  readonly handlers: readonly [
-    {
-      readonly path: readonly ['connect'];
-      readonly handler: (request: ConnectCommandRequest) => Promise<{ readonly exitCode: number }>;
-    },
-    {
-      readonly path: readonly ['materialize'];
-      readonly handler: (
-        request: MaterializeCommandRequest,
-      ) => Promise<{ readonly exitCode: number }>;
-    },
-  ];
-}
+import packageJson from '../../../package.json';
+import { CAPABILITIES } from '../../capabilities/index.js';
+import { runConnectCommandAsync } from '../commands/connect/runConnectCommandAsync.js';
+import { runMaterializeCommandAsync } from '../commands/materialize/runMaterializeCommandAsync.js';
 
 /*** Create the package-level Ankh provider for repository connect and materialization commands. */
-export function createRepositoryRuntimeProvider(): RepositoryRuntimeProvider {
+export function createRepositoryRuntimeProvider(): AnkhRuntimeCommandProvider {
   return {
-    id: repositoryPackageMetadata.provider,
-    category: repositoryPackageMetadata.category,
-    version: repositoryPackageMetadata.version,
-    capabilities: repositoryPackageMetadata.capabilities,
-    commands: [repositoryPackageMetadata.command, repositoryPackageMetadata.materializeCommand],
+    id: 'repository',
+    category: 'repository',
+    version: packageJson.version,
+    capabilities: CAPABILITIES,
+    commands: [
+      {
+        path: ['connect'],
+        capability: CAPABILITIES[0].id,
+        summary: 'Create or safely resume a source repository connection.',
+      },
+      {
+        path: ['materialize'],
+        capability: CAPABILITIES[1].id,
+        summary: 'Materialize a GitHub repository URL as a local filesystem snapshot.',
+      },
+    ],
     handlers: [
       { path: ['connect'], handler: runConnectCommandAsync },
       { path: ['materialize'], handler: runMaterializeCommandAsync },
     ],
-  };
+  } satisfies AnkhRuntimeCommandProvider;
 }

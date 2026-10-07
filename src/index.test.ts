@@ -3,6 +3,7 @@ import { extname, join } from 'node:path';
 
 import { expect, test } from 'bun:test';
 
+import { CAPABILITIES } from './capabilities/index.js';
 import * as packageApi from './index.js';
 import { REPOSITORY_PACKAGE_METADATA } from './metadata/index.js';
 
@@ -17,6 +18,7 @@ test('publishes repository manifest authoring metadata', () => {
     contractSubpath: '@ankhorage/contracts/repository',
     providers: ['github'],
   });
+  expect(REPOSITORY_PACKAGE_METADATA.capabilities).toBe(CAPABILITIES);
 });
 
 async function collectProductionTypeScriptFiles(directory: string): Promise<string[]> {

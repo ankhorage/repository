@@ -48,14 +48,46 @@
       "types": "./dist/cli/index.d.ts",
       "default": "./dist/cli/index.js"
     },
+    "./capabilities": {
+      "types": "./dist/capabilities/index.d.ts",
+      "default": "./dist/capabilities/index.js"
+    },
     "./package.json": "./package.json"
   },
   "ankh": {
     "category": "repository",
     "provider": "./dist/cli/index.js",
     "capabilities": [
-      "repository.connect",
-      "repository.materialize"
+      {
+        "id": "repository.connect",
+        "owner": "@ankhorage/repository",
+        "access": [
+          "invoke"
+        ],
+        "binding": {
+          "kind": "action",
+          "bindableAs": [
+            "target"
+          ]
+        },
+        "label": "Connect repository",
+        "description": "Create or safely resume a source repository connection."
+      },
+      {
+        "id": "repository.materialize",
+        "owner": "@ankhorage/repository",
+        "access": [
+          "invoke"
+        ],
+        "binding": {
+          "kind": "action",
+          "bindableAs": [
+            "target"
+          ]
+        },
+        "label": "Materialize repository",
+        "description": "Materialize a GitHub repository revision as a local filesystem snapshot."
+      }
     ]
   },
   "publishConfig": {
@@ -84,6 +116,7 @@
   },
   "packageManager": "bun@1.4.2",
   "dependencies": {
+    "@ankhorage/ankh": "^0.12.0",
     "@ankhorage/contracts": "^24.1.0",
     "ignore": "^7.0.12"
   }
