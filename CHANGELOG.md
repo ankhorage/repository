@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.6.1
+
+### Patch Changes
+
+- f696217: Update dependencies: `@ankhorage/contracts`.
+
 ## 0.6.0
 
 ### Minor Changes
