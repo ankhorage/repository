@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.6.5
+
+### Patch Changes
+
+- a17dd19: Use the canonical capability declaration and runtime helper packages.
+
 ## 0.6.4
 
 ### Patch Changes
