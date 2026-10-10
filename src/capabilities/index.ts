@@ -1,4 +1,4 @@
-import type { Capability } from '@ankhorage/contracts/capabilities';
+import type { Capability } from '@ankhorage/contracts/capability';
 
 /*** Publish Repository's executable connection and materialization operations for Ankh discovery. */
 export const CAPABILITIES = [
