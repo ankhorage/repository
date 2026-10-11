@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.6.6
+
+### Patch Changes
+
+- 28565af: Update dependencies: `@ankhorage/ankh`, `@ankhorage/devtools`.
+
 ## 0.6.5
 
 ### Patch Changes
