@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.6.7
+
+### Patch Changes
+
+- d0a0d6f: Update dependencies: `@ankhorage/contracts`, `@ankhorage/paradox`.
+
 ## 0.6.6
 
 ### Patch Changes
