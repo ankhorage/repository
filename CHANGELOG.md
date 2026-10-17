@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.6.9
+
+### Patch Changes
+
+- 5cce8f2: Update dependencies: `@ankhorage/ankh`.
+
 ## 0.6.8
 
 ### Patch Changes
