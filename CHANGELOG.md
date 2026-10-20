@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.6.10
+
+### Patch Changes
+
+- 73a2397: Update dependencies: `ignore`.
+
 ## 0.6.9
 
 ### Patch Changes
