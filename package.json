@@ -119,6 +119,6 @@
     "@ankhorage/ankh": "^0.13.2",
     "@ankhorage/capability": "^0.2.2",
     "@ankhorage/contracts": "^26.0.1",
-    "ignore": "^7.0.13"
+    "ignore": "^7.0.14"
   }
 }
