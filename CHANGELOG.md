@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.6.12
+
+### Patch Changes
+
+- f58acc6: Update dependencies: `ignore`.
+
 ## 0.6.11
 
 ### Patch Changes
