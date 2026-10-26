@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.6.14
+
+### Patch Changes
+
+- d810fac: Update dependencies: `@ankhorage/contracts`.
+
 ## 0.6.13
 
 ### Patch Changes
