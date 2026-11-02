@@ -47,8 +47,14 @@ async function inspectRepositoryAsync(
   );
   const record = requireRecord(value.value, 'repository metadata');
   const defaultBranch = requireString(record.default_branch, 'repository default branch');
-  const url = typeof record.html_url === 'string' ? record.html_url : target.url;
-  return { defaultBranch, url };
+  const owner = requireRecord(record.owner, 'repository owner');
+  return {
+    id: String(requireSafeInteger(record.id, 'repository ID')),
+    owner: requireString(owner.login, 'repository owner login'),
+    name: requireString(record.name, 'repository name'),
+    defaultBranch,
+    url: requireString(record.html_url, 'repository URL'),
+  };
 }
 
 /*** Resolve a branch, tag, or commit ref to an immutable commit and tree SHA. */
@@ -139,6 +145,13 @@ function requireRecord(value: unknown, subject: string): Record<string, unknown>
 /*** Require a non-empty provider string field. */
 function requireString(value: unknown, subject: string): string {
   if (typeof value !== 'string' || value.trim() === '')
+    throw new Error(`GitHub returned invalid ${subject}.`);
+  return value;
+}
+
+/** Require a safe integer GitHub resource ID before exposing its canonical string form. */
+function requireSafeInteger(value: unknown, subject: string): number {
+  if (typeof value !== 'number' || !Number.isSafeInteger(value) || value < 0)
     throw new Error(`GitHub returned invalid ${subject}.`);
   return value;
 }

@@ -2,15 +2,15 @@ import { chmod, mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 
-import { GitHubRepositoryDiscoveryError } from '../definitions/GitHubRepositoryDiscoveryResult.js';
 import type { GitHubRepositoryMaterializationOptions } from '../definitions/GitHubRepositoryMaterializationOptions.js';
 import type { GitHubRepositoryMaterializationResult } from '../definitions/GitHubRepositoryMaterializationResult.js';
 import type {
   GitHubRepositoryReadGateway,
   GitHubRepositoryReadTarget,
-  GitHubRepositoryRevision,
   GitHubRepositoryTreeEntry,
 } from '../ports/GitHubRepositoryReadGateway.js';
+import { parseGitHubRepositoryUrl } from './parseGitHubRepositoryUrl.js';
+import { resolveGitHubUrlRevisionAsync } from './resolveGitHubUrlRevisionAsync.js';
 
 /*** Materialize a GitHub repository through an injected read gateway for deterministic testing. */
 export async function materializeGitHubRepositoryWithGatewayAsync(
@@ -19,19 +19,29 @@ export async function materializeGitHubRepositoryWithGatewayAsync(
 ): Promise<GitHubRepositoryMaterializationResult> {
   const parsed = parseGitHubRepositoryUrl(options.url);
   const repository = await gateway.inspectRepositoryAsync(parsed.target, options.signal);
+  const target = { owner: repository.owner, name: repository.name, url: repository.url };
   const explicitRef = normalizeRef(options.ref);
   const revision =
     explicitRef === undefined
-      ? await resolveUrlRevisionAsync(gateway, parsed, repository.defaultBranch, options.signal)
-      : await gateway.resolveRevisionAsync(parsed.target, explicitRef, options.signal);
-  const tree = await gateway.readTreeAsync(parsed.target, revision.treeSha, options.signal);
+      ? await resolveGitHubUrlRevisionAsync(
+          gateway,
+          parsed,
+          target,
+          repository.defaultBranch,
+          options.signal,
+        )
+      : {
+          ...(await gateway.resolveRevisionAsync(target, explicitRef, options.signal)),
+          ref: explicitRef,
+        };
+  const tree = await gateway.readTreeAsync(target, revision.treeSha, options.signal);
   const validated = validateTree(tree.entries, tree.truncated);
   const rootPath = await createMaterializationRootAsync(options.destinationPath);
 
   try {
     await writeFileBatchesAsync(
       gateway,
-      parsed.target,
+      target,
       revision.commitSha,
       rootPath,
       validated.files,
@@ -47,8 +57,8 @@ export async function materializeGitHubRepositoryWithGatewayAsync(
     revision: revision.commitSha,
     diagnostics: validated.diagnostics,
     repository: {
-      owner: parsed.target.owner,
-      name: parsed.target.name,
+      owner: repository.owner,
+      name: repository.name,
       url: repository.url,
       defaultBranch: repository.defaultBranch,
     },
@@ -59,134 +69,6 @@ export async function materializeGitHubRepositoryWithGatewayAsync(
 const MAX_FILE_COUNT = 20_000;
 const MAX_TOTAL_BYTES = 256 * 1024 * 1024;
 const WRITE_BATCH_SIZE = 8;
-
-interface ParsedGitHubRepositoryUrl {
-  readonly target: GitHubRepositoryReadTarget;
-  readonly refCandidates: readonly string[];
-}
-
-/*** Parse a normal GitHub repository, tree, blob, or commit URL into repository and ref intent. */
-function parseGitHubRepositoryUrl(value: string): ParsedGitHubRepositoryUrl {
-  const url = parseRepositoryUrl(value);
-  assertGitHubRepositoryUrl(url);
-  const segments = decodePathSegments(url);
-  if (segments.length < 2) {
-    throw invalidRepositoryUrl();
-  }
-
-  const [owner = '', repositorySegment = '', route] = segments;
-  const name = repositorySegment.endsWith('.git')
-    ? repositorySegment.slice(0, -4)
-    : repositorySegment;
-  assertRepositoryIdentity(owner, name);
-
-  const routeSegments = segments.slice(3);
-  if (route === undefined) {
-    return {
-      target: { owner, name, url: `https://github.com/${owner}/${name}` },
-      refCandidates: [],
-    };
-  }
-  if (route === 'commit') {
-    if (routeSegments.length !== 1) throw invalidRepositoryUrl();
-    return {
-      target: { owner, name, url: `https://github.com/${owner}/${name}` },
-      refCandidates: [routeSegments[0] ?? ''],
-    };
-  }
-  if (route !== 'tree' && route !== 'blob') throw invalidRepositoryUrl();
-  if (routeSegments.length === 0) throw invalidRepositoryUrl();
-
-  return {
-    target: { owner, name, url: `https://github.com/${owner}/${name}` },
-    refCandidates: createRefCandidates(routeSegments),
-  };
-}
-
-/*** Parse a repository URL while preserving the original parsing failure as the cause. */
-function parseRepositoryUrl(value: string): URL {
-  try {
-    return new URL(value);
-  } catch (error) {
-    throw new Error('Repository URL must be a valid GitHub HTTPS URL.', { cause: error });
-  }
-}
-
-/*** Reject non-GitHub origins and embedded credentials while ignoring normal page query/anchor state. */
-function assertGitHubRepositoryUrl(url: URL): void {
-  if (
-    url.protocol !== 'https:' ||
-    url.hostname.toLowerCase() !== 'github.com' ||
-    url.username !== '' ||
-    url.password !== ''
-  ) {
-    throw invalidRepositoryUrl();
-  }
-}
-
-/*** Decode normal GitHub path segments and reject malformed encoded paths. */
-function decodePathSegments(url: URL): readonly string[] {
-  try {
-    return url.pathname
-      .split('/')
-      .filter(Boolean)
-      .map((segment) => decodeURIComponent(segment));
-  } catch (error) {
-    throw new Error('Repository URL contains an invalid encoded path.', { cause: error });
-  }
-}
-
-/*** Build longest-first ref candidates so slash-containing branch/tag names resolve like GitHub URLs. */
-function createRefCandidates(segments: readonly string[]): readonly string[] {
-  return Array.from({ length: segments.length }, (_, index) =>
-    segments.slice(0, segments.length - index).join('/'),
-  );
-}
-
-/*** Resolve URL-derived ref candidates, falling back to the repository default branch. */
-async function resolveUrlRevisionAsync(
-  gateway: GitHubRepositoryReadGateway,
-  parsed: ParsedGitHubRepositoryUrl,
-  defaultBranch: string,
-  signal: AbortSignal | undefined,
-): Promise<GitHubRepositoryRevision> {
-  if (parsed.refCandidates.length === 0) {
-    return gateway.resolveRevisionAsync(parsed.target, defaultBranch, signal);
-  }
-
-  for (const candidate of parsed.refCandidates) {
-    try {
-      return await gateway.resolveRevisionAsync(parsed.target, candidate, signal);
-    } catch (error) {
-      if (isCancellationError(error)) throw error;
-      // GitHub tree/blob URLs can contain both slash-containing refs and trailing repository paths.
-    }
-  }
-  throw new Error('GitHub repository URL does not resolve to a branch, tag, or commit.');
-}
-
-/*** Preserve caller cancellation and deadlines instead of mistaking them for an ambiguous URL ref. */
-function isCancellationError(error: unknown): boolean {
-  return (
-    error instanceof GitHubRepositoryDiscoveryError &&
-    (error.code === 'cancelled' || error.code === 'timeout')
-  );
-}
-
-/*** Create the consistent public error for unsupported GitHub URL shapes. */
-function invalidRepositoryUrl(): Error {
-  return new Error('Repository URL must be a GitHub repository, tree, blob, or commit HTTPS URL.');
-}
-
-/*** Validate canonical GitHub owner and repository path segments. */
-function assertRepositoryIdentity(owner: string, name: string): void {
-  if (!/^[A-Za-z0-9](?:[A-Za-z0-9-]{0,98}[A-Za-z0-9])?$/u.test(owner)) {
-    throw new Error('GitHub repository owner is invalid.');
-  }
-  if (!/^[A-Za-z0-9._-]{1,100}$/u.test(name) || name === '.' || name === '..') {
-    throw new Error('GitHub repository name is invalid.');
-  }
-}
 
 /*** Normalize an optional requested ref while rejecting an explicitly empty value. */
 function normalizeRef(value: string | undefined): string | undefined {

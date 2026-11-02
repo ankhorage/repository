@@ -195,6 +195,9 @@ function createGateway(options: {
   return {
     inspectRepositoryAsync: (target) =>
       Promise.resolve({
+        id: '1',
+        owner: target.owner,
+        name: target.name,
         defaultBranch: options.defaultBranch ?? 'main',
         url: target.url,
       }),
