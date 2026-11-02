@@ -1,5 +1,6 @@
 import type { GitHubRepositoryAuthentication } from '../definitions/GitHubRepositoryDiscoveryOptions.js';
 import { GitHubRepositoryDiscoveryError } from '../definitions/GitHubRepositoryDiscoveryResult.js';
+import { type GitHubRateLimitResponse, rateLimitResponseAsync } from './rateLimitResponseAsync.js';
 
 const REQUEST_TIMEOUT_MILLISECONDS = 30_000;
 const MAX_REQUEST_ATTEMPTS = 3;
@@ -48,11 +49,6 @@ export function createGitHubHttpClient(
 
 type ResponseReaderAsync<Value> = (response: Response) => Promise<Value>;
 
-interface GitHubRateLimitResponse {
-  readonly isRateLimited: boolean;
-  readonly retryAfterMilliseconds?: number;
-}
-
 interface GitHubHttpClientConfiguration {
   readonly authentication: GitHubRepositoryAuthentication;
   readonly now: () => number;
@@ -86,7 +82,14 @@ async function requestWithRetriesAsync<Value>(
         throw new GitHubRepositoryDiscoveryError('api-failure', 'GitHub returned malformed data.');
       }
     }
-    const rateLimit = await rateLimitResponseAsync(response, configuration, signal);
+    const rateLimit = await rateLimitResponseAsync(response, configuration.now, (errorResponse) =>
+      readResponseWithDeadlineAsync(
+        readGitHubErrorMessageAsync,
+        errorResponse,
+        configuration,
+        signal,
+      ),
+    );
     const failure = requestError(response, subject, rateLimit);
     const retryDelay = retryDelayMilliseconds(response, attempt, rateLimit);
     const canRetry =
@@ -201,43 +204,6 @@ function retryDelayMilliseconds(
   if (response.status === 429 || response.status >= 500)
     return Math.min(250 * 2 ** attempt, MAX_RETRY_DELAY_MILLISECONDS);
   return undefined;
-}
-
-/*** Read a syntactically valid non-negative Retry-After delay without discarding provider timing. */
-function readRetryAfterMilliseconds(response: Response): number | undefined {
-  const value = response.headers.get('retry-after');
-  if (!value || !/^\d+(?:\.\d+)?$/u.test(value)) return undefined;
-  const milliseconds = Number(value) * 1000;
-  return Number.isSafeInteger(milliseconds) ? milliseconds : undefined;
-}
-
-/*** Read a valid GitHub rate-limit reset timestamp without discarding a delay beyond this client's budget. */
-function readResetDelayMilliseconds(response: Response, now: () => number): number | undefined {
-  const value = response.headers.get('x-ratelimit-reset');
-  if (!value || !/^\d+$/u.test(value)) return undefined;
-  const milliseconds = Number(value) * 1000 - now();
-  return Number.isSafeInteger(milliseconds) && milliseconds >= 0 ? milliseconds : undefined;
-}
-
-/*** Classify GitHub rate-limit responses, including documented headerless secondary-limit messages. */
-async function rateLimitResponseAsync(
-  response: Response,
-  configuration: GitHubHttpClientConfiguration,
-  signal: AbortSignal | undefined,
-): Promise<GitHubRateLimitResponse> {
-  const retryAfterMilliseconds =
-    readRetryAfterMilliseconds(response) ?? readResetDelayMilliseconds(response, configuration.now);
-  if (response.status === 429) return { isRateLimited: true, retryAfterMilliseconds };
-  if (response.status !== 403) return { isRateLimited: false };
-  if (response.headers.get('x-ratelimit-remaining') === '0' || retryAfterMilliseconds !== undefined)
-    return { isRateLimited: true, retryAfterMilliseconds };
-  const message = await readResponseWithDeadlineAsync(
-    readGitHubErrorMessageAsync,
-    response,
-    configuration,
-    signal,
-  );
-  return { isRateLimited: message !== undefined && /\bsecondary rate limit\b/iu.test(message) };
 }
 
 /*** Read only GitHub's structured error message and treat absent or malformed bodies as unknown. */
