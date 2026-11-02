@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.7.0
+
+### Minor Changes
+
+- e482ef6: Add a public GitHub owner and repository discovery API with normalized source parsing, complete pagination, rate-limit handling, retries, cancellation, and repository URL preselection.
+
 ## 0.6.16
 
 ### Patch Changes

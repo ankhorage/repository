@@ -84,6 +84,89 @@
     "structuredRows": []
   },
   {
+    "name": "discoverGitHubRepositoriesAsync",
+    "title": null,
+    "description": null,
+    "isReadme": false,
+    "see": [],
+    "security": [],
+    "kind": "function",
+    "modulePath": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts",
+      "line": 7,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [
+      "GitHubRepositoryDiscoveryOptions",
+      "GitHubRepositoryDiscoveryResult"
+    ],
+    "signatures": [
+      {
+        "label": "(options: GitHubRepositoryDiscoveryOptions) => Promise<GitHubRepositoryDiscoveryResult>",
+        "parameters": [
+          {
+            "name": "options",
+            "type": "GitHubRepositoryDiscoveryOptions",
+            "required": true,
+            "description": null
+          }
+        ],
+        "returnType": "Promise<GitHubRepositoryDiscoveryResult>",
+        "returnDescription": null
+      }
+    ],
+    "members": [],
+    "structuredRows": []
+  },
+  {
+    "name": "GitHubOwnerType",
+    "title": null,
+    "description": null,
+    "isReadme": false,
+    "see": [],
+    "security": [],
+    "kind": "unknown",
+    "modulePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+      "line": 1,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [],
+    "structuredRows": []
+  },
+  {
+    "name": "GitHubRepositoryAuthentication",
+    "title": null,
+    "description": null,
+    "isReadme": false,
+    "see": [],
+    "security": [],
+    "kind": "unknown",
+    "modulePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
+      "line": 2,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [],
+    "structuredRows": []
+  },
+  {
     "name": "GitHubRepositoryConnectionFailure",
     "title": null,
     "description": null,
@@ -239,6 +322,201 @@
     "structuredRows": []
   },
   {
+    "name": "GitHubRepositoryDiscoveryError",
+    "title": null,
+    "description": null,
+    "isReadme": false,
+    "see": [],
+    "security": [],
+    "kind": "type",
+    "modulePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+      "line": 31,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [],
+    "structuredRows": []
+  },
+  {
+    "name": "GitHubRepositoryDiscoveryErrorCode",
+    "title": null,
+    "description": null,
+    "isReadme": false,
+    "see": [],
+    "security": [],
+    "kind": "unknown",
+    "modulePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+      "line": 21,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [],
+    "structuredRows": []
+  },
+  {
+    "name": "GitHubRepositoryDiscoveryOptions",
+    "title": null,
+    "description": null,
+    "isReadme": false,
+    "see": [],
+    "security": [],
+    "kind": "type",
+    "modulePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
+      "line": 5,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [
+      "GitHubRepositoryAuthentication"
+    ],
+    "signatures": [],
+    "members": [
+      {
+        "name": "authentication",
+        "kind": "property",
+        "type": "GitHubRepositoryAuthentication | undefined",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "signal",
+        "kind": "property",
+        "type": "AbortSignal | undefined",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "source",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
+    "name": "GitHubRepositoryDiscoveryRepository",
+    "title": null,
+    "description": null,
+    "isReadme": false,
+    "see": [],
+    "security": [],
+    "kind": "type",
+    "modulePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+      "line": 3,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [
+      {
+        "name": "id",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "name",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "owner",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "url",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "visibility",
+        "kind": "property",
+        "type": "\"private\" | \"public\"",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
+    "name": "GitHubRepositoryDiscoveryResult",
+    "title": null,
+    "description": null,
+    "isReadme": false,
+    "see": [],
+    "security": [],
+    "kind": "type",
+    "modulePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+      "line": 11,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [
+      "GitHubOwnerType",
+      "GitHubRepositoryDiscoveryRepository"
+    ],
+    "signatures": [],
+    "members": [
+      {
+        "name": "owner",
+        "kind": "property",
+        "type": "{ readonly login: string; readonly type: GitHubOwnerType; readonly url: string; }",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "repositories",
+        "kind": "property",
+        "type": "readonly GitHubRepositoryDiscoveryRepository[]",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "selectedRepository",
+        "kind": "property",
+        "type": "GitHubRepositoryDiscoveryRepository | undefined",
+        "required": false,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
     "name": "GitHubRepositoryMaterializationDiagnostic",
     "title": null,
     "description": null,
@@ -320,6 +598,13 @@
         "name": "ref",
         "kind": "property",
         "type": "string | undefined",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "signal",
+        "kind": "property",
+        "type": "AbortSignal | undefined",
         "required": false,
         "description": null
       },

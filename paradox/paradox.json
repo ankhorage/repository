@@ -14,7 +14,7 @@
     {
       "id": "npm",
       "label": "npm",
-      "value": "v0.6.16",
+      "value": "v0.7.0",
       "color": "cb3837"
     },
     {
@@ -85,6 +85,13 @@
       "message": "Exported function connectGitHubRepositoryAsync has no documentation description.",
       "sourcePath": "src/providers/github/services/connectGitHubRepositoryAsync.ts",
       "line": 31
+    },
+    {
+      "ruleId": "documentation.public-function.description",
+      "severity": "warning",
+      "message": "Exported function discoverGitHubRepositoriesAsync has no documentation description.",
+      "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts",
+      "line": 7
     }
   ],
   "config": null,
@@ -349,10 +356,18 @@
       "dependencies": [],
       "exports": [
         "connectGitHubRepositoryAsync",
+        "discoverGitHubRepositoriesAsync",
+        "GitHubOwnerType",
+        "GitHubRepositoryAuthentication",
         "GitHubRepositoryConnectionFailure",
         "GitHubRepositoryConnectionOptions",
         "GitHubRepositoryConnectionResult",
         "GitHubRepositoryConnectionStatus",
+        "GitHubRepositoryDiscoveryError",
+        "GitHubRepositoryDiscoveryErrorCode",
+        "GitHubRepositoryDiscoveryOptions",
+        "GitHubRepositoryDiscoveryRepository",
+        "GitHubRepositoryDiscoveryResult",
         "GitHubRepositoryMaterializationDiagnostic",
         "GitHubRepositoryMaterializationOptions",
         "GitHubRepositoryMaterializationResult",
@@ -426,6 +441,39 @@
       ]
     },
     {
+      "path": "src/providers/github/adapters/createGitHubHttpClient.test.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/providers/github/adapters/createGitHubHttpClient.ts"
+      ],
+      "exports": []
+    },
+    {
+      "path": "src/providers/github/adapters/createGitHubHttpClient.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/providers/github/adapters/rateLimitResponseAsync.ts",
+        "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
+        "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts"
+      ],
+      "exports": [
+        "createGitHubHttpClient",
+        "GitHubHttpClient",
+        "GitHubHttpClientOptions"
+      ]
+    },
+    {
+      "path": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+        "src/providers/github/ports/GitHubRepositoryDiscoveryGateway.ts"
+      ],
+      "exports": [
+        "createGitHubHttpRepositoryDiscoveryGateway"
+      ]
+    },
+    {
       "path": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
       "isEntrypoint": false,
       "dependencies": [
@@ -437,6 +485,9 @@
       "path": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
       "isEntrypoint": false,
       "dependencies": [
+        "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts",
+        "src/providers/github/ports/GitHubRepositoryDiscoveryGateway.ts",
         "src/providers/github/ports/GitHubRepositoryReadGateway.ts"
       ],
       "exports": [
@@ -459,6 +510,15 @@
       ]
     },
     {
+      "path": "src/providers/github/adapters/rateLimitResponseAsync.ts",
+      "isEntrypoint": false,
+      "dependencies": [],
+      "exports": [
+        "GitHubRateLimitResponse",
+        "rateLimitResponseAsync"
+      ]
+    },
+    {
       "path": "src/providers/github/definitions/GitHubRepositoryConnectionOptions.ts",
       "isEntrypoint": false,
       "dependencies": [
@@ -477,6 +537,27 @@
         "GitHubRepositoryConnectionIdentity",
         "GitHubRepositoryConnectionResult",
         "GitHubRepositoryConnectionStatus"
+      ]
+    },
+    {
+      "path": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
+      "isEntrypoint": false,
+      "dependencies": [],
+      "exports": [
+        "GitHubRepositoryAuthentication",
+        "GitHubRepositoryDiscoveryOptions"
+      ]
+    },
+    {
+      "path": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+      "isEntrypoint": false,
+      "dependencies": [],
+      "exports": [
+        "GitHubOwnerType",
+        "GitHubRepositoryDiscoveryError",
+        "GitHubRepositoryDiscoveryErrorCode",
+        "GitHubRepositoryDiscoveryRepository",
+        "GitHubRepositoryDiscoveryResult"
       ]
     },
     {
@@ -511,6 +592,16 @@
       "exports": [
         "GitHubRepositoryConnectionIdentity",
         "GitHubRepositoryConnectionOptions"
+      ]
+    },
+    {
+      "path": "src/providers/github/ports/GitHubRepositoryDiscoveryGateway.ts",
+      "isEntrypoint": false,
+      "dependencies": [],
+      "exports": [
+        "GitHubDiscoveredRepository",
+        "GitHubRepositoryDiscoveryGateway",
+        "GitHubRepositoryOwner"
       ]
     },
     {
@@ -572,6 +663,40 @@
       ]
     },
     {
+      "path": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
+        "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
+        "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+        "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts"
+      ],
+      "exports": [
+        "discoverGitHubRepositoriesAsync"
+      ]
+    },
+    {
+      "path": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.test.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/providers/github/ports/GitHubRepositoryDiscoveryGateway.ts",
+        "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts"
+      ],
+      "exports": []
+    },
+    {
+      "path": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
+        "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+        "src/providers/github/ports/GitHubRepositoryDiscoveryGateway.ts"
+      ],
+      "exports": [
+        "discoverGitHubRepositoriesWithGatewayAsync"
+      ]
+    },
+    {
       "path": "src/providers/github/services/inspectGitHubRepositoryPreflightAsync.ts",
       "isEntrypoint": false,
       "dependencies": [
@@ -613,6 +738,7 @@
       "path": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
       "isEntrypoint": false,
       "dependencies": [
+        "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
         "src/providers/github/definitions/GitHubRepositoryMaterializationOptions.ts",
         "src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts",
         "src/providers/github/ports/GitHubRepositoryReadGateway.ts"
@@ -716,6 +842,89 @@
           "returnDescription": null
         }
       ],
+      "members": [],
+      "structuredRows": []
+    },
+    {
+      "name": "discoverGitHubRepositoriesAsync",
+      "title": null,
+      "description": null,
+      "isReadme": false,
+      "see": [],
+      "security": [],
+      "kind": "function",
+      "modulePath": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts",
+      "sourceLocation": {
+        "filePath": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts",
+        "line": 7,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/github/index.ts"
+      ],
+      "relatedSymbols": [
+        "GitHubRepositoryDiscoveryOptions",
+        "GitHubRepositoryDiscoveryResult"
+      ],
+      "signatures": [
+        {
+          "label": "(options: GitHubRepositoryDiscoveryOptions) => Promise<GitHubRepositoryDiscoveryResult>",
+          "parameters": [
+            {
+              "name": "options",
+              "type": "GitHubRepositoryDiscoveryOptions",
+              "required": true,
+              "description": null
+            }
+          ],
+          "returnType": "Promise<GitHubRepositoryDiscoveryResult>",
+          "returnDescription": null
+        }
+      ],
+      "members": [],
+      "structuredRows": []
+    },
+    {
+      "name": "GitHubOwnerType",
+      "title": null,
+      "description": null,
+      "isReadme": false,
+      "see": [],
+      "security": [],
+      "kind": "unknown",
+      "modulePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+      "sourceLocation": {
+        "filePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+        "line": 1,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/github/index.ts"
+      ],
+      "relatedSymbols": [],
+      "signatures": [],
+      "members": [],
+      "structuredRows": []
+    },
+    {
+      "name": "GitHubRepositoryAuthentication",
+      "title": null,
+      "description": null,
+      "isReadme": false,
+      "see": [],
+      "security": [],
+      "kind": "unknown",
+      "modulePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
+      "sourceLocation": {
+        "filePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
+        "line": 2,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/github/index.ts"
+      ],
+      "relatedSymbols": [],
+      "signatures": [],
       "members": [],
       "structuredRows": []
     },
@@ -875,6 +1084,201 @@
       "structuredRows": []
     },
     {
+      "name": "GitHubRepositoryDiscoveryError",
+      "title": null,
+      "description": null,
+      "isReadme": false,
+      "see": [],
+      "security": [],
+      "kind": "type",
+      "modulePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+      "sourceLocation": {
+        "filePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+        "line": 31,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/github/index.ts"
+      ],
+      "relatedSymbols": [],
+      "signatures": [],
+      "members": [],
+      "structuredRows": []
+    },
+    {
+      "name": "GitHubRepositoryDiscoveryErrorCode",
+      "title": null,
+      "description": null,
+      "isReadme": false,
+      "see": [],
+      "security": [],
+      "kind": "unknown",
+      "modulePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+      "sourceLocation": {
+        "filePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+        "line": 21,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/github/index.ts"
+      ],
+      "relatedSymbols": [],
+      "signatures": [],
+      "members": [],
+      "structuredRows": []
+    },
+    {
+      "name": "GitHubRepositoryDiscoveryOptions",
+      "title": null,
+      "description": null,
+      "isReadme": false,
+      "see": [],
+      "security": [],
+      "kind": "type",
+      "modulePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
+      "sourceLocation": {
+        "filePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
+        "line": 5,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/github/index.ts"
+      ],
+      "relatedSymbols": [
+        "GitHubRepositoryAuthentication"
+      ],
+      "signatures": [],
+      "members": [
+        {
+          "name": "authentication",
+          "kind": "property",
+          "type": "GitHubRepositoryAuthentication | undefined",
+          "required": false,
+          "description": null
+        },
+        {
+          "name": "signal",
+          "kind": "property",
+          "type": "AbortSignal | undefined",
+          "required": false,
+          "description": null
+        },
+        {
+          "name": "source",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        }
+      ],
+      "structuredRows": []
+    },
+    {
+      "name": "GitHubRepositoryDiscoveryRepository",
+      "title": null,
+      "description": null,
+      "isReadme": false,
+      "see": [],
+      "security": [],
+      "kind": "type",
+      "modulePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+      "sourceLocation": {
+        "filePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+        "line": 3,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/github/index.ts"
+      ],
+      "relatedSymbols": [],
+      "signatures": [],
+      "members": [
+        {
+          "name": "id",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "name",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "owner",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "url",
+          "kind": "property",
+          "type": "string",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "visibility",
+          "kind": "property",
+          "type": "\"private\" | \"public\"",
+          "required": true,
+          "description": null
+        }
+      ],
+      "structuredRows": []
+    },
+    {
+      "name": "GitHubRepositoryDiscoveryResult",
+      "title": null,
+      "description": null,
+      "isReadme": false,
+      "see": [],
+      "security": [],
+      "kind": "type",
+      "modulePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+      "sourceLocation": {
+        "filePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+        "line": 11,
+        "column": 1
+      },
+      "exportPaths": [
+        "src/github/index.ts"
+      ],
+      "relatedSymbols": [
+        "GitHubOwnerType",
+        "GitHubRepositoryDiscoveryRepository"
+      ],
+      "signatures": [],
+      "members": [
+        {
+          "name": "owner",
+          "kind": "property",
+          "type": "{ readonly login: string; readonly type: GitHubOwnerType; readonly url: string; }",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "repositories",
+          "kind": "property",
+          "type": "readonly GitHubRepositoryDiscoveryRepository[]",
+          "required": true,
+          "description": null
+        },
+        {
+          "name": "selectedRepository",
+          "kind": "property",
+          "type": "GitHubRepositoryDiscoveryRepository | undefined",
+          "required": false,
+          "description": null
+        }
+      ],
+      "structuredRows": []
+    },
+    {
       "name": "GitHubRepositoryMaterializationDiagnostic",
       "title": null,
       "description": null,
@@ -956,6 +1360,13 @@
           "name": "ref",
           "kind": "property",
           "type": "string | undefined",
+          "required": false,
+          "description": null
+        },
+        {
+          "name": "signal",
+          "kind": "property",
+          "type": "AbortSignal | undefined",
           "required": false,
           "description": null
         },
@@ -1726,13 +2137,332 @@
       }
     },
     {
+      "name": "requestFailureAsync",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpClient.test.ts",
+        "line": 274,
+        "column": 1
+      }
+    },
+    {
+      "name": "createGitHubHttpClient",
+      "description": "Create the canonical credential-safe GitHub HTTP client for repository provider adapters.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "line": 27,
+        "column": 1
+      }
+    },
+    {
+      "name": "requestWithRetriesAsync",
+      "description": "Execute one GitHub request with bounded retry time and cancellation across all request phases.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "line": 60,
+        "column": 1
+      }
+    },
+    {
+      "name": "readResponseWithDeadlineAsync",
+      "description": "Read a response body under the same bounded cancellation contract as the network request.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "line": 111,
+        "column": 1
+      }
+    },
+    {
+      "name": "fetchResponseAsync",
+      "description": "Fetch a GitHub response with a bounded deadline that remains distinguishable from caller cancellation.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "line": 130,
+        "column": 1
+      }
+    },
+    {
+      "name": "createDeadline",
+      "description": "Create a request-local signal and release its timer and caller listener after each request.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "line": 156,
+        "column": 1
+      }
+    },
+    {
+      "name": "abortFromCaller",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "line": 166,
+        "column": 9
+      }
+    },
+    {
+      "name": "readWithCancellationAsync",
+      "description": "Race a response operation against cancellation and always remove the temporary abort listener.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "line": 184,
+        "column": 1
+      }
+    },
+    {
+      "name": "abort",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "line": 191,
+        "column": 11
+      }
+    },
+    {
+      "name": "retryDelayMilliseconds",
+      "description": "Calculate a retry delay without replacing a provider-required rate-limit wait with backoff.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "line": 198,
+        "column": 1
+      }
+    },
+    {
+      "name": "readGitHubErrorMessageAsync",
+      "description": "Read only GitHub's structured error message and treat absent or malformed bodies as unknown.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "line": 210,
+        "column": 1
+      }
+    },
+    {
+      "name": "requestError",
+      "description": "Map provider failures to credential-free typed errors at the canonical adapter boundary.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "line": 222,
+        "column": 1
+      }
+    },
+    {
+      "name": "waitForRetryAsync",
+      "description": "Wait for a retry while promptly cancelling the timer and removing its listener in every outcome.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "line": 250,
+        "column": 1
+      }
+    },
+    {
+      "name": "done",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "line": 254,
+        "column": 11
+      }
+    },
+    {
+      "name": "abort",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "line": 255,
+        "column": 11
+      }
+    },
+    {
+      "name": "requestHeaders",
+      "description": "Build GitHub request headers only when the caller explicitly selected environment authentication.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "line": 269,
+        "column": 1
+      }
+    },
+    {
+      "name": "isInterruptionError",
+      "description": "Identify a stable cancellation or timeout error created by this client.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "line": 285,
+        "column": 1
+      }
+    },
+    {
+      "name": "cancelledError",
+      "description": "Construct the stable cancellation error returned from the GitHub adapter boundary.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "line": 293,
+        "column": 1
+      }
+    },
+    {
+      "name": "timeoutError",
+      "description": "Construct the stable timeout error without conflating it with an explicit caller cancellation.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "line": 301,
+        "column": 1
+      }
+    },
+    {
+      "name": "throwIfAborted",
+      "description": "Stop before starting an adapter request when cancellation has already been requested.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "line": 306,
+        "column": 1
+      }
+    },
+    {
+      "name": "createGitHubHttpRepositoryDiscoveryGateway",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts",
+        "line": 17,
+        "column": 1
+      }
+    },
+    {
+      "name": "resolveOwnerAsync",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts",
+        "line": 29,
+        "column": 1
+      }
+    },
+    {
+      "name": "listOwnerRepositoriesAsync",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts",
+        "line": 55,
+        "column": 1
+      }
+    },
+    {
+      "name": "parseDiscoveredRepository",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts",
+        "line": 82,
+        "column": 1
+      }
+    },
+    {
+      "name": "nextPageUrl",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts",
+        "line": 102,
+        "column": 1
+      }
+    },
+    {
+      "name": "compareRepositories",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts",
+        "line": 117,
+        "column": 1
+      }
+    },
+    {
+      "name": "requireRecord",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts",
+        "line": 127,
+        "column": 1
+      }
+    },
+    {
+      "name": "requireString",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts",
+        "line": 135,
+        "column": 1
+      }
+    },
+    {
+      "name": "target",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
+        "line": 204,
+        "column": 1
+      }
+    },
+    {
       "name": "createFetchFixture",
       "description": null,
       "see": [],
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
-        "line": 42,
+        "line": 208,
         "column": 1
       }
     },
@@ -1743,7 +2473,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
-        "line": 50,
+        "line": 216,
         "column": 1
       }
     },
@@ -1754,7 +2484,18 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
-        "line": 56,
+        "line": 222,
+        "column": 1
+      }
+    },
+    {
+      "name": "createDiscoveryFetchFixture",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
+        "line": 255,
         "column": 1
       }
     },
@@ -1765,7 +2506,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
-        "line": 11,
+        "line": 18,
         "column": 1
       }
     },
@@ -1776,7 +2517,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
-        "line": 26,
+        "line": 38,
         "column": 1
       }
     },
@@ -1787,7 +2528,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
-        "line": 41,
+        "line": 55,
         "column": 1
       }
     },
@@ -1798,7 +2539,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
-        "line": 62,
+        "line": 76,
         "column": 1
       }
     },
@@ -1809,7 +2550,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
-        "line": 82,
+        "line": 96,
         "column": 1
       }
     },
@@ -1820,40 +2561,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
-        "line": 103,
-        "column": 1
-      }
-    },
-    {
-      "name": "requestJsonAsync",
-      "description": "Request GitHub JSON with stable safe errors and optional standard token authentication.",
-      "see": [],
-      "security": [],
-      "sourceLocation": {
-        "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
-        "line": 123,
-        "column": 1
-      }
-    },
-    {
-      "name": "requestHeaders",
-      "description": "Build GitHub request headers without exposing credentials to callers or errors.",
-      "see": [],
-      "security": [],
-      "sourceLocation": {
-        "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
-        "line": 137,
-        "column": 1
-      }
-    },
-    {
-      "name": "requestError",
-      "description": "Convert one failed provider response into a credential-free diagnostic.",
-      "see": [],
-      "security": [],
-      "sourceLocation": {
-        "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
-        "line": 148,
+        "line": 115,
         "column": 1
       }
     },
@@ -1864,7 +2572,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
-        "line": 153,
+        "line": 133,
         "column": 1
       }
     },
@@ -1875,7 +2583,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
-        "line": 161,
+        "line": 140,
         "column": 1
       }
     },
@@ -1957,6 +2665,50 @@
       }
     },
     {
+      "name": "rateLimitResponseAsync",
+      "description": "Classify GitHub primary, secondary, and Retry-After rate-limit responses.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/rateLimitResponseAsync.ts",
+        "line": 2,
+        "column": 1
+      }
+    },
+    {
+      "name": "laterRateLimitDeadlineMilliseconds",
+      "description": "Keep every provider-required rate-limit deadline by selecting the later valid delay.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/rateLimitResponseAsync.ts",
+        "line": 33,
+        "column": 1
+      }
+    },
+    {
+      "name": "readRetryAfterMilliseconds",
+      "description": "Read a syntactically valid non-negative Retry-After delay without discarding provider timing.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/rateLimitResponseAsync.ts",
+        "line": 43,
+        "column": 1
+      }
+    },
+    {
+      "name": "readResetDelayMilliseconds",
+      "description": "Read a valid primary-rate-limit reset timestamp without discarding a delay beyond the retry budget.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/rateLimitResponseAsync.ts",
+        "line": 51,
+        "column": 1
+      }
+    },
+    {
       "name": "createExistingConnectionDependencies",
       "description": null,
       "see": [],
@@ -2019,6 +2771,149 @@
       "sourceLocation": {
         "filePath": "src/providers/github/services/connectGitHubRepositoryAsync.ts",
         "line": 118,
+        "column": 1
+      }
+    },
+    {
+      "name": "discoverGitHubRepositoriesAsync",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts",
+        "line": 7,
+        "column": 1
+      }
+    },
+    {
+      "name": "createGateway",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.test.ts",
+        "line": 55,
+        "column": 1
+      }
+    },
+    {
+      "name": "discoverGitHubRepositoriesWithGatewayAsync",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts",
+        "line": 14,
+        "column": 1
+      }
+    },
+    {
+      "name": "compareRepositories",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts",
+        "line": 34,
+        "column": 1
+      }
+    },
+    {
+      "name": "parseGitHubSource",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts",
+        "line": 44,
+        "column": 1
+      }
+    },
+    {
+      "name": "isOwnerTokenSource",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts",
+        "line": 52,
+        "column": 1
+      }
+    },
+    {
+      "name": "parseGitHubUrlSource",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts",
+        "line": 57,
+        "column": 1
+      }
+    },
+    {
+      "name": "parseSourceUrl",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts",
+        "line": 73,
+        "column": 1
+      }
+    },
+    {
+      "name": "normalizeOwner",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts",
+        "line": 82,
+        "column": 1
+      }
+    },
+    {
+      "name": "normalizeRepositoryName",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts",
+        "line": 91,
+        "column": 1
+      }
+    },
+    {
+      "name": "decodeSegment",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts",
+        "line": 100,
+        "column": 1
+      }
+    },
+    {
+      "name": "invalidSource",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts",
+        "line": 109,
+        "column": 1
+      }
+    },
+    {
+      "name": "throwIfAborted",
+      "description": null,
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts",
+        "line": 117,
         "column": 1
       }
     },
@@ -2128,7 +3023,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 15,
+        "line": 16,
         "column": 1
       }
     },
@@ -2139,7 +3034,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 67,
+        "line": 69,
         "column": 1
       }
     },
@@ -2150,7 +3045,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 105,
+        "line": 107,
         "column": 1
       }
     },
@@ -2161,7 +3056,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 114,
+        "line": 116,
         "column": 1
       }
     },
@@ -2172,7 +3067,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 126,
+        "line": 128,
         "column": 1
       }
     },
@@ -2183,7 +3078,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 138,
+        "line": 140,
         "column": 1
       }
     },
@@ -2194,7 +3089,18 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 145,
+        "line": 147,
+        "column": 1
+      }
+    },
+    {
+      "name": "isCancellationError",
+      "description": "Preserve caller cancellation and deadlines instead of mistaking them for an ambiguous URL ref.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
+        "line": 169,
         "column": 1
       }
     },
@@ -2205,7 +3111,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 165,
+        "line": 177,
         "column": 1
       }
     },
@@ -2216,7 +3122,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 170,
+        "line": 182,
         "column": 1
       }
     },
@@ -2227,7 +3133,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 180,
+        "line": 192,
         "column": 1
       }
     },
@@ -2238,7 +3144,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 188,
+        "line": 200,
         "column": 1
       }
     },
@@ -2249,7 +3155,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 224,
+        "line": 236,
         "column": 1
       }
     },
@@ -2260,7 +3166,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 237,
+        "line": 249,
         "column": 1
       }
     },
@@ -2271,7 +3177,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 255,
+        "line": 270,
         "column": 1
       }
     },
@@ -2282,7 +3188,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
-        "line": 273,
+        "line": 289,
         "column": 1
       }
     },
@@ -2313,6 +3219,14 @@
       "sourcePath": "src/connection/services/connectRepositoryAsync.ts",
       "symbolName": "connectRepositoryAsync",
       "description": "Connect the app project repository using only the standalone `RepositoryManifest` slice.",
+      "isReadme": false
+    },
+    {
+      "kind": "export",
+      "name": "discoverGitHubRepositoriesAsync",
+      "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts",
+      "symbolName": "discoverGitHubRepositoriesAsync",
+      "description": null,
       "isReadme": false
     },
     {
@@ -2388,6 +3302,16 @@
       },
       {
         "fromPath": "src/github/index.ts",
+        "toPath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
+        "sourcePath": "src/github/index.ts"
+      },
+      {
+        "fromPath": "src/github/index.ts",
+        "toPath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+        "sourcePath": "src/github/index.ts"
+      },
+      {
+        "fromPath": "src/github/index.ts",
         "toPath": "src/providers/github/definitions/GitHubRepositoryMaterializationOptions.ts",
         "sourcePath": "src/github/index.ts"
       },
@@ -2404,6 +3328,11 @@
       {
         "fromPath": "src/github/index.ts",
         "toPath": "src/providers/github/services/connectGitHubRepositoryAsync.ts",
+        "sourcePath": "src/github/index.ts"
+      },
+      {
+        "fromPath": "src/github/index.ts",
+        "toPath": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts",
         "sourcePath": "src/github/index.ts"
       },
       {
@@ -2592,13 +3521,58 @@
         "sourcePath": "src/providers/github/adapters/createGhCliRepositoryGateway.ts"
       },
       {
+        "fromPath": "src/providers/github/adapters/createGitHubHttpClient.test.ts",
+        "toPath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.test.ts"
+      },
+      {
+        "fromPath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "toPath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromPath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "toPath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromPath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "toPath": "src/providers/github/adapters/rateLimitResponseAsync.ts",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromPath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts",
+        "toPath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts"
+      },
+      {
+        "fromPath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts",
+        "toPath": "src/providers/github/ports/GitHubRepositoryDiscoveryGateway.ts",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts"
+      },
+      {
         "fromPath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
         "toPath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
         "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts"
       },
       {
         "fromPath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
+        "toPath": "src/providers/github/ports/GitHubRepositoryDiscoveryGateway.ts",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts"
+      },
+      {
+        "fromPath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
         "toPath": "src/providers/github/ports/GitHubRepositoryReadGateway.ts",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts"
+      },
+      {
+        "fromPath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
+        "toPath": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts"
+      },
+      {
+        "fromPath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
+        "toPath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts",
         "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts"
       },
       {
@@ -2697,6 +3671,51 @@
         "sourcePath": "src/providers/github/services/connectGitHubRepositoryAsync.ts"
       },
       {
+        "fromPath": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts",
+        "toPath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts"
+      },
+      {
+        "fromPath": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts",
+        "toPath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts"
+      },
+      {
+        "fromPath": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts",
+        "toPath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts"
+      },
+      {
+        "fromPath": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts",
+        "toPath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts"
+      },
+      {
+        "fromPath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.test.ts",
+        "toPath": "src/providers/github/ports/GitHubRepositoryDiscoveryGateway.ts",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.test.ts"
+      },
+      {
+        "fromPath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.test.ts",
+        "toPath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.test.ts"
+      },
+      {
+        "fromPath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts",
+        "toPath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts"
+      },
+      {
+        "fromPath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts",
+        "toPath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts"
+      },
+      {
+        "fromPath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts",
+        "toPath": "src/providers/github/ports/GitHubRepositoryDiscoveryGateway.ts",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts"
+      },
+      {
         "fromPath": "src/providers/github/services/inspectGitHubRepositoryPreflightAsync.ts",
         "toPath": "src/connection/definitions/ProjectSnapshot.ts",
         "sourcePath": "src/providers/github/services/inspectGitHubRepositoryPreflightAsync.ts"
@@ -2750,6 +3769,11 @@
         "fromPath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.test.ts",
         "toPath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
         "sourcePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.test.ts"
+      },
+      {
+        "fromPath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
+        "toPath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
+        "sourcePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts"
       },
       {
         "fromPath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts",
@@ -3642,6 +4666,318 @@
         "sourcePath": "src/providers/github/adapters/createGhCliRepositoryGateway.ts"
       },
       {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpClient.test.ts",
+        "toSymbol": "test",
+        "callExpression": "test",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpClient.test.ts",
+        "toSymbol": "createGitHubHttpClient",
+        "callExpression": "createGitHubHttpClient",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpClient.test.ts",
+        "toSymbol": "requestJsonResponseAsync",
+        "callExpression": "client.requestJsonResponseAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpClient.test.ts",
+        "toSymbol": "expect",
+        "callExpression": "expect",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpClient.test.ts",
+        "toSymbol": "reject",
+        "callExpression": "reject",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpClient.test.ts",
+        "toSymbol": "requestFailureAsync",
+        "callExpression": "requestFailureAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.test.ts"
+      },
+      {
+        "fromSymbol": "requestFailureAsync",
+        "toSymbol": "requestJsonResponseAsync",
+        "callExpression": "client.requestJsonResponseAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.test.ts"
+      },
+      {
+        "fromSymbol": "requestBytesAsync",
+        "toSymbol": "requestWithRetriesAsync",
+        "callExpression": "requestWithRetriesAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "requestJsonResponseAsync",
+        "toSymbol": "requestWithRetriesAsync",
+        "callExpression": "requestWithRetriesAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "requestWithRetriesAsync",
+        "toSymbol": "throwIfAborted",
+        "callExpression": "throwIfAborted",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "requestWithRetriesAsync",
+        "toSymbol": "fetchResponseAsync",
+        "callExpression": "fetchResponseAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "requestWithRetriesAsync",
+        "toSymbol": "readResponseWithDeadlineAsync",
+        "callExpression": "readResponseWithDeadlineAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "requestWithRetriesAsync",
+        "toSymbol": "isInterruptionError",
+        "callExpression": "isInterruptionError",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "requestWithRetriesAsync",
+        "toSymbol": "rateLimitResponseAsync",
+        "callExpression": "rateLimitResponseAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "toSymbol": "readResponseWithDeadlineAsync",
+        "callExpression": "readResponseWithDeadlineAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "requestWithRetriesAsync",
+        "toSymbol": "requestError",
+        "callExpression": "requestError",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "requestWithRetriesAsync",
+        "toSymbol": "retryDelayMilliseconds",
+        "callExpression": "retryDelayMilliseconds",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "requestWithRetriesAsync",
+        "toSymbol": "waitAsync",
+        "callExpression": "configuration.waitAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "readResponseWithDeadlineAsync",
+        "toSymbol": "createDeadline",
+        "callExpression": "createDeadline",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "readResponseWithDeadlineAsync",
+        "toSymbol": "readWithCancellationAsync",
+        "callExpression": "readWithCancellationAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "readResponseWithDeadlineAsync",
+        "toSymbol": "readResponseAsync",
+        "callExpression": "readResponseAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "readResponseWithDeadlineAsync",
+        "toSymbol": "cancelledError",
+        "callExpression": "cancelledError",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "readResponseWithDeadlineAsync",
+        "toSymbol": "timedOut",
+        "callExpression": "deadline.timedOut",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "readResponseWithDeadlineAsync",
+        "toSymbol": "timeoutError",
+        "callExpression": "timeoutError",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "readResponseWithDeadlineAsync",
+        "toSymbol": "dispose",
+        "callExpression": "deadline.dispose",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "fetchResponseAsync",
+        "toSymbol": "createDeadline",
+        "callExpression": "createDeadline",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "fetchResponseAsync",
+        "toSymbol": "readWithCancellationAsync",
+        "callExpression": "readWithCancellationAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "fetchResponseAsync",
+        "toSymbol": "fetcher",
+        "callExpression": "fetcher",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "fetchResponseAsync",
+        "toSymbol": "requestHeaders",
+        "callExpression": "requestHeaders",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "fetchResponseAsync",
+        "toSymbol": "cancelledError",
+        "callExpression": "cancelledError",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "fetchResponseAsync",
+        "toSymbol": "timedOut",
+        "callExpression": "deadline.timedOut",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "fetchResponseAsync",
+        "toSymbol": "timeoutError",
+        "callExpression": "timeoutError",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "fetchResponseAsync",
+        "toSymbol": "isInterruptionError",
+        "callExpression": "isInterruptionError",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "fetchResponseAsync",
+        "toSymbol": "dispose",
+        "callExpression": "deadline.dispose",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "readWithCancellationAsync",
+        "toSymbol": "cancelledError",
+        "callExpression": "cancelledError",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "abort",
+        "toSymbol": "reject",
+        "callExpression": "reject",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "abort",
+        "toSymbol": "cancelledError",
+        "callExpression": "cancelledError",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "waitForRetryAsync",
+        "toSymbol": "cancelledError",
+        "callExpression": "cancelledError",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "abort",
+        "toSymbol": "done",
+        "callExpression": "done",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "toSymbol": "done",
+        "callExpression": "done",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpClient.ts",
+        "toSymbol": "resolve",
+        "callExpression": "resolve",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "throwIfAborted",
+        "toSymbol": "cancelledError",
+        "callExpression": "cancelledError",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.ts"
+      },
+      {
+        "fromSymbol": "resolveOwnerAsync",
+        "toSymbol": "resolveOwnerAsync",
+        "callExpression": "resolveOwnerAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts"
+      },
+      {
+        "fromSymbol": "listOwnerRepositoriesAsync",
+        "toSymbol": "listOwnerRepositoriesAsync",
+        "callExpression": "listOwnerRepositoriesAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts"
+      },
+      {
+        "fromSymbol": "resolveOwnerAsync",
+        "toSymbol": "requestJsonResponseAsync",
+        "callExpression": "requestJsonResponseAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts"
+      },
+      {
+        "fromSymbol": "resolveOwnerAsync",
+        "toSymbol": "requireRecord",
+        "callExpression": "requireRecord",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts"
+      },
+      {
+        "fromSymbol": "resolveOwnerAsync",
+        "toSymbol": "requireString",
+        "callExpression": "requireString",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts"
+      },
+      {
+        "fromSymbol": "listOwnerRepositoriesAsync",
+        "toSymbol": "requestJsonResponseAsync",
+        "callExpression": "requestJsonResponseAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts"
+      },
+      {
+        "fromSymbol": "listOwnerRepositoriesAsync",
+        "toSymbol": "parseDiscoveredRepository",
+        "callExpression": "parseDiscoveredRepository",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts"
+      },
+      {
+        "fromSymbol": "listOwnerRepositoriesAsync",
+        "toSymbol": "nextPageUrl",
+        "callExpression": "nextPageUrl",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts"
+      },
+      {
+        "fromSymbol": "parseDiscoveredRepository",
+        "toSymbol": "requireRecord",
+        "callExpression": "requireRecord",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts"
+      },
+      {
+        "fromSymbol": "parseDiscoveredRepository",
+        "toSymbol": "requireString",
+        "callExpression": "requireString",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts"
+      },
+      {
         "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
         "toSymbol": "test",
         "callExpression": "test",
@@ -3691,6 +5027,66 @@
       },
       {
         "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
+        "toSymbol": "createDiscoveryFetchFixture",
+        "callExpression": "createDiscoveryFetchFixture",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
+        "toSymbol": "resolveOwnerAsync",
+        "callExpression": "gateway.resolveOwnerAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
+        "toSymbol": "listOwnerRepositoriesAsync",
+        "callExpression": "gateway.listOwnerRepositoriesAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
+        "toSymbol": "resolveOwnerAsync",
+        "callExpression": "rateLimitedGateway.resolveOwnerAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
+        "toSymbol": "target",
+        "callExpression": "target",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
+        "toSymbol": "request",
+        "callExpression": "request",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
+        "toSymbol": "resolveOwnerAsync",
+        "callExpression": "secondaryGateway.resolveOwnerAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
+        "toSymbol": "resolveOwnerAsync",
+        "callExpression": "permissionGateway.resolveOwnerAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
+        "toSymbol": "resolveOwnerAsync",
+        "callExpression": "responseGateway.resolveOwnerAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
+        "toSymbol": "resolveOwnerAsync",
+        "callExpression": "retryGateway.resolveOwnerAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
         "toSymbol": "requestUrl",
         "callExpression": "requestUrl",
         "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts"
@@ -3700,6 +5096,24 @@
         "toSymbol": "responseForUrl",
         "callExpression": "responseForUrl",
         "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts"
+      },
+      {
+        "fromSymbol": "createGitHubHttpRepositoryReadGateway",
+        "toSymbol": "createGitHubHttpClient",
+        "callExpression": "createGitHubHttpClient",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts"
+      },
+      {
+        "fromSymbol": "createGitHubHttpRepositoryReadGateway",
+        "toSymbol": "createGitHubHttpRepositoryDiscoveryGateway",
+        "callExpression": "createGitHubHttpRepositoryDiscoveryGateway",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
+        "toSymbol": "requestJsonResponseAsync",
+        "callExpression": "client.requestJsonResponseAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts"
       },
       {
         "fromSymbol": "inspectRepositoryAsync",
@@ -3727,8 +5141,8 @@
       },
       {
         "fromSymbol": "inspectRepositoryAsync",
-        "toSymbol": "requestJsonAsync",
-        "callExpression": "requestJsonAsync",
+        "toSymbol": "requestJsonResponseAsync",
+        "callExpression": "client.requestJsonResponseAsync",
         "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts"
       },
       {
@@ -3745,8 +5159,8 @@
       },
       {
         "fromSymbol": "resolveRevisionAsync",
-        "toSymbol": "requestJsonAsync",
-        "callExpression": "requestJsonAsync",
+        "toSymbol": "requestJsonResponseAsync",
+        "callExpression": "client.requestJsonResponseAsync",
         "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts"
       },
       {
@@ -3763,8 +5177,8 @@
       },
       {
         "fromSymbol": "readTreeAsync",
-        "toSymbol": "requestJsonAsync",
-        "callExpression": "requestJsonAsync",
+        "toSymbol": "requestJsonResponseAsync",
+        "callExpression": "client.requestJsonResponseAsync",
         "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts"
       },
       {
@@ -3781,20 +5195,8 @@
       },
       {
         "fromSymbol": "readFileAsync",
-        "toSymbol": "fetcher",
-        "callExpression": "fetcher",
-        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts"
-      },
-      {
-        "fromSymbol": "readFileAsync",
-        "toSymbol": "requestHeaders",
-        "callExpression": "requestHeaders",
-        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts"
-      },
-      {
-        "fromSymbol": "readFileAsync",
-        "toSymbol": "requestError",
-        "callExpression": "requestError",
+        "toSymbol": "requestBytesAsync",
+        "callExpression": "client.requestBytesAsync",
         "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts"
       },
       {
@@ -3807,24 +5209,6 @@
         "fromSymbol": "parseTreeEntry",
         "toSymbol": "requireString",
         "callExpression": "requireString",
-        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts"
-      },
-      {
-        "fromSymbol": "requestJsonAsync",
-        "toSymbol": "fetcher",
-        "callExpression": "fetcher",
-        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts"
-      },
-      {
-        "fromSymbol": "requestJsonAsync",
-        "toSymbol": "requestHeaders",
-        "callExpression": "requestHeaders",
-        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts"
-      },
-      {
-        "fromSymbol": "requestJsonAsync",
-        "toSymbol": "requestError",
-        "callExpression": "requestError",
         "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts"
       },
       {
@@ -3850,6 +5234,36 @@
         "toSymbol": "isRecord",
         "callExpression": "isRecord",
         "sourcePath": "src/providers/github/adapters/ghCliJson.ts"
+      },
+      {
+        "fromSymbol": "rateLimitResponseAsync",
+        "toSymbol": "readRetryAfterMilliseconds",
+        "callExpression": "readRetryAfterMilliseconds",
+        "sourcePath": "src/providers/github/adapters/rateLimitResponseAsync.ts"
+      },
+      {
+        "fromSymbol": "rateLimitResponseAsync",
+        "toSymbol": "laterRateLimitDeadlineMilliseconds",
+        "callExpression": "laterRateLimitDeadlineMilliseconds",
+        "sourcePath": "src/providers/github/adapters/rateLimitResponseAsync.ts"
+      },
+      {
+        "fromSymbol": "rateLimitResponseAsync",
+        "toSymbol": "readResetDelayMilliseconds",
+        "callExpression": "readResetDelayMilliseconds",
+        "sourcePath": "src/providers/github/adapters/rateLimitResponseAsync.ts"
+      },
+      {
+        "fromSymbol": "rateLimitResponseAsync",
+        "toSymbol": "readMessageAsync",
+        "callExpression": "readMessageAsync",
+        "sourcePath": "src/providers/github/adapters/rateLimitResponseAsync.ts"
+      },
+      {
+        "fromSymbol": "readResetDelayMilliseconds",
+        "toSymbol": "now",
+        "callExpression": "now",
+        "sourcePath": "src/providers/github/adapters/rateLimitResponseAsync.ts"
       },
       {
         "fromSymbol": "src/providers/github/services/connectGitHubRepositoryAsync.test.ts",
@@ -3952,6 +5366,132 @@
         "toSymbol": "publishGitHubProjectSnapshotAsync",
         "callExpression": "publishGitHubProjectSnapshotAsync",
         "sourcePath": "src/providers/github/services/connectGitHubRepositoryAsync.ts"
+      },
+      {
+        "fromSymbol": "discoverGitHubRepositoriesAsync",
+        "toSymbol": "discoverGitHubRepositoriesWithGatewayAsync",
+        "callExpression": "discoverGitHubRepositoriesWithGatewayAsync",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts"
+      },
+      {
+        "fromSymbol": "discoverGitHubRepositoriesAsync",
+        "toSymbol": "createGitHubHttpRepositoryReadGateway",
+        "callExpression": "createGitHubHttpRepositoryReadGateway",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.test.ts",
+        "toSymbol": "discoverGitHubRepositoriesWithGatewayAsync",
+        "callExpression": "discoverGitHubRepositoriesWithGatewayAsync",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.test.ts",
+        "toSymbol": "createGateway",
+        "callExpression": "createGateway",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.test.ts",
+        "toSymbol": "expect",
+        "callExpression": "expect",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.test.ts",
+        "toSymbol": "test",
+        "callExpression": "test",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.test.ts"
+      },
+      {
+        "fromSymbol": "discoverGitHubRepositoriesWithGatewayAsync",
+        "toSymbol": "parseGitHubSource",
+        "callExpression": "parseGitHubSource",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts"
+      },
+      {
+        "fromSymbol": "discoverGitHubRepositoriesWithGatewayAsync",
+        "toSymbol": "throwIfAborted",
+        "callExpression": "throwIfAborted",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts"
+      },
+      {
+        "fromSymbol": "discoverGitHubRepositoriesWithGatewayAsync",
+        "toSymbol": "resolveOwnerAsync",
+        "callExpression": "gateway.resolveOwnerAsync",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts"
+      },
+      {
+        "fromSymbol": "discoverGitHubRepositoriesWithGatewayAsync",
+        "toSymbol": "listOwnerRepositoriesAsync",
+        "callExpression": "gateway.listOwnerRepositoriesAsync",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts"
+      },
+      {
+        "fromSymbol": "parseGitHubSource",
+        "toSymbol": "invalidSource",
+        "callExpression": "invalidSource",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts"
+      },
+      {
+        "fromSymbol": "parseGitHubSource",
+        "toSymbol": "isOwnerTokenSource",
+        "callExpression": "isOwnerTokenSource",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts"
+      },
+      {
+        "fromSymbol": "parseGitHubSource",
+        "toSymbol": "normalizeOwner",
+        "callExpression": "normalizeOwner",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts"
+      },
+      {
+        "fromSymbol": "parseGitHubSource",
+        "toSymbol": "parseGitHubUrlSource",
+        "callExpression": "parseGitHubUrlSource",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts"
+      },
+      {
+        "fromSymbol": "parseGitHubUrlSource",
+        "toSymbol": "parseSourceUrl",
+        "callExpression": "parseSourceUrl",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts"
+      },
+      {
+        "fromSymbol": "parseGitHubUrlSource",
+        "toSymbol": "invalidSource",
+        "callExpression": "invalidSource",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts"
+      },
+      {
+        "fromSymbol": "parseGitHubUrlSource",
+        "toSymbol": "normalizeOwner",
+        "callExpression": "normalizeOwner",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts"
+      },
+      {
+        "fromSymbol": "parseGitHubUrlSource",
+        "toSymbol": "normalizeRepositoryName",
+        "callExpression": "normalizeRepositoryName",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts"
+      },
+      {
+        "fromSymbol": "normalizeOwner",
+        "toSymbol": "invalidSource",
+        "callExpression": "invalidSource",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts"
+      },
+      {
+        "fromSymbol": "normalizeRepositoryName",
+        "toSymbol": "invalidSource",
+        "callExpression": "invalidSource",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts"
+      },
+      {
+        "fromSymbol": "decodeSegment",
+        "toSymbol": "invalidSource",
+        "callExpression": "invalidSource",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesWithGatewayAsync.ts"
       },
       {
         "fromSymbol": "inspectGitHubRepositoryPreflightAsync",
@@ -4248,6 +5788,12 @@
         "sourcePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts"
       },
       {
+        "fromSymbol": "resolveUrlRevisionAsync",
+        "toSymbol": "isCancellationError",
+        "callExpression": "isCancellationError",
+        "sourcePath": "src/providers/github/services/materializeGitHubRepositoryWithGatewayAsync.ts"
+      },
+      {
         "fromSymbol": "createMaterializationRootAsync",
         "toSymbol": "mkdtemp",
         "callExpression": "mkdtemp",
@@ -4416,6 +5962,31 @@
         "sourcePath": "src/providers/github/definitions/GitHubRepositoryConnectionResult.ts"
       },
       {
+        "fromSymbol": "GitHubRepositoryDiscoveryOptions",
+        "toType": "AbortSignal",
+        "sourcePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts"
+      },
+      {
+        "fromSymbol": "GitHubRepositoryDiscoveryOptions",
+        "toType": "GitHubRepositoryAuthentication",
+        "sourcePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts"
+      },
+      {
+        "fromSymbol": "GitHubRepositoryDiscoveryResult",
+        "toType": "GitHubOwnerType",
+        "sourcePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts"
+      },
+      {
+        "fromSymbol": "GitHubRepositoryDiscoveryResult",
+        "toType": "GitHubRepositoryDiscoveryRepository",
+        "sourcePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts"
+      },
+      {
+        "fromSymbol": "GitHubRepositoryMaterializationOptions",
+        "toType": "AbortSignal",
+        "sourcePath": "src/providers/github/definitions/GitHubRepositoryMaterializationOptions.ts"
+      },
+      {
         "fromSymbol": "GitHubRepositoryMaterializationResult",
         "toType": "GitHubRepositoryMaterializationDiagnostic",
         "sourcePath": "src/providers/github/definitions/GitHubRepositoryMaterializationResult.ts"
@@ -4434,6 +6005,16 @@
         "fromSymbol": "connectGitHubRepositoryAsync",
         "toType": "GitHubRepositoryConnectionResult",
         "sourcePath": "src/providers/github/services/connectGitHubRepositoryAsync.ts"
+      },
+      {
+        "fromSymbol": "discoverGitHubRepositoriesAsync",
+        "toType": "GitHubRepositoryDiscoveryOptions",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts"
+      },
+      {
+        "fromSymbol": "discoverGitHubRepositoriesAsync",
+        "toType": "GitHubRepositoryDiscoveryResult",
+        "sourcePath": "src/providers/github/services/discoverGitHubRepositoriesAsync.ts"
       },
       {
         "fromSymbol": "materializeGitHubRepositoryAsync",

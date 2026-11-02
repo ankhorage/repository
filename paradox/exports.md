@@ -27,6 +27,30 @@ Connect the app project repository using only the standalone `RepositoryManifest
   - options: `RepositoryConnectionOptions`
   - returns: `Promise<RepositoryConnectionResult>`
 
+## discoverGitHubRepositoriesAsync
+
+Kind: `function`
+Module: `src/providers/github/services/discoverGitHubRepositoriesAsync.ts`
+Source: `src/providers/github/services/discoverGitHubRepositoriesAsync.ts:7:1`
+
+### Signatures
+
+- `(options: GitHubRepositoryDiscoveryOptions) => Promise<GitHubRepositoryDiscoveryResult>`
+  - options: `GitHubRepositoryDiscoveryOptions`
+  - returns: `Promise<GitHubRepositoryDiscoveryResult>`
+
+## GitHubOwnerType
+
+Kind: `unknown`
+Module: `src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts`
+Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts:1:1`
+
+## GitHubRepositoryAuthentication
+
+Kind: `unknown`
+Module: `src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts`
+Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts:2:1`
+
 ## GitHubRepositoryConnectionFailure
 
 Kind: `type`
@@ -70,6 +94,62 @@ Kind: `unknown`
 Module: `src/providers/github/definitions/GitHubRepositoryConnectionResult.ts`
 Source: `src/providers/github/definitions/GitHubRepositoryConnectionResult.ts:1:1`
 
+## GitHubRepositoryDiscoveryError
+
+Kind: `type`
+Module: `src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts`
+Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts:31:1`
+
+## GitHubRepositoryDiscoveryErrorCode
+
+Kind: `unknown`
+Module: `src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts`
+Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts:21:1`
+
+## GitHubRepositoryDiscoveryOptions
+
+Kind: `type`
+Module: `src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts`
+Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts:5:1`
+
+### Members
+
+| Name | Kind | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| authentication | property | `GitHubRepositoryAuthentication \| undefined` | no |  |
+| signal | property | `AbortSignal \| undefined` | no |  |
+| source | property | `string` | yes |  |
+
+## GitHubRepositoryDiscoveryRepository
+
+Kind: `type`
+Module: `src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts`
+Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts:3:1`
+
+### Members
+
+| Name | Kind | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| id | property | `string` | yes |  |
+| name | property | `string` | yes |  |
+| owner | property | `string` | yes |  |
+| url | property | `string` | yes |  |
+| visibility | property | `"private" \| "public"` | yes |  |
+
+## GitHubRepositoryDiscoveryResult
+
+Kind: `type`
+Module: `src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts`
+Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts:11:1`
+
+### Members
+
+| Name | Kind | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| owner | property | `{ readonly login: string; readonly type: GitHubOwnerType; readonly url: string; }` | yes |  |
+| repositories | property | `readonly GitHubRepositoryDiscoveryRepository[]` | yes |  |
+| selectedRepository | property | `GitHubRepositoryDiscoveryRepository \| undefined` | no |  |
+
 ## GitHubRepositoryMaterializationDiagnostic
 
 Kind: `type`
@@ -97,6 +177,7 @@ Source: `src/providers/github/definitions/GitHubRepositoryMaterializationOptions
 | --- | --- | --- | --- | --- |
 | destinationPath | property | `string \| undefined` | no |  |
 | ref | property | `string \| undefined` | no |  |
+| signal | property | `AbortSignal \| undefined` | no |  |
 | url | property | `string` | yes |  |
 
 ## GitHubRepositoryMaterializationResult
