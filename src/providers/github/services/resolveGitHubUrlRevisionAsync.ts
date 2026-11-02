@@ -26,7 +26,9 @@ export async function resolveGitHubUrlRevisionAsync(
 
 /** Identify only ambiguous URL ref failures that may have a trailing repository path. */
 function isRefNotFoundError(error: unknown): boolean {
-  if (error instanceof GitHubRepositoryDiscoveryError)
-    return error.code === 'api-failure' && error.message.includes('HTTP 404');
-  return true;
+  return (
+    error instanceof GitHubRepositoryDiscoveryError &&
+    error.code === 'api-failure' &&
+    error.message.includes('HTTP 404')
+  );
 }

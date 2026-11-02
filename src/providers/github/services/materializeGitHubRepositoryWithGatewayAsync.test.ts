@@ -3,6 +3,7 @@ import { join } from 'node:path';
 
 import { expect, test } from 'bun:test';
 
+import { GitHubRepositoryDiscoveryError } from '../definitions/GitHubRepositoryDiscoveryResult.js';
 import type { GitHubRepositoryReadGateway } from '../ports/GitHubRepositoryReadGateway.js';
 import { materializeGitHubRepositoryWithGatewayAsync } from './materializeGitHubRepositoryWithGatewayAsync.js';
 
@@ -204,7 +205,7 @@ function createGateway(options: {
     resolveRevisionAsync: (_target, ref) => {
       options.requestedRefs?.push(ref);
       if (options.acceptedRefs !== undefined && !options.acceptedRefs.includes(ref)) {
-        return Promise.reject(new Error(`Unknown fixture ref: ${ref}`));
+        return Promise.reject(refNotFoundError());
       }
       return Promise.resolve({ commitSha: 'commit-sha', treeSha: 'tree-sha' });
     },
@@ -221,6 +222,13 @@ function createGateway(options: {
       return Promise.resolve(Buffer.from(fileContent));
     },
   };
+}
+
+function refNotFoundError(): GitHubRepositoryDiscoveryError {
+  return new GitHubRepositoryDiscoveryError(
+    'api-failure',
+    'GitHub repository revision request failed with HTTP 404.',
+  );
 }
 
 async function expectFailureAsync(
