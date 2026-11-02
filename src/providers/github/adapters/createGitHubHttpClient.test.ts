@@ -64,6 +64,76 @@ test('retries a secondary limit using a valid GitHub reset header', () => {
   expect(calls).toBe(2);
 });
 
+test('does not replace a provider-required rate-limit wait beyond the retry budget with backoff', async () => {
+  let calls = 0;
+  const waits: number[] = [];
+  const client = createGitHubHttpClient(
+    ((_input: string | URL | Request) => {
+      calls += 1;
+      return Promise.resolve(new Response('', { status: 429, headers: { 'retry-after': '120' } }));
+    }) as typeof fetch,
+    { waitAsync: (milliseconds) => (waits.push(milliseconds), Promise.resolve()) },
+  );
+
+  expect(await requestFailureAsync(client)).toMatchObject({
+    code: 'rate-limited',
+    retryAfterMilliseconds: 120_000,
+  });
+  expect(calls).toBe(1);
+  expect(waits).toEqual([]);
+});
+
+test('identifies a headerless GitHub secondary limit without retrying it as a permission failure', async () => {
+  let calls = 0;
+  const client = createGitHubHttpClient(((_input: string | URL | Request) => {
+    calls += 1;
+    return Promise.resolve(
+      Response.json(
+        { message: 'You have exceeded a secondary rate limit. Please wait a few minutes.' },
+        { status: 403 },
+      ),
+    );
+  }) as typeof fetch);
+
+  expect(await requestFailureAsync(client)).toMatchObject({
+    code: 'rate-limited',
+    retryAfterMilliseconds: undefined,
+  });
+  expect(calls).toBe(1);
+});
+
+test('keeps a genuine GitHub permission denial distinct from a secondary rate limit', async () => {
+  let calls = 0;
+  const client = createGitHubHttpClient(((_input: string | URL | Request) => {
+    calls += 1;
+    return Promise.resolve(
+      Response.json({ message: 'Resource not accessible by integration' }, { status: 403 }),
+    );
+  }) as typeof fetch);
+
+  expect(await requestFailureAsync(client)).toMatchObject({ code: 'permission-denied' });
+  expect(calls).toBe(1);
+});
+
+test('preserves a reset delay beyond the retry budget without retrying early', async () => {
+  let calls = 0;
+  const client = createGitHubHttpClient(
+    ((_input: string | URL | Request) => {
+      calls += 1;
+      return Promise.resolve(
+        new Response('', { status: 403, headers: { 'x-ratelimit-reset': '121' } }),
+      );
+    }) as typeof fetch,
+    { now: () => 1_000, waitAsync: () => Promise.resolve() },
+  );
+
+  expect(await requestFailureAsync(client)).toMatchObject({
+    code: 'rate-limited',
+    retryAfterMilliseconds: 120_000,
+  });
+  expect(calls).toBe(1);
+});
+
 test('times out while GitHub response processing is still pending', () => {
   const client = createGitHubHttpClient(
     ((_input: string | URL | Request) =>
@@ -78,3 +148,14 @@ test('times out while GitHub response processing is still pending', () => {
     client.requestJsonResponseAsync('https://api.github.com/users/ankhorage', 'owner'),
   ).rejects.toMatchObject({ code: 'timeout' });
 });
+
+async function requestFailureAsync(
+  client: ReturnType<typeof createGitHubHttpClient>,
+): Promise<unknown> {
+  try {
+    await client.requestJsonResponseAsync('https://api.github.com/users/ankhorage', 'owner');
+    return undefined;
+  } catch (error) {
+    return error;
+  }
+}
