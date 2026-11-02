@@ -39,6 +39,81 @@ test('reads repository metadata, immutable revision, tree, and raw file content'
   );
 });
 
+test('resolves an organization and returns every sorted repository page', async () => {
+  const urls: string[] = [];
+  const gateway = createGitHubHttpRepositoryReadGateway(createDiscoveryFetchFixture(urls), () =>
+    Promise.resolve(),
+  );
+  const owner = await gateway.resolveOwnerAsync('ankhorage');
+  const repositories = await gateway.listOwnerRepositoriesAsync(owner);
+
+  expect(owner).toEqual({
+    login: 'Ankhorage',
+    type: 'organization',
+    url: 'https://github.com/Ankhorage',
+  });
+  expect(repositories).toEqual([
+    {
+      id: '1',
+      name: 'atlas',
+      owner: 'Ankhorage',
+      url: 'https://github.com/Ankhorage/atlas',
+      visibility: 'public',
+    },
+    {
+      id: '2',
+      name: 'zora',
+      owner: 'Ankhorage',
+      url: 'https://github.com/Ankhorage/zora',
+      visibility: 'public',
+    },
+  ]);
+  expect(urls).toHaveLength(3);
+});
+
+test('retries a GitHub rate limit and returns a stable rate-limit error after its retry budget', async () => {
+  let calls = 0;
+  const gateway = createGitHubHttpRepositoryReadGateway(
+    ((_input: string | URL | Request) => {
+      calls += 1;
+      return Promise.resolve(
+        calls === 1
+          ? new Response('', { status: 429, headers: { 'retry-after': '0' } })
+          : Response.json({
+              login: 'Ankhorage',
+              type: 'Organization',
+              html_url: 'https://github.com/Ankhorage',
+            }),
+      );
+    }) as typeof fetch,
+    () => Promise.resolve(),
+  );
+  expect(await gateway.resolveOwnerAsync('ankhorage')).toMatchObject({ type: 'organization' });
+  expect(calls).toBe(2);
+
+  const rateLimitedGateway = createGitHubHttpRepositoryReadGateway(
+    ((_input: string | URL | Request) =>
+      Promise.resolve(
+        new Response('', { status: 429, headers: { 'retry-after': '0' } }),
+      )) as typeof fetch,
+    () => Promise.resolve(),
+  );
+  expect(rateLimitedGateway.resolveOwnerAsync('ankhorage')).rejects.toMatchObject({
+    code: 'rate-limited',
+    retryAfterMilliseconds: 0,
+  });
+});
+
+test('maps an aborted request to a stable cancellation error', () => {
+  const controller = new AbortController();
+  controller.abort();
+  const gateway = createGitHubHttpRepositoryReadGateway(((_input: string | URL | Request) =>
+    Promise.reject(new DOMException('Aborted', 'AbortError'))) as typeof fetch);
+  expect(gateway.resolveOwnerAsync('ankhorage', controller.signal)).rejects.toMatchObject({
+    code: 'cancelled',
+  });
+});
+
 function createFetchFixture(urls: string[]): typeof fetch {
   return ((input: string | URL | Request) => {
     const url = requestUrl(input);
@@ -84,4 +159,51 @@ function responseForUrl(url: string): Response {
     return new Response('0123456789');
   }
   return new Response('', { status: 404 });
+}
+
+function createDiscoveryFetchFixture(urls: string[]): typeof fetch {
+  return ((input: string | URL | Request) => {
+    const url = requestUrl(input);
+    urls.push(url);
+    if (url.endsWith('/users/ankhorage')) {
+      return Promise.resolve(
+        Response.json({
+          login: 'Ankhorage',
+          type: 'Organization',
+          html_url: 'https://github.com/Ankhorage',
+        }),
+      );
+    }
+    if (url.includes('page=2')) {
+      return Promise.resolve(
+        Response.json([
+          {
+            id: 2,
+            name: 'zora',
+            owner: { login: 'Ankhorage' },
+            html_url: 'https://github.com/Ankhorage/zora',
+            private: false,
+          },
+        ]),
+      );
+    }
+    return Promise.resolve(
+      Response.json(
+        [
+          {
+            id: 1,
+            name: 'atlas',
+            owner: { login: 'Ankhorage' },
+            html_url: 'https://github.com/Ankhorage/atlas',
+            private: false,
+          },
+        ],
+        {
+          headers: {
+            link: '<https://api.github.com/orgs/Ankhorage/repos?per_page=100&type=all&sort=full_name&direction=asc&page=2>; rel="next"',
+          },
+        },
+      ),
+    );
+  }) as typeof fetch;
 }
