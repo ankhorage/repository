@@ -5,19 +5,18 @@ export async function rateLimitResponseAsync(
   readMessageAsync: ReadGitHubErrorMessageAsync,
 ): Promise<GitHubRateLimitResponse> {
   const retryAfterMilliseconds = readRetryAfterMilliseconds(response);
-  if (response.status === 429) return { isRateLimited: true, retryAfterMilliseconds };
-  if (response.status !== 403) return { isRateLimited: false };
+  if (response.status !== 403 && response.status !== 429) return { isRateLimited: false };
   const primaryRateLimitExceeded = response.headers.get('x-ratelimit-remaining') === '0';
   if (primaryRateLimitExceeded) {
-    const resetDelayMilliseconds = readResetDelayMilliseconds(response, now);
-    const rateLimitDelayMilliseconds =
-      retryAfterMilliseconds === undefined
-        ? resetDelayMilliseconds
-        : resetDelayMilliseconds === undefined
-          ? retryAfterMilliseconds
-          : Math.max(retryAfterMilliseconds, resetDelayMilliseconds);
-    return { isRateLimited: true, retryAfterMilliseconds: rateLimitDelayMilliseconds };
+    return {
+      isRateLimited: true,
+      retryAfterMilliseconds: laterRateLimitDeadlineMilliseconds(
+        readResetDelayMilliseconds(response, now),
+        retryAfterMilliseconds,
+      ),
+    };
   }
+  if (response.status === 429) return { isRateLimited: true, retryAfterMilliseconds };
   if (retryAfterMilliseconds !== undefined) return { isRateLimited: true, retryAfterMilliseconds };
   const message = await readMessageAsync(response);
   return { isRateLimited: message !== undefined && /\bsecondary rate limit\b/iu.test(message) };
@@ -29,6 +28,16 @@ export interface GitHubRateLimitResponse {
 }
 
 type ReadGitHubErrorMessageAsync = (response: Response) => Promise<string | undefined>;
+
+/*** Keep every provider-required rate-limit deadline by selecting the later valid delay. */
+function laterRateLimitDeadlineMilliseconds(
+  primaryResetDelayMilliseconds: number | undefined,
+  retryAfterMilliseconds: number | undefined,
+): number | undefined {
+  if (primaryResetDelayMilliseconds === undefined) return retryAfterMilliseconds;
+  if (retryAfterMilliseconds === undefined) return primaryResetDelayMilliseconds;
+  return Math.max(primaryResetDelayMilliseconds, retryAfterMilliseconds);
+}
 
 /*** Read a syntactically valid non-negative Retry-After delay without discarding provider timing. */
 function readRetryAfterMilliseconds(response: Response): number | undefined {

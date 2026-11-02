@@ -82,6 +82,96 @@ test('does not replace a provider-required rate-limit wait beyond the retry budg
   expect(waits).toEqual([]);
 });
 
+test('keeps an exhausted-primary reset deadline for HTTP 429 when it is later than Retry-After', async () => {
+  let calls = 0;
+  const waits: number[] = [];
+  const client = createGitHubHttpClient(
+    ((_input: string | URL | Request) => {
+      calls += 1;
+      return Promise.resolve(
+        new Response('', {
+          status: 429,
+          headers: {
+            'retry-after': '2',
+            'x-ratelimit-remaining': '0',
+            'x-ratelimit-reset': '121',
+          },
+        }),
+      );
+    }) as typeof fetch,
+    {
+      now: () => 1_000,
+      waitAsync: (milliseconds) => (waits.push(milliseconds), Promise.resolve()),
+    },
+  );
+
+  expect(await requestFailureAsync(client)).toMatchObject({
+    code: 'rate-limited',
+    retryAfterMilliseconds: 120_000,
+  });
+  expect(calls).toBe(1);
+  expect(waits).toEqual([]);
+});
+
+test('keeps Retry-After for HTTP 429 when it is later than an exhausted-primary reset deadline', async () => {
+  let calls = 0;
+  const waits: number[] = [];
+  const client = createGitHubHttpClient(
+    ((_input: string | URL | Request) => {
+      calls += 1;
+      return Promise.resolve(
+        new Response('', {
+          status: 429,
+          headers: {
+            'retry-after': '120',
+            'x-ratelimit-remaining': '0',
+            'x-ratelimit-reset': '3',
+          },
+        }),
+      );
+    }) as typeof fetch,
+    {
+      now: () => 1_000,
+      waitAsync: (milliseconds) => (waits.push(milliseconds), Promise.resolve()),
+    },
+  );
+
+  expect(await requestFailureAsync(client)).toMatchObject({
+    code: 'rate-limited',
+    retryAfterMilliseconds: 120_000,
+  });
+  expect(calls).toBe(1);
+  expect(waits).toEqual([]);
+});
+
+test('retries HTTP 429 after an exhausted-primary reset deadline when Retry-After is absent', async () => {
+  let calls = 0;
+  const waits: number[] = [];
+  const client = createGitHubHttpClient(
+    ((_input: string | URL | Request) => {
+      calls += 1;
+      return Promise.resolve(
+        calls === 1
+          ? new Response('', {
+              status: 429,
+              headers: { 'x-ratelimit-remaining': '0', 'x-ratelimit-reset': '3' },
+            })
+          : Response.json({ owner: 'public' }),
+      );
+    }) as typeof fetch,
+    {
+      now: () => 1_000,
+      waitAsync: (milliseconds) => (waits.push(milliseconds), Promise.resolve()),
+    },
+  );
+
+  expect(
+    await client.requestJsonResponseAsync('https://api.github.com/users/ankhorage', 'owner'),
+  ).toEqual({ link: null, value: { owner: 'public' } });
+  expect(calls).toBe(2);
+  expect(waits).toEqual([2_000]);
+});
+
 test('identifies a secondary limit despite available primary quota and reset metadata', async () => {
   let calls = 0;
   const client = createGitHubHttpClient(
