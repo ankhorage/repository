@@ -4,7 +4,10 @@ export type {
   GitHubRepositoryConnectionResult,
   GitHubRepositoryConnectionStatus,
 } from '../providers/github/definitions/GitHubRepositoryConnectionResult.js';
-export type { GitHubRepositoryDiscoveryOptions } from '../providers/github/definitions/GitHubRepositoryDiscoveryOptions.js';
+export type {
+  GitHubRepositoryAuthentication,
+  GitHubRepositoryDiscoveryOptions,
+} from '../providers/github/definitions/GitHubRepositoryDiscoveryOptions.js';
 export {
   type GitHubOwnerType,
   GitHubRepositoryDiscoveryError,

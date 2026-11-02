@@ -24,7 +24,8 @@ export type GitHubRepositoryDiscoveryErrorCode =
   | 'invalid-source'
   | 'owner-not-found'
   | 'permission-denied'
-  | 'rate-limited';
+  | 'rate-limited'
+  | 'timeout';
 
 /** A stable, credential-free error reported by GitHub repository discovery. */
 export class GitHubRepositoryDiscoveryError extends Error {

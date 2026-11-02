@@ -41,9 +41,9 @@ test('reads repository metadata, immutable revision, tree, and raw file content'
 
 test('resolves an organization and returns every sorted repository page', async () => {
   const urls: string[] = [];
-  const gateway = createGitHubHttpRepositoryReadGateway(createDiscoveryFetchFixture(urls), () =>
-    Promise.resolve(),
-  );
+  const gateway = createGitHubHttpRepositoryReadGateway(createDiscoveryFetchFixture(urls), {
+    waitAsync: () => Promise.resolve(),
+  });
   const owner = await gateway.resolveOwnerAsync('ankhorage');
   const repositories = await gateway.listOwnerRepositoriesAsync(owner);
 
@@ -86,7 +86,7 @@ test('retries a GitHub rate limit and returns a stable rate-limit error after it
             }),
       );
     }) as typeof fetch,
-    () => Promise.resolve(),
+    { waitAsync: () => Promise.resolve() },
   );
   expect(await gateway.resolveOwnerAsync('ankhorage')).toMatchObject({ type: 'organization' });
   expect(calls).toBe(2);
@@ -96,7 +96,7 @@ test('retries a GitHub rate limit and returns a stable rate-limit error after it
       Promise.resolve(
         new Response('', { status: 429, headers: { 'retry-after': '0' } }),
       )) as typeof fetch,
-    () => Promise.resolve(),
+    { waitAsync: () => Promise.resolve() },
   );
   expect(rateLimitedGateway.resolveOwnerAsync('ankhorage')).rejects.toMatchObject({
     code: 'rate-limited',
@@ -113,6 +113,97 @@ test('maps an aborted request to a stable cancellation error', () => {
     code: 'cancelled',
   });
 });
+
+test.each([
+  [
+    'metadata',
+    (gateway: ReturnType<typeof createGitHubHttpRepositoryReadGateway>) =>
+      gateway.inspectRepositoryAsync(target()),
+  ],
+  [
+    'revision',
+    (gateway: ReturnType<typeof createGitHubHttpRepositoryReadGateway>) =>
+      gateway.resolveRevisionAsync(target(), 'main'),
+  ],
+  [
+    'tree',
+    (gateway: ReturnType<typeof createGitHubHttpRepositoryReadGateway>) =>
+      gateway.readTreeAsync(target(), 'tree-sha'),
+  ],
+  [
+    'discovery',
+    (gateway: ReturnType<typeof createGitHubHttpRepositoryReadGateway>) =>
+      gateway.resolveOwnerAsync('ankhorage'),
+  ],
+])('times out a hanging %s request', (_subject, request) => {
+  const gateway = createGitHubHttpRepositoryReadGateway(
+    ((_input: string | URL | Request) => new Promise<Response>(() => undefined)) as typeof fetch,
+    { timeoutMilliseconds: 0 },
+  );
+  expect(request(gateway)).rejects.toMatchObject({ code: 'timeout' });
+});
+
+test('retries a secondary rate limit but does not retry a permission-only 403', () => {
+  let secondaryCalls = 0;
+  const secondaryGateway = createGitHubHttpRepositoryReadGateway(
+    ((_input: string | URL | Request) => {
+      secondaryCalls += 1;
+      return Promise.resolve(
+        secondaryCalls === 1
+          ? new Response('', { status: 403, headers: { 'retry-after': '0' } })
+          : Response.json({
+              login: 'Ankhorage',
+              type: 'Organization',
+              html_url: 'https://github.com/Ankhorage',
+            }),
+      );
+    }) as typeof fetch,
+    { waitAsync: () => Promise.resolve() },
+  );
+  expect(secondaryGateway.resolveOwnerAsync('ankhorage')).resolves.toMatchObject({
+    type: 'organization',
+  });
+  expect(secondaryCalls).toBe(2);
+
+  let permissionCalls = 0;
+  const permissionGateway = createGitHubHttpRepositoryReadGateway(((
+    _input: string | URL | Request,
+  ) => {
+    permissionCalls += 1;
+    return Promise.resolve(new Response('', { status: 403 }));
+  }) as typeof fetch);
+  expect(permissionGateway.resolveOwnerAsync('ankhorage')).rejects.toMatchObject({
+    code: 'permission-denied',
+  });
+  expect(permissionCalls).toBe(1);
+});
+
+test('cancels during response processing and retry waits', () => {
+  const responseController = new AbortController();
+  const responseGateway = createGitHubHttpRepositoryReadGateway(((_input: string | URL | Request) =>
+    Promise.resolve({
+      ok: true,
+      headers: new Headers(),
+      json: () => new Promise(() => undefined),
+    } as Response)) as typeof fetch);
+  const responseRequest = responseGateway.resolveOwnerAsync('ankhorage', responseController.signal);
+  responseController.abort();
+  expect(responseRequest).rejects.toMatchObject({ code: 'cancelled' });
+
+  const retryController = new AbortController();
+  const retryGateway = createGitHubHttpRepositoryReadGateway(((_input: string | URL | Request) =>
+    Promise.resolve(
+      new Response('', { status: 429, headers: { 'retry-after': '10' } }),
+    )) as typeof fetch);
+  const retryRequest = retryGateway.resolveOwnerAsync('ankhorage', retryController.signal);
+  retryController.abort();
+  expect(retryRequest).rejects.toMatchObject({ code: 'cancelled' });
+});
+
+/** Create a stable repository target used by HTTP gateway behavior tests. */
+function target(): { readonly owner: string; readonly name: string; readonly url: string } {
+  return { owner: 'ankhorage', name: 'demo', url: 'https://github.com/ankhorage/demo' };
+}
 
 function createFetchFixture(urls: string[]): typeof fetch {
   return ((input: string | URL | Request) => {

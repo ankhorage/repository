@@ -1,5 +1,10 @@
+/** Explicit credential policy for GitHub operations that may be exposed through an application endpoint. */
+export type GitHubRepositoryAuthentication = 'anonymous' | 'environment';
+
 /** Options for discovering the repositories visible under one GitHub owner source. */
 export interface GitHubRepositoryDiscoveryOptions {
   readonly source: string;
+  /** Defaults to anonymous access so a public discovery endpoint cannot inherit server credentials. */
+  readonly authentication?: GitHubRepositoryAuthentication;
   readonly signal?: AbortSignal;
 }

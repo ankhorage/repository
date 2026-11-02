@@ -9,6 +9,8 @@ export function discoverGitHubRepositoriesAsync(
 ): Promise<GitHubRepositoryDiscoveryResult> {
   return discoverGitHubRepositoriesWithGatewayAsync(
     options,
-    createGitHubHttpRepositoryReadGateway(),
+    createGitHubHttpRepositoryReadGateway(fetch, {
+      authentication: options.authentication ?? 'anonymous',
+    }),
   );
 }

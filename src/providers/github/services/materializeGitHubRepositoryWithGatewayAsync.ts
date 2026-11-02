@@ -2,6 +2,7 @@ import { chmod, mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 
+import { GitHubRepositoryDiscoveryError } from '../definitions/GitHubRepositoryDiscoveryResult.js';
 import type { GitHubRepositoryMaterializationOptions } from '../definitions/GitHubRepositoryMaterializationOptions.js';
 import type { GitHubRepositoryMaterializationResult } from '../definitions/GitHubRepositoryMaterializationResult.js';
 import type {
@@ -17,13 +18,13 @@ export async function materializeGitHubRepositoryWithGatewayAsync(
   gateway: GitHubRepositoryReadGateway,
 ): Promise<GitHubRepositoryMaterializationResult> {
   const parsed = parseGitHubRepositoryUrl(options.url);
-  const repository = await gateway.inspectRepositoryAsync(parsed.target);
+  const repository = await gateway.inspectRepositoryAsync(parsed.target, options.signal);
   const explicitRef = normalizeRef(options.ref);
   const revision =
     explicitRef === undefined
-      ? await resolveUrlRevisionAsync(gateway, parsed, repository.defaultBranch)
-      : await gateway.resolveRevisionAsync(parsed.target, explicitRef);
-  const tree = await gateway.readTreeAsync(parsed.target, revision.treeSha);
+      ? await resolveUrlRevisionAsync(gateway, parsed, repository.defaultBranch, options.signal)
+      : await gateway.resolveRevisionAsync(parsed.target, explicitRef, options.signal);
+  const tree = await gateway.readTreeAsync(parsed.target, revision.treeSha, options.signal);
   const validated = validateTree(tree.entries, tree.truncated);
   const rootPath = await createMaterializationRootAsync(options.destinationPath);
 
@@ -34,6 +35,7 @@ export async function materializeGitHubRepositoryWithGatewayAsync(
       revision.commitSha,
       rootPath,
       validated.files,
+      options.signal,
     );
   } catch (error) {
     await rm(rootPath, { force: true, recursive: true });
@@ -146,19 +148,29 @@ async function resolveUrlRevisionAsync(
   gateway: GitHubRepositoryReadGateway,
   parsed: ParsedGitHubRepositoryUrl,
   defaultBranch: string,
+  signal: AbortSignal | undefined,
 ): Promise<GitHubRepositoryRevision> {
   if (parsed.refCandidates.length === 0) {
-    return gateway.resolveRevisionAsync(parsed.target, defaultBranch);
+    return gateway.resolveRevisionAsync(parsed.target, defaultBranch, signal);
   }
 
   for (const candidate of parsed.refCandidates) {
     try {
-      return await gateway.resolveRevisionAsync(parsed.target, candidate);
-    } catch {
+      return await gateway.resolveRevisionAsync(parsed.target, candidate, signal);
+    } catch (error) {
+      if (isCancellationError(error)) throw error;
       // GitHub tree/blob URLs can contain both slash-containing refs and trailing repository paths.
     }
   }
   throw new Error('GitHub repository URL does not resolve to a branch, tag, or commit.');
+}
+
+/*** Preserve caller cancellation and deadlines instead of mistaking them for an ambiguous URL ref. */
+function isCancellationError(error: unknown): boolean {
+  return (
+    error instanceof GitHubRepositoryDiscoveryError &&
+    (error.code === 'cancelled' || error.code === 'timeout')
+  );
 }
 
 /*** Create the consistent public error for unsupported GitHub URL shapes. */
@@ -240,13 +252,16 @@ async function writeFileBatchesAsync(
   revision: string,
   rootPath: string,
   entries: readonly GitHubRepositoryTreeEntry[],
+  signal: AbortSignal | undefined,
 ): Promise<void> {
   const batches = Array.from({ length: Math.ceil(entries.length / WRITE_BATCH_SIZE) }, (_, index) =>
     entries.slice(index * WRITE_BATCH_SIZE, (index + 1) * WRITE_BATCH_SIZE),
   );
   for (const batch of batches) {
     await Promise.all(
-      batch.map((entry) => materializeFileAsync(gateway, target, revision, rootPath, entry)),
+      batch.map((entry) =>
+        materializeFileAsync(gateway, target, revision, rootPath, entry, signal),
+      ),
     );
   }
 }
@@ -258,9 +273,10 @@ async function materializeFileAsync(
   revision: string,
   rootPath: string,
   entry: GitHubRepositoryTreeEntry,
+  signal: AbortSignal | undefined,
 ): Promise<void> {
   const destination = resolveMaterializationPath(rootPath, entry.path);
-  const content = await gateway.readFileAsync(target, revision, entry.path);
+  const content = await gateway.readFileAsync(target, revision, entry.path, signal);
   if (entry.size !== content.byteLength) {
     throw new Error(`GitHub repository file size changed while reading ${entry.path}.`);
   }
