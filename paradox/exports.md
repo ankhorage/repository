@@ -196,6 +196,33 @@ Source: `src/providers/github/definitions/GitHubRepositoryMaterializationResult.
 | revision | property | `string` | yes |  |
 | rootPath | property | `string` | yes |  |
 
+## GitHubRepositoryRevisionResolutionOptions
+
+Kind: `type`
+Module: `src/providers/github/definitions/GitHubRepositoryRevisionResolutionOptions.ts`
+Source: `src/providers/github/definitions/GitHubRepositoryRevisionResolutionOptions.ts:4:1`
+
+### Members
+
+| Name | Kind | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| authentication | property | `GitHubRepositoryAuthentication \| undefined` | no |  |
+| signal | property | `AbortSignal \| undefined` | no |  |
+| url | property | `string` | yes |  |
+
+## GitHubRepositoryRevisionResolutionResult
+
+Kind: `type`
+Module: `src/providers/github/definitions/GitHubRepositoryRevisionResolutionResult.ts`
+Source: `src/providers/github/definitions/GitHubRepositoryRevisionResolutionResult.ts:2:1`
+
+### Members
+
+| Name | Kind | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| repository | property | `{ readonly id: string; readonly owner: string; readonly name: string; readonly url: string; readonly defaultBranch: string; }` | yes |  |
+| revision | property | `{ readonly commitSha: string; readonly ref: string; }` | yes |  |
+
 ## GitHubRepositoryVisibility
 
 Kind: `unknown`
@@ -269,3 +296,15 @@ Source: `src/connection/definitions/RepositoryConnectionResult.ts:3:1`
 Kind: `unknown`
 Module: `src/connection/definitions/RepositoryConnectionOptions.ts`
 Source: `src/connection/definitions/RepositoryConnectionOptions.ts:3:1`
+
+## resolveGitHubRepositoryRevisionAsync
+
+Kind: `function`
+Module: `src/providers/github/services/resolveGitHubRepositoryRevisionAsync.ts`
+Source: `src/providers/github/services/resolveGitHubRepositoryRevisionAsync.ts:7:1`
+
+### Signatures
+
+- `(options: GitHubRepositoryRevisionResolutionOptions) => Promise<GitHubRepositoryRevisionResolutionResult>`
+  - options: `GitHubRepositoryRevisionResolutionOptions`
+  - returns: `Promise<GitHubRepositoryRevisionResolutionResult>`

@@ -679,6 +679,89 @@
     "structuredRows": []
   },
   {
+    "name": "GitHubRepositoryRevisionResolutionOptions",
+    "title": null,
+    "description": null,
+    "isReadme": false,
+    "see": [],
+    "security": [],
+    "kind": "type",
+    "modulePath": "src/providers/github/definitions/GitHubRepositoryRevisionResolutionOptions.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/definitions/GitHubRepositoryRevisionResolutionOptions.ts",
+      "line": 4,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [
+      "GitHubRepositoryAuthentication"
+    ],
+    "signatures": [],
+    "members": [
+      {
+        "name": "authentication",
+        "kind": "property",
+        "type": "GitHubRepositoryAuthentication | undefined",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "signal",
+        "kind": "property",
+        "type": "AbortSignal | undefined",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "url",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
+    "name": "GitHubRepositoryRevisionResolutionResult",
+    "title": null,
+    "description": null,
+    "isReadme": false,
+    "see": [],
+    "security": [],
+    "kind": "type",
+    "modulePath": "src/providers/github/definitions/GitHubRepositoryRevisionResolutionResult.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/definitions/GitHubRepositoryRevisionResolutionResult.ts",
+      "line": 2,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [
+      {
+        "name": "repository",
+        "kind": "property",
+        "type": "{ readonly id: string; readonly owner: string; readonly name: string; readonly url: string; readonly defaultBranch: string; }",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "revision",
+        "kind": "property",
+        "type": "{ readonly commitSha: string; readonly ref: string; }",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
     "name": "GitHubRepositoryVisibility",
     "title": null,
     "description": null,
@@ -928,6 +1011,45 @@
     ],
     "relatedSymbols": [],
     "signatures": [],
+    "members": [],
+    "structuredRows": []
+  },
+  {
+    "name": "resolveGitHubRepositoryRevisionAsync",
+    "title": null,
+    "description": null,
+    "isReadme": false,
+    "see": [],
+    "security": [],
+    "kind": "function",
+    "modulePath": "src/providers/github/services/resolveGitHubRepositoryRevisionAsync.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/services/resolveGitHubRepositoryRevisionAsync.ts",
+      "line": 7,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [
+      "GitHubRepositoryRevisionResolutionOptions",
+      "GitHubRepositoryRevisionResolutionResult"
+    ],
+    "signatures": [
+      {
+        "label": "(options: GitHubRepositoryRevisionResolutionOptions) => Promise<GitHubRepositoryRevisionResolutionResult>",
+        "parameters": [
+          {
+            "name": "options",
+            "type": "GitHubRepositoryRevisionResolutionOptions",
+            "required": true,
+            "description": null
+          }
+        ],
+        "returnType": "Promise<GitHubRepositoryRevisionResolutionResult>",
+        "returnDescription": null
+      }
+    ],
     "members": [],
     "structuredRows": []
   }

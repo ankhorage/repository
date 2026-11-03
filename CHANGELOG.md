@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.8.0
+
+### Minor Changes
+
+- a809734: Add public GitHub repository revision resolution for immutable repository analysis.
+
 ## 0.7.0
 
 ### Minor Changes
