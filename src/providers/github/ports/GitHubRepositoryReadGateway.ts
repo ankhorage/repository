@@ -5,6 +5,9 @@ export interface GitHubRepositoryReadTarget {
 }
 
 export interface GitHubRepositoryReadMetadata {
+  readonly id: string;
+  readonly owner: string;
+  readonly name: string;
   readonly defaultBranch: string;
   readonly url: string;
 }

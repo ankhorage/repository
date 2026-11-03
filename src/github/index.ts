@@ -20,7 +20,10 @@ export type {
   GitHubRepositoryMaterializationDiagnostic,
   GitHubRepositoryMaterializationResult,
 } from '../providers/github/definitions/GitHubRepositoryMaterializationResult.js';
+export type { GitHubRepositoryRevisionResolutionOptions } from '../providers/github/definitions/GitHubRepositoryRevisionResolutionOptions.js';
+export type { GitHubRepositoryRevisionResolutionResult } from '../providers/github/definitions/GitHubRepositoryRevisionResolutionResult.js';
 export type { GitHubRepositoryVisibility } from '../providers/github/definitions/GitHubRepositoryVisibility.js';
 export { connectGitHubRepositoryAsync } from '../providers/github/services/connectGitHubRepositoryAsync.js';
 export { discoverGitHubRepositoriesAsync } from '../providers/github/services/discoverGitHubRepositoriesAsync.js';
 export { materializeGitHubRepositoryAsync } from '../providers/github/services/materializeGitHubRepositoryAsync.js';
+export { resolveGitHubRepositoryRevisionAsync } from '../providers/github/services/resolveGitHubRepositoryRevisionAsync.js';

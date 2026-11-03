@@ -12,6 +12,9 @@ test('reads repository metadata, immutable revision, tree, and raw file content'
   };
 
   expect(await gateway.inspectRepositoryAsync(target)).toEqual({
+    id: '1',
+    owner: 'ankhorage',
+    name: 'demo',
     defaultBranch: 'main',
     url: 'https://github.com/ankhorage/demo',
   });
@@ -222,6 +225,9 @@ function requestUrl(input: string | URL | Request): string {
 function responseForUrl(url: string): Response {
   if (url.endsWith('/repos/ankhorage/demo')) {
     return Response.json({
+      id: 1,
+      name: 'demo',
+      owner: { login: 'ankhorage' },
       default_branch: 'main',
       html_url: 'https://github.com/ankhorage/demo',
     });
