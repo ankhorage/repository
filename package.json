@@ -118,7 +118,7 @@
   "dependencies": {
     "@ankhorage/ankh": "^0.13.3",
     "@ankhorage/capability": "^0.2.2",
-    "@ankhorage/contracts": "^26.3.0",
+    "@ankhorage/contracts": "^26.4.0",
     "ignore": "^7.0.14"
   }
 }
