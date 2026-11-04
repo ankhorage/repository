@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.8.1
+
+### Patch Changes
+
+- bc9525b: Update dependencies: `@ankhorage/contracts`.
+
 ## 0.8.0
 
 ### Minor Changes
