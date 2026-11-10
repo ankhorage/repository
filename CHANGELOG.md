@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.8.2
+
+### Patch Changes
+
+- ec8840d: Update dependencies: `@ankhorage/contracts`.
+
 ## 0.8.1
 
 ### Patch Changes
