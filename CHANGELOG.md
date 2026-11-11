@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.8.3
+
+### Patch Changes
+
+- 49371fe: Update dependencies: `@ankhorage/contracts`.
+
 ## 0.8.2
 
 ### Patch Changes
