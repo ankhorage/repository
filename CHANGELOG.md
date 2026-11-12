@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.8.4
+
+### Patch Changes
+
+- cb542a7: Update dependencies: `@ankhorage/contracts`.
+
 ## 0.8.3
 
 ### Patch Changes
