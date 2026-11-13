@@ -145,6 +145,7 @@ async function fetchResponseAsync(
   } catch (error) {
     if (signal?.aborted) throw cancelledError();
     if (deadline.timedOut()) throw timeoutError();
+    if (error instanceof GitHubRepositoryDiscoveryError) throw error;
     if (isInterruptionError(error)) throw error;
     throw new GitHubRepositoryDiscoveryError('api-failure', 'GitHub request failed.');
   } finally {
@@ -265,14 +266,21 @@ function waitForRetryAsync(milliseconds: number, signal: AbortSignal | undefined
   });
 }
 
-/*** Build GitHub request headers only when the caller explicitly selected environment authentication. */
+/*** Build GitHub request headers only from the caller's explicit authentication selection. */
 function requestHeaders(
   authentication: GitHubRepositoryAuthentication,
 ): Readonly<Record<string, string>> {
   const token =
     authentication === 'environment'
       ? (process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN)
-      : undefined;
+      : typeof authentication === 'object'
+        ? authentication.accessToken
+        : undefined;
+  if (typeof authentication === 'object' && !authentication.accessToken.trim())
+    throw new GitHubRepositoryDiscoveryError(
+      'permission-denied',
+      'GitHub user authorization is unavailable.',
+    );
   return {
     Accept: 'application/vnd.github+json',
     'User-Agent': '@ankhorage/repository',

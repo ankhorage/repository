@@ -18,6 +18,7 @@ export async function runMaterializeCommandAsync(
     const options = parseMaterializeCommandOptions(request.argv ?? []);
     const result = await materializeGitHubRepositoryAsync({
       url: options.repositoryUrl,
+      authentication: 'environment',
       ...(options.ref === undefined ? {} : { ref: options.ref }),
       ...(options.destinationPath === undefined
         ? {}

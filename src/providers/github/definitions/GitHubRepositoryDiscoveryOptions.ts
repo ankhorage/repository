@@ -1,5 +1,6 @@
 /** Explicit credential policy for GitHub operations that may be exposed through an application endpoint. */
-export type GitHubRepositoryAuthentication = 'anonymous' | 'environment';
+export type GitHubRepositoryAuthentication =
+  'anonymous' | 'environment' | { readonly kind: 'user'; readonly accessToken: string };
 
 /** Options for discovering the repositories visible under one GitHub owner source. */
 export interface GitHubRepositoryDiscoveryOptions {
