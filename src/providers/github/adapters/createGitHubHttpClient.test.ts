@@ -23,6 +23,40 @@ test('omits inherited environment credentials for explicit anonymous requests', 
   }
 });
 
+test('sends only the request-scoped user access token for user-authorized requests', async () => {
+  const originalToken = process.env.GITHUB_TOKEN;
+  process.env.GITHUB_TOKEN = 'environment-token-must-not-leak';
+  const headers: Headers[] = [];
+  try {
+    const client = createGitHubHttpClient(
+      ((_input: string | URL | Request, init?: RequestInit) => {
+        headers.push(new Headers(init?.headers));
+        return Promise.resolve(Response.json({ owner: 'private' }));
+      }) as typeof fetch,
+      { authentication: { kind: 'user', accessToken: 'user-token' } },
+    );
+    await client.requestJsonResponseAsync('https://api.github.com/users/ankhorage', 'owner');
+    expect(headers[0]?.get('authorization')).toBe('Bearer user-token');
+  } finally {
+    if (originalToken === undefined) delete process.env.GITHUB_TOKEN;
+    else process.env.GITHUB_TOKEN = originalToken;
+  }
+});
+
+test('rejects a blank request-scoped user access token before an HTTP request', async () => {
+  let requests = 0;
+  const client = createGitHubHttpClient(
+    ((_input: string | URL | Request) => {
+      requests += 1;
+      return Promise.resolve(Response.json({}));
+    }) as typeof fetch,
+    { authentication: { kind: 'user', accessToken: ' ' } },
+  );
+  const failure = await requestFailureAsync(client);
+  expect(failure).toMatchObject({ code: 'permission-denied' });
+  expect(requests).toBe(0);
+});
+
 test('cancels an in-flight request through its combined fetch signal', () => {
   const controller = new AbortController();
   const client = createGitHubHttpClient(

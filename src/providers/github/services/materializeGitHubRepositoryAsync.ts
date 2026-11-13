@@ -9,6 +9,8 @@ export async function materializeGitHubRepositoryAsync(
 ): Promise<GitHubRepositoryMaterializationResult> {
   return materializeGitHubRepositoryWithGatewayAsync(
     options,
-    createGitHubHttpRepositoryReadGateway(),
+    createGitHubHttpRepositoryReadGateway(fetch, {
+      authentication: options.authentication ?? 'anonymous',
+    }),
   );
 }
