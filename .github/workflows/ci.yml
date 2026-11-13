@@ -73,8 +73,8 @@ jobs:
           (
             cd "$consumer_dir"
             bun add "$artifact" --ignore-scripts
-            node --input-type=module -e "import('@ankhorage/repository/github').then(({ discoverGitHubRepositoriesAsync, materializeGitHubRepositoryAsync, resolveGitHubRepositoryRevisionAsync }) => { if (![discoverGitHubRepositoriesAsync, materializeGitHubRepositoryAsync, resolveGitHubRepositoryRevisionAsync].every((value) => typeof value === 'function')) throw new Error('Missing GitHub public runtime export.'); })"
-            printf "import type { GitHubRepositoryAuthentication, GitHubRepositoryMaterializationOptions } from '@ankhorage/repository/github';\nconst authentication: GitHubRepositoryAuthentication = { kind: 'user', accessToken: 'token' };\nconst options: GitHubRepositoryMaterializationOptions = { authentication, url: 'https://github.com/owner/repository' };\nvoid options;\n" > consumer.ts
+            node --input-type=module -e "import('@ankhorage/repository/github').then(({ discoverGitHubAuthenticatedUserRepositoriesAsync, discoverGitHubRepositoriesAsync, materializeGitHubRepositoryAsync, resolveGitHubRepositoryRevisionAsync }) => { if (![discoverGitHubAuthenticatedUserRepositoriesAsync, discoverGitHubRepositoriesAsync, materializeGitHubRepositoryAsync, resolveGitHubRepositoryRevisionAsync].every((value) => typeof value === 'function')) throw new Error('Missing GitHub public runtime export.'); })"
+            printf "import type { GitHubAuthenticatedUserRepositoryInventoryOptions, GitHubRepositoryAuthentication, GitHubRepositoryMaterializationOptions } from '@ankhorage/repository/github';\nconst authentication: GitHubRepositoryAuthentication = { kind: 'user', accessToken: 'token' };\nconst options: GitHubRepositoryMaterializationOptions = { authentication, url: 'https://github.com/owner/repository' };\nconst inventory: GitHubAuthenticatedUserRepositoryInventoryOptions = { authentication };\nvoid options;\nvoid inventory;\n" > consumer.ts
             bun x tsc --noEmit --module NodeNext --moduleResolution NodeNext --target ES2022 consumer.ts
           )
 
