@@ -1,5 +1,6 @@
 import { GitHubRepositoryDiscoveryError } from '../definitions/GitHubRepositoryDiscoveryResult.js';
 import type {
+  GitHubAuthenticatedUserRepositoryInventoryGateway,
   GitHubDiscoveredRepository,
   GitHubRepositoryDiscoveryGateway,
   GitHubRepositoryOwner,
@@ -12,16 +13,19 @@ type RequestJsonResponseAsync = (
 ) => Promise<{ readonly value: unknown; readonly link: string | null }>;
 
 const API_ORIGIN = 'https://api.github.com';
+const MAX_REPOSITORY_PAGES = 1_000;
 
 /** Create the discovery adapter from the shared GitHub HTTP requester. */
 export function createGitHubHttpRepositoryDiscoveryGateway(
   requestJsonResponseAsync: RequestJsonResponseAsync,
-): GitHubRepositoryDiscoveryGateway {
+): GitHubRepositoryDiscoveryGateway & GitHubAuthenticatedUserRepositoryInventoryGateway {
   return {
     resolveOwnerAsync: (owner, signal) =>
       resolveOwnerAsync(requestJsonResponseAsync, owner, signal),
     listOwnerRepositoriesAsync: (owner, signal) =>
       listOwnerRepositoriesAsync(requestJsonResponseAsync, owner, signal),
+    listAuthenticatedUserRepositoriesAsync: (signal) =>
+      listAuthenticatedUserRepositoriesAsync(requestJsonResponseAsync, signal),
   };
 }
 
@@ -58,10 +62,45 @@ async function listOwnerRepositoriesAsync(
   signal: AbortSignal | undefined,
 ): Promise<readonly GitHubDiscoveredRepository[]> {
   const route = owner.type === 'organization' ? 'orgs' : 'users';
-  let nextUrl: string | undefined =
-    `${API_ORIGIN}/${route}/${encodeURIComponent(owner.login)}/repos?per_page=100&type=all&sort=full_name&direction=asc`;
+  return listRepositoriesAsync(
+    requestJsonResponseAsync,
+    `${API_ORIGIN}/${route}/${encodeURIComponent(owner.login)}/repos?per_page=100&type=all&sort=full_name&direction=asc`,
+    `/${route}/${encodeURIComponent(owner.login)}/repos`,
+    signal,
+  );
+}
+
+/** Read every accessible repository page for the current authenticated GitHub user. */
+async function listAuthenticatedUserRepositoriesAsync(
+  requestJsonResponseAsync: RequestJsonResponseAsync,
+  signal: AbortSignal | undefined,
+): Promise<readonly GitHubDiscoveredRepository[]> {
+  return listRepositoriesAsync(
+    requestJsonResponseAsync,
+    `${API_ORIGIN}/user/repos?visibility=all&affiliation=owner,collaborator,organization_member&per_page=100`,
+    '/user/repos',
+    signal,
+  );
+}
+
+/** Read, validate, deduplicate, and deterministically order one bounded GitHub repository listing. */
+async function listRepositoriesAsync(
+  requestJsonResponseAsync: RequestJsonResponseAsync,
+  initialUrl: string,
+  expectedPath: string,
+  signal: AbortSignal | undefined,
+): Promise<readonly GitHubDiscoveredRepository[]> {
+  let nextUrl: string | undefined = initialUrl;
   const repositories = new Map<string, GitHubDiscoveredRepository>();
-  while (nextUrl !== undefined) {
+  const visitedUrls = new Set<string>();
+  while (nextUrl !== undefined && visitedUrls.size < MAX_REPOSITORY_PAGES) {
+    if (visitedUrls.has(nextUrl)) {
+      throw new GitHubRepositoryDiscoveryError(
+        'api-failure',
+        'GitHub returned a repeated repository pagination URL.',
+      );
+    }
+    visitedUrls.add(nextUrl);
     const page = await requestJsonResponseAsync(nextUrl, 'repository list', signal);
     if (!Array.isArray(page.value)) {
       throw new GitHubRepositoryDiscoveryError(
@@ -73,7 +112,13 @@ async function listOwnerRepositoriesAsync(
       const repository = parseDiscoveredRepository(value);
       repositories.set(repository.id, repository);
     }
-    nextUrl = nextPageUrl(page.link);
+    nextUrl = nextPageUrl(page.link, expectedPath);
+  }
+  if (nextUrl !== undefined) {
+    throw new GitHubRepositoryDiscoveryError(
+      'api-failure',
+      'GitHub repository pagination exceeded the supported limit.',
+    );
   }
   return [...repositories.values()].sort(compareRepositories);
 }
@@ -94,23 +139,42 @@ function parseDiscoveredRepository(value: unknown): GitHubDiscoveredRepository {
     name: requireString(record.name, 'repository name'),
     owner: requireString(owner.login, 'repository owner login'),
     url: requireString(record.html_url, 'repository URL'),
-    visibility: record.private === true ? 'private' : 'public',
+    visibility: parseRepositoryVisibility(record),
   };
 }
 
 /** Select the next GitHub pagination target while rejecting an unexpected cross-origin link. */
-function nextPageUrl(link: string | null): string | undefined {
+function nextPageUrl(link: string | null, expectedPath: string): string | undefined {
   if (!link) return undefined;
   const match = /<([^>]+)>;\s*rel="next"/u.exec(link);
   if (!match?.[1]) return undefined;
   const url = new URL(match[1]);
-  if (url.origin !== API_ORIGIN) {
+  if (url.origin !== API_ORIGIN || url.pathname !== expectedPath || !isPositivePage(url)) {
     throw new GitHubRepositoryDiscoveryError(
       'api-failure',
       'GitHub returned an invalid pagination URL.',
     );
   }
   return url.href;
+}
+
+/** Validate that GitHub's next link advances through a bounded numbered listing page. */
+function isPositivePage(url: URL): boolean {
+  const page = url.searchParams.get('page');
+  return page !== null && /^[1-9]\d*$/u.test(page);
+}
+
+/** Map GitHub's documented repository visibility fields without misclassifying internal repositories. */
+function parseRepositoryVisibility(
+  repository: Record<string, unknown>,
+): GitHubDiscoveredRepository['visibility'] {
+  if (repository.visibility === 'internal') return 'internal';
+  if (repository.private === true) return 'private';
+  if (repository.private === false) return 'public';
+  throw new GitHubRepositoryDiscoveryError(
+    'api-failure',
+    'GitHub returned an invalid repository visibility.',
+  );
 }
 
 /** Sort repository identities independently of the provider's page ordering. */

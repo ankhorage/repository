@@ -1,3 +1,5 @@
+export type { GitHubAuthenticatedUserRepositoryInventoryOptions } from '../providers/github/definitions/GitHubAuthenticatedUserRepositoryInventoryOptions.js';
+export type { GitHubAuthenticatedUserRepositoryInventoryResult } from '../providers/github/definitions/GitHubAuthenticatedUserRepositoryInventoryResult.js';
 export type { GitHubRepositoryConnectionOptions } from '../providers/github/definitions/GitHubRepositoryConnectionOptions.js';
 export type {
   GitHubRepositoryConnectionFailure,
@@ -7,6 +9,7 @@ export type {
 export type {
   GitHubRepositoryAuthentication,
   GitHubRepositoryDiscoveryOptions,
+  GitHubRepositoryUserAuthentication,
 } from '../providers/github/definitions/GitHubRepositoryDiscoveryOptions.js';
 export {
   type GitHubOwnerType,
@@ -24,6 +27,7 @@ export type { GitHubRepositoryRevisionResolutionOptions } from '../providers/git
 export type { GitHubRepositoryRevisionResolutionResult } from '../providers/github/definitions/GitHubRepositoryRevisionResolutionResult.js';
 export type { GitHubRepositoryVisibility } from '../providers/github/definitions/GitHubRepositoryVisibility.js';
 export { connectGitHubRepositoryAsync } from '../providers/github/services/connectGitHubRepositoryAsync.js';
+export { discoverGitHubAuthenticatedUserRepositoriesAsync } from '../providers/github/services/discoverGitHubAuthenticatedUserRepositoriesAsync.js';
 export { discoverGitHubRepositoriesAsync } from '../providers/github/services/discoverGitHubRepositoriesAsync.js';
 export { materializeGitHubRepositoryAsync } from '../providers/github/services/materializeGitHubRepositoryAsync.js';
 export { resolveGitHubRepositoryRevisionAsync } from '../providers/github/services/resolveGitHubRepositoryRevisionAsync.js';

@@ -5,7 +5,7 @@ export interface GitHubRepositoryDiscoveryRepository {
   readonly name: string;
   readonly owner: string;
   readonly url: string;
-  readonly visibility: 'private' | 'public';
+  readonly visibility: 'internal' | 'private' | 'public';
 }
 
 export interface GitHubRepositoryDiscoveryResult {

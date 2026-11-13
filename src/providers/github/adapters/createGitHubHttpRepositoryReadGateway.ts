@@ -1,4 +1,7 @@
-import type { GitHubRepositoryDiscoveryGateway } from '../ports/GitHubRepositoryDiscoveryGateway.js';
+import type {
+  GitHubAuthenticatedUserRepositoryInventoryGateway,
+  GitHubRepositoryDiscoveryGateway,
+} from '../ports/GitHubRepositoryDiscoveryGateway.js';
 import type {
   GitHubRepositoryReadGateway,
   GitHubRepositoryReadMetadata,
@@ -18,7 +21,9 @@ const RAW_ORIGIN = 'https://raw.githubusercontent.com';
 export function createGitHubHttpRepositoryReadGateway(
   fetcher: typeof fetch = fetch,
   options: GitHubHttpClientOptions = {},
-): GitHubRepositoryReadGateway & GitHubRepositoryDiscoveryGateway {
+): GitHubRepositoryReadGateway &
+  GitHubRepositoryDiscoveryGateway &
+  GitHubAuthenticatedUserRepositoryInventoryGateway {
   const client = createGitHubHttpClient(fetcher, options);
   const discoveryGateway = createGitHubHttpRepositoryDiscoveryGateway((url, subject, signal) =>
     client.requestJsonResponseAsync(url, subject, signal),
