@@ -376,7 +376,7 @@
     "modulePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
     "sourceLocation": {
       "filePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
-      "line": 5,
+      "line": 6,
       "column": 1
     },
     "exportPaths": [
@@ -578,15 +578,24 @@
     "modulePath": "src/providers/github/definitions/GitHubRepositoryMaterializationOptions.ts",
     "sourceLocation": {
       "filePath": "src/providers/github/definitions/GitHubRepositoryMaterializationOptions.ts",
-      "line": 1,
+      "line": 3,
       "column": 1
     },
     "exportPaths": [
       "src/github/index.ts"
     ],
-    "relatedSymbols": [],
+    "relatedSymbols": [
+      "GitHubRepositoryAuthentication"
+    ],
     "signatures": [],
     "members": [
+      {
+        "name": "authentication",
+        "kind": "property",
+        "type": "GitHubRepositoryAuthentication | undefined",
+        "required": false,
+        "description": null
+      },
       {
         "name": "destinationPath",
         "kind": "property",

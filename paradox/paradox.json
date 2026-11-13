@@ -14,7 +14,7 @@
     {
       "id": "npm",
       "label": "npm",
-      "value": "v0.8.5",
+      "value": "v0.9.0",
       "color": "cb3837"
     },
     {
@@ -394,6 +394,14 @@
       ]
     },
     {
+      "path": "src/github/publicAuthentication.test.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/github/index.ts"
+      ],
+      "exports": []
+    },
+    {
       "path": "src/index.test.ts",
       "isEntrypoint": false,
       "dependencies": [
@@ -492,6 +500,14 @@
       ]
     },
     {
+      "path": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts",
+      "isEntrypoint": false,
+      "dependencies": [
+        "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts"
+      ],
+      "exports": []
+    },
+    {
       "path": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
       "isEntrypoint": false,
       "dependencies": [
@@ -581,7 +597,9 @@
     {
       "path": "src/providers/github/definitions/GitHubRepositoryMaterializationOptions.ts",
       "isEntrypoint": false,
-      "dependencies": [],
+      "dependencies": [
+        "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts"
+      ],
       "exports": [
         "GitHubRepositoryMaterializationOptions"
       ]
@@ -1236,7 +1254,7 @@
       "modulePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
       "sourceLocation": {
         "filePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
-        "line": 5,
+        "line": 6,
         "column": 1
       },
       "exportPaths": [
@@ -1438,15 +1456,24 @@
       "modulePath": "src/providers/github/definitions/GitHubRepositoryMaterializationOptions.ts",
       "sourceLocation": {
         "filePath": "src/providers/github/definitions/GitHubRepositoryMaterializationOptions.ts",
-        "line": 1,
+        "line": 3,
         "column": 1
       },
       "exportPaths": [
         "src/github/index.ts"
       ],
-      "relatedSymbols": [],
+      "relatedSymbols": [
+        "GitHubRepositoryAuthentication"
+      ],
       "signatures": [],
       "members": [
+        {
+          "name": "authentication",
+          "kind": "property",
+          "type": "GitHubRepositoryAuthentication | undefined",
+          "required": false,
+          "description": null
+        },
         {
           "name": "destinationPath",
           "kind": "property",
@@ -2236,6 +2263,39 @@
       }
     },
     {
+      "name": "responseForUrl",
+      "description": "Return only the deterministic provider fields consumed by the public GitHub entrypoints.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/github/publicAuthentication.test.ts",
+        "line": 59,
+        "column": 1
+      }
+    },
+    {
+      "name": "requestUrl",
+      "description": "Read the URL from a Fetch invocation without changing the request passed to GitHub.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/github/publicAuthentication.test.ts",
+        "line": 82,
+        "column": 1
+      }
+    },
+    {
+      "name": "header",
+      "description": "Project recorded authorization headers without ever recording credentials in test diagnostics.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/github/publicAuthentication.test.ts",
+        "line": 87,
+        "column": 1
+      }
+    },
+    {
       "name": "collectProductionTypeScriptFiles",
       "description": null,
       "see": [],
@@ -2363,7 +2423,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpClient.test.ts",
-        "line": 274,
+        "line": 308,
         "column": 1
       }
     },
@@ -2418,7 +2478,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
-        "line": 156,
+        "line": 157,
         "column": 1
       }
     },
@@ -2429,7 +2489,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
-        "line": 166,
+        "line": 167,
         "column": 9
       }
     },
@@ -2440,7 +2500,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
-        "line": 184,
+        "line": 185,
         "column": 1
       }
     },
@@ -2451,7 +2511,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
-        "line": 191,
+        "line": 192,
         "column": 11
       }
     },
@@ -2462,7 +2522,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
-        "line": 198,
+        "line": 199,
         "column": 1
       }
     },
@@ -2473,7 +2533,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
-        "line": 210,
+        "line": 211,
         "column": 1
       }
     },
@@ -2484,7 +2544,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
-        "line": 222,
+        "line": 223,
         "column": 1
       }
     },
@@ -2495,7 +2555,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
-        "line": 250,
+        "line": 251,
         "column": 1
       }
     },
@@ -2506,7 +2566,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
-        "line": 254,
+        "line": 255,
         "column": 11
       }
     },
@@ -2517,18 +2577,18 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
-        "line": 255,
+        "line": 256,
         "column": 11
       }
     },
     {
       "name": "requestHeaders",
-      "description": "Build GitHub request headers only when the caller explicitly selected environment authentication.",
+      "description": "Build GitHub request headers only from the caller's explicit authentication selection.",
       "see": [],
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
-        "line": 269,
+        "line": 270,
         "column": 1
       }
     },
@@ -2539,7 +2599,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
-        "line": 285,
+        "line": 293,
         "column": 1
       }
     },
@@ -2550,7 +2610,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
-        "line": 293,
+        "line": 301,
         "column": 1
       }
     },
@@ -2561,7 +2621,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
-        "line": 301,
+        "line": 309,
         "column": 1
       }
     },
@@ -2572,7 +2632,7 @@
       "security": [],
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpClient.ts",
-        "line": 306,
+        "line": 314,
         "column": 1
       }
     },
@@ -2661,6 +2721,28 @@
       "sourceLocation": {
         "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts",
         "line": 135,
+        "column": 1
+      }
+    },
+    {
+      "name": "responseForUrl",
+      "description": "Return the smallest valid response for each GitHub read boundary.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts",
+        "line": 30,
+        "column": 1
+      }
+    },
+    {
+      "name": "requestUrl",
+      "description": "Extract a URL from the fetch input without changing the request under test.",
+      "see": [],
+      "security": [],
+      "sourceLocation": {
+        "filePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts",
+        "line": 46,
         "column": 1
       }
     },
@@ -3666,6 +3748,11 @@
         "sourcePath": "src/github/index.ts"
       },
       {
+        "fromPath": "src/github/publicAuthentication.test.ts",
+        "toPath": "src/github/index.ts",
+        "sourcePath": "src/github/publicAuthentication.test.ts"
+      },
+      {
         "fromPath": "src/metadata/index.ts",
         "toPath": "src/capabilities/index.ts",
         "sourcePath": "src/metadata/index.ts"
@@ -3876,6 +3963,11 @@
         "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts"
       },
       {
+        "fromPath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts",
+        "toPath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts"
+      },
+      {
         "fromPath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
         "toPath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.ts",
         "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts"
@@ -3904,6 +3996,11 @@
         "fromPath": "src/providers/github/definitions/GitHubRepositoryConnectionOptions.ts",
         "toPath": "src/providers/github/definitions/GitHubRepositoryVisibility.ts",
         "sourcePath": "src/providers/github/definitions/GitHubRepositoryConnectionOptions.ts"
+      },
+      {
+        "fromPath": "src/providers/github/definitions/GitHubRepositoryMaterializationOptions.ts",
+        "toPath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
+        "sourcePath": "src/providers/github/definitions/GitHubRepositoryMaterializationOptions.ts"
       },
       {
         "fromPath": "src/providers/github/definitions/GitHubRepositoryRevisionResolutionOptions.ts",
@@ -4334,6 +4431,54 @@
         "toSymbol": "expect",
         "callExpression": "expect",
         "sourcePath": "src/github/index.test.ts"
+      },
+      {
+        "fromSymbol": "src/github/publicAuthentication.test.ts",
+        "toSymbol": "test",
+        "callExpression": "test",
+        "sourcePath": "src/github/publicAuthentication.test.ts"
+      },
+      {
+        "fromSymbol": "src/github/publicAuthentication.test.ts",
+        "toSymbol": "requestUrl",
+        "callExpression": "requestUrl",
+        "sourcePath": "src/github/publicAuthentication.test.ts"
+      },
+      {
+        "fromSymbol": "src/github/publicAuthentication.test.ts",
+        "toSymbol": "responseForUrl",
+        "callExpression": "responseForUrl",
+        "sourcePath": "src/github/publicAuthentication.test.ts"
+      },
+      {
+        "fromSymbol": "src/github/publicAuthentication.test.ts",
+        "toSymbol": "discoverGitHubRepositoriesAsync",
+        "callExpression": "discoverGitHubRepositoriesAsync",
+        "sourcePath": "src/github/publicAuthentication.test.ts"
+      },
+      {
+        "fromSymbol": "src/github/publicAuthentication.test.ts",
+        "toSymbol": "resolveGitHubRepositoryRevisionAsync",
+        "callExpression": "resolveGitHubRepositoryRevisionAsync",
+        "sourcePath": "src/github/publicAuthentication.test.ts"
+      },
+      {
+        "fromSymbol": "src/github/publicAuthentication.test.ts",
+        "toSymbol": "materializeGitHubRepositoryAsync",
+        "callExpression": "materializeGitHubRepositoryAsync",
+        "sourcePath": "src/github/publicAuthentication.test.ts"
+      },
+      {
+        "fromSymbol": "src/github/publicAuthentication.test.ts",
+        "toSymbol": "cleanupAsync",
+        "callExpression": "materialized.cleanupAsync",
+        "sourcePath": "src/github/publicAuthentication.test.ts"
+      },
+      {
+        "fromSymbol": "src/github/publicAuthentication.test.ts",
+        "toSymbol": "expect",
+        "callExpression": "expect",
+        "sourcePath": "src/github/publicAuthentication.test.ts"
       },
       {
         "fromSymbol": "src/cli/provider/createRepositoryRuntimeProvider.test.ts",
@@ -5123,14 +5268,14 @@
       },
       {
         "fromSymbol": "src/providers/github/adapters/createGitHubHttpClient.test.ts",
-        "toSymbol": "reject",
-        "callExpression": "reject",
+        "toSymbol": "requestFailureAsync",
+        "callExpression": "requestFailureAsync",
         "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.test.ts"
       },
       {
         "fromSymbol": "src/providers/github/adapters/createGitHubHttpClient.test.ts",
-        "toSymbol": "requestFailureAsync",
-        "callExpression": "requestFailureAsync",
+        "toSymbol": "reject",
+        "callExpression": "reject",
         "sourcePath": "src/providers/github/adapters/createGitHubHttpClient.test.ts"
       },
       {
@@ -5408,6 +5553,60 @@
         "toSymbol": "requireString",
         "callExpression": "requireString",
         "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryDiscoveryGateway.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts",
+        "toSymbol": "test",
+        "callExpression": "test",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts",
+        "toSymbol": "createGitHubHttpRepositoryReadGateway",
+        "callExpression": "createGitHubHttpRepositoryReadGateway",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts",
+        "toSymbol": "responseForUrl",
+        "callExpression": "responseForUrl",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts",
+        "toSymbol": "requestUrl",
+        "callExpression": "requestUrl",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts",
+        "toSymbol": "inspectRepositoryAsync",
+        "callExpression": "gateway.inspectRepositoryAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts",
+        "toSymbol": "resolveRevisionAsync",
+        "callExpression": "gateway.resolveRevisionAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts",
+        "toSymbol": "readTreeAsync",
+        "callExpression": "gateway.readTreeAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts",
+        "toSymbol": "readFileAsync",
+        "callExpression": "gateway.readFileAsync",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts"
+      },
+      {
+        "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts",
+        "toSymbol": "expect",
+        "callExpression": "expect",
+        "sourcePath": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.authorization.test.ts"
       },
       {
         "fromSymbol": "src/providers/github/adapters/createGitHubHttpRepositoryReadGateway.test.ts",
@@ -6506,6 +6705,11 @@
       {
         "fromSymbol": "GitHubRepositoryMaterializationOptions",
         "toType": "AbortSignal",
+        "sourcePath": "src/providers/github/definitions/GitHubRepositoryMaterializationOptions.ts"
+      },
+      {
+        "fromSymbol": "GitHubRepositoryMaterializationOptions",
+        "toType": "GitHubRepositoryAuthentication",
         "sourcePath": "src/providers/github/definitions/GitHubRepositoryMaterializationOptions.ts"
       },
       {

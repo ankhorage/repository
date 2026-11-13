@@ -110,7 +110,7 @@ Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts:21:
 
 Kind: `type`
 Module: `src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts`
-Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts:5:1`
+Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts:6:1`
 
 ### Members
 
@@ -169,12 +169,13 @@ Source: `src/providers/github/definitions/GitHubRepositoryMaterializationResult.
 
 Kind: `type`
 Module: `src/providers/github/definitions/GitHubRepositoryMaterializationOptions.ts`
-Source: `src/providers/github/definitions/GitHubRepositoryMaterializationOptions.ts:1:1`
+Source: `src/providers/github/definitions/GitHubRepositoryMaterializationOptions.ts:3:1`
 
 ### Members
 
 | Name | Kind | Type | Required | Description |
 | --- | --- | --- | --- | --- |
+| authentication | property | `GitHubRepositoryAuthentication \| undefined` | no |  |
 | destinationPath | property | `string \| undefined` | no |  |
 | ref | property | `string \| undefined` | no |  |
 | signal | property | `AbortSignal \| undefined` | no |  |

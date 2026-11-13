@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.9.0
+
+### Minor Changes
+
+- a5c159a: Add request-scoped GitHub user authorization for discovery, revision resolution, and materialization while keeping anonymous access explicit by default.
+
 ## 0.8.5
 
 ### Patch Changes
