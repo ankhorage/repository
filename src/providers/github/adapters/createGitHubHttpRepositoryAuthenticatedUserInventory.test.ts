@@ -50,6 +50,29 @@ test('keeps interleaved authenticated inventories isolated from environment and 
   }
 });
 
+test.each([
+  'https://api.github.com/user/repos?visibility=private&affiliation=owner%2Ccollaborator%2Corganization_member&per_page=100&page=2',
+  'https://api.github.com/user/repos?visibility=all&per_page=100&page=2',
+  'https://api.github.com/user/repos?visibility=all&affiliation=owner%2Ccollaborator%2Corganization_member&per_page=100&page=1',
+])('rejects an incomplete or non-forward authenticated inventory pagination link', async (next) => {
+  const gateway = createGitHubHttpRepositoryReadGateway(
+    ((_input: string | URL | Request, _init?: RequestInit) =>
+      Promise.resolve(
+        Response.json([], {
+          headers: { link: `<${next}>; rel="next"` },
+        }),
+      )) as typeof fetch,
+    { authentication: { kind: 'user', accessToken: 'user-token' } },
+  );
+
+  try {
+    await gateway.listAuthenticatedUserRepositoriesAsync();
+    throw new Error('Expected invalid pagination to fail.');
+  } catch (error) {
+    expect(error).toMatchObject({ code: 'api-failure' });
+  }
+});
+
 /** Create a request-capturing paginated inventory HTTP adapter fixture. */
 function createInventoryFetch(requests: Request[]): typeof fetch {
   return ((input: string | URL | Request, init?: RequestInit) => {

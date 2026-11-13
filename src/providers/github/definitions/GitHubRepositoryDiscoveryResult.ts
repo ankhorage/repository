@@ -5,7 +5,7 @@ export interface GitHubRepositoryDiscoveryRepository {
   readonly name: string;
   readonly owner: string;
   readonly url: string;
-  readonly visibility: 'internal' | 'private' | 'public';
+  readonly visibility: GitHubRepositoryVisibility;
 }
 
 export interface GitHubRepositoryDiscoveryResult {
@@ -38,3 +38,4 @@ export class GitHubRepositoryDiscoveryError extends Error {
     this.name = 'GitHubRepositoryDiscoveryError';
   }
 }
+import type { GitHubRepositoryVisibility } from './GitHubRepositoryVisibility.js';

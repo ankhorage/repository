@@ -14,6 +14,11 @@ type RequestJsonResponseAsync = (
 
 const API_ORIGIN = 'https://api.github.com';
 const MAX_REPOSITORY_PAGES = 1_000;
+const AUTHENTICATED_INVENTORY_FILTERS = {
+  affiliation: 'owner,collaborator,organization_member',
+  per_page: '100',
+  visibility: 'all',
+} as const;
 
 /** Create the discovery adapter from the shared GitHub HTTP requester. */
 export function createGitHubHttpRepositoryDiscoveryGateway(
@@ -65,7 +70,7 @@ async function listOwnerRepositoriesAsync(
   return listRepositoriesAsync(
     requestJsonResponseAsync,
     `${API_ORIGIN}/${route}/${encodeURIComponent(owner.login)}/repos?per_page=100&type=all&sort=full_name&direction=asc`,
-    `/${route}/${encodeURIComponent(owner.login)}/repos`,
+    { path: `/${route}/${encodeURIComponent(owner.login)}/repos` },
     signal,
   );
 }
@@ -78,7 +83,7 @@ async function listAuthenticatedUserRepositoriesAsync(
   return listRepositoriesAsync(
     requestJsonResponseAsync,
     `${API_ORIGIN}/user/repos?visibility=all&affiliation=owner,collaborator,organization_member&per_page=100`,
-    '/user/repos',
+    { path: '/user/repos', filters: AUTHENTICATED_INVENTORY_FILTERS },
     signal,
   );
 }
@@ -87,10 +92,11 @@ async function listAuthenticatedUserRepositoriesAsync(
 async function listRepositoriesAsync(
   requestJsonResponseAsync: RequestJsonResponseAsync,
   initialUrl: string,
-  expectedPath: string,
+  pagination: RepositoryPagination,
   signal: AbortSignal | undefined,
 ): Promise<readonly GitHubDiscoveredRepository[]> {
   let nextUrl: string | undefined = initialUrl;
+  let previousPage = 1;
   const repositories = new Map<string, GitHubDiscoveredRepository>();
   const visitedUrls = new Set<string>();
   while (nextUrl !== undefined && visitedUrls.size < MAX_REPOSITORY_PAGES) {
@@ -112,7 +118,8 @@ async function listRepositoriesAsync(
       const repository = parseDiscoveredRepository(value);
       repositories.set(repository.id, repository);
     }
-    nextUrl = nextPageUrl(page.link, expectedPath);
+    nextUrl = nextPageUrl(page.link, pagination, previousPage);
+    if (nextUrl !== undefined) previousPage = pageNumber(new URL(nextUrl));
   }
   if (nextUrl !== undefined) {
     throw new GitHubRepositoryDiscoveryError(
@@ -144,12 +151,21 @@ function parseDiscoveredRepository(value: unknown): GitHubDiscoveredRepository {
 }
 
 /** Select the next GitHub pagination target while rejecting an unexpected cross-origin link. */
-function nextPageUrl(link: string | null, expectedPath: string): string | undefined {
+function nextPageUrl(
+  link: string | null,
+  pagination: RepositoryPagination,
+  previousPage: number,
+): string | undefined {
   if (!link) return undefined;
   const match = /<([^>]+)>;\s*rel="next"/u.exec(link);
   if (!match?.[1]) return undefined;
   const url = new URL(match[1]);
-  if (url.origin !== API_ORIGIN || url.pathname !== expectedPath || !isPositivePage(url)) {
+  if (
+    url.origin !== API_ORIGIN ||
+    url.pathname !== pagination.path ||
+    !hasExpectedPaginationFilters(url, pagination.filters) ||
+    pageNumber(url) <= previousPage
+  ) {
     throw new GitHubRepositoryDiscoveryError(
       'api-failure',
       'GitHub returned an invalid pagination URL.',
@@ -158,10 +174,33 @@ function nextPageUrl(link: string | null, expectedPath: string): string | undefi
   return url.href;
 }
 
-/** Validate that GitHub's next link advances through a bounded numbered listing page. */
-function isPositivePage(url: URL): boolean {
+/*** Validate all invariant inventory filters before following a provider-controlled next URL. */
+function hasExpectedPaginationFilters(
+  url: URL,
+  filters: Readonly<Record<string, string>> | undefined,
+): boolean {
+  if (filters === undefined) return pageNumber(url) > 0;
+  const expectedKeys = new Set([...Object.keys(filters), 'page']);
+  return (
+    [...url.searchParams.keys()].every((key) => expectedKeys.has(key)) &&
+    Object.entries(filters).every(
+      ([key, value]) =>
+        url.searchParams.getAll(key).length === 1 && url.searchParams.get(key) === value,
+    ) &&
+    url.searchParams.getAll('page').length === 1 &&
+    pageNumber(url) > 0
+  );
+}
+
+/*** Read a positive, unambiguous page number from a provider pagination URL. */
+function pageNumber(url: URL): number {
   const page = url.searchParams.get('page');
-  return page !== null && /^[1-9]\d*$/u.test(page);
+  return page !== null && /^[1-9]\d*$/u.test(page) ? Number(page) : 0;
+}
+
+interface RepositoryPagination {
+  readonly path: string;
+  readonly filters?: Readonly<Record<string, string>>;
 }
 
 /** Map GitHub's documented repository visibility fields without misclassifying internal repositories. */
