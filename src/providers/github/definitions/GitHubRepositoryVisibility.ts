@@ -1,1 +1,1 @@
-export type GitHubRepositoryVisibility = 'private' | 'public';
+export type GitHubRepositoryVisibility = 'internal' | 'private' | 'public';

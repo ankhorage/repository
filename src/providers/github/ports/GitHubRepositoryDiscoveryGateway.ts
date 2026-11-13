@@ -9,7 +9,7 @@ export interface GitHubDiscoveredRepository {
   readonly name: string;
   readonly owner: string;
   readonly url: string;
-  readonly visibility: 'private' | 'public';
+  readonly visibility: 'internal' | 'private' | 'public';
 }
 
 /** Read-only provider boundary for GitHub owner resolution and repository discovery. */
@@ -17,6 +17,13 @@ export interface GitHubRepositoryDiscoveryGateway {
   resolveOwnerAsync(owner: string, signal?: AbortSignal): Promise<GitHubRepositoryOwner>;
   listOwnerRepositoriesAsync(
     owner: GitHubRepositoryOwner,
+    signal?: AbortSignal,
+  ): Promise<readonly GitHubDiscoveredRepository[]>;
+}
+
+/** Read-only provider boundary for the authenticated user's GitHub repository inventory. */
+export interface GitHubAuthenticatedUserRepositoryInventoryGateway {
+  listAuthenticatedUserRepositoriesAsync(
     signal?: AbortSignal,
   ): Promise<readonly GitHubDiscoveredRepository[]>;
 }
