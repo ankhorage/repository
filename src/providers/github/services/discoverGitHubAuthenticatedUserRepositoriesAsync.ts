@@ -10,7 +10,7 @@ import { discoverGitHubAuthenticatedUserRepositoriesWithGatewayAsync } from './d
  * The result represents the caller's current GitHub access, which can be partial when OAuth scope,
  * organization approval, SSO, or repository permissions restrict visibility.
  *
- * @security
+ * @security discoverGitHubAuthenticatedUserRepositoriesAsync.test.ts#fails closed for malformed public authenticated inventory credentials without network access
  */
 export async function discoverGitHubAuthenticatedUserRepositoriesAsync(
   options: GitHubAuthenticatedUserRepositoryInventoryOptions,
