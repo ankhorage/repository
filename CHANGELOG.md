@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.10.6
+
+### Patch Changes
+
+- 87f58ee: Update dependencies: `@ankhorage/capability`.
+
 ## 0.10.5
 
 ### Patch Changes
