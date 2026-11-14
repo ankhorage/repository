@@ -1,5 +1,15 @@
 # @ankhorage/repository
 
+## 0.10.0
+
+### Minor Changes
+
+- 21bd669: Add the authenticated GitHub user repository inventory API with bounded pagination, multi-owner visibility, and request-scoped credentials.
+
+### Patch Changes
+
+- 0056529: Validate the authenticated GitHub inventory's fail-closed credential test as security evidence during release documentation generation.
+
 ## 0.9.0
 
 ### Minor Changes

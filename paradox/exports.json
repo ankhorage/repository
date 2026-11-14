@@ -84,6 +84,47 @@
     "structuredRows": []
   },
   {
+    "name": "discoverGitHubAuthenticatedUserRepositoriesAsync",
+    "title": null,
+    "description": "List repositories GitHub makes available to one request-scoped authenticated user.\n\nThe result represents the caller's current GitHub access, which can be partial when OAuth scope,\norganization approval, SSO, or repository permissions restrict visibility.",
+    "isReadme": false,
+    "see": [],
+    "security": [
+      "discoverGitHubAuthenticatedUserRepositoriesAsync.test.ts#fails closed for malformed public authenticated inventory credentials without network access"
+    ],
+    "kind": "function",
+    "modulePath": "src/providers/github/services/discoverGitHubAuthenticatedUserRepositoriesAsync.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/services/discoverGitHubAuthenticatedUserRepositoriesAsync.ts",
+      "line": 15,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [
+      "GitHubAuthenticatedUserRepositoryInventoryOptions",
+      "GitHubAuthenticatedUserRepositoryInventoryResult"
+    ],
+    "signatures": [
+      {
+        "label": "(options: GitHubAuthenticatedUserRepositoryInventoryOptions) => Promise<GitHubAuthenticatedUserRepositoryInventoryResult>",
+        "parameters": [
+          {
+            "name": "options",
+            "type": "GitHubAuthenticatedUserRepositoryInventoryOptions",
+            "required": true,
+            "description": null
+          }
+        ],
+        "returnType": "Promise<GitHubAuthenticatedUserRepositoryInventoryResult>",
+        "returnDescription": null
+      }
+    ],
+    "members": [],
+    "structuredRows": []
+  },
+  {
     "name": "discoverGitHubRepositoriesAsync",
     "title": null,
     "description": null,
@@ -123,6 +164,77 @@
     "structuredRows": []
   },
   {
+    "name": "GitHubAuthenticatedUserRepositoryInventoryOptions",
+    "title": null,
+    "description": null,
+    "isReadme": false,
+    "see": [],
+    "security": [],
+    "kind": "type",
+    "modulePath": "src/providers/github/definitions/GitHubAuthenticatedUserRepositoryInventoryOptions.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/definitions/GitHubAuthenticatedUserRepositoryInventoryOptions.ts",
+      "line": 4,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [
+      "GitHubRepositoryUserAuthentication"
+    ],
+    "signatures": [],
+    "members": [
+      {
+        "name": "authentication",
+        "kind": "property",
+        "type": "GitHubRepositoryUserAuthentication",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "signal",
+        "kind": "property",
+        "type": "AbortSignal | undefined",
+        "required": false,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
+    "name": "GitHubAuthenticatedUserRepositoryInventoryResult",
+    "title": null,
+    "description": null,
+    "isReadme": false,
+    "see": [],
+    "security": [],
+    "kind": "type",
+    "modulePath": "src/providers/github/definitions/GitHubAuthenticatedUserRepositoryInventoryResult.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/definitions/GitHubAuthenticatedUserRepositoryInventoryResult.ts",
+      "line": 4,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [
+      "GitHubRepositoryDiscoveryRepository"
+    ],
+    "signatures": [],
+    "members": [
+      {
+        "name": "repositories",
+        "kind": "property",
+        "type": "readonly GitHubRepositoryDiscoveryRepository[]",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
     "name": "GitHubOwnerType",
     "title": null,
     "description": null,
@@ -155,7 +267,7 @@
     "modulePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
     "sourceLocation": {
       "filePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
-      "line": 2,
+      "line": 8,
       "column": 1
     },
     "exportPaths": [
@@ -376,7 +488,7 @@
     "modulePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
     "sourceLocation": {
       "filePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
-      "line": 6,
+      "line": 12,
       "column": 1
     },
     "exportPaths": [
@@ -428,7 +540,9 @@
     "exportPaths": [
       "src/github/index.ts"
     ],
-    "relatedSymbols": [],
+    "relatedSymbols": [
+      "GitHubRepositoryVisibility"
+    ],
     "signatures": [],
     "members": [
       {
@@ -462,7 +576,7 @@
       {
         "name": "visibility",
         "kind": "property",
-        "type": "\"private\" | \"public\"",
+        "type": "GitHubRepositoryVisibility",
         "required": true,
         "description": null
       }
@@ -764,6 +878,43 @@
         "name": "revision",
         "kind": "property",
         "type": "{ readonly commitSha: string; readonly ref: string; }",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
+    "name": "GitHubRepositoryUserAuthentication",
+    "title": null,
+    "description": null,
+    "isReadme": false,
+    "see": [],
+    "security": [],
+    "kind": "type",
+    "modulePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts",
+      "line": 2,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [
+      {
+        "name": "accessToken",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "kind",
+        "kind": "property",
+        "type": "\"user\"",
         "required": true,
         "description": null
       }

@@ -27,6 +27,25 @@ Connect the app project repository using only the standalone `RepositoryManifest
   - options: `RepositoryConnectionOptions`
   - returns: `Promise<RepositoryConnectionResult>`
 
+## discoverGitHubAuthenticatedUserRepositoriesAsync
+
+Kind: `function`
+Module: `src/providers/github/services/discoverGitHubAuthenticatedUserRepositoriesAsync.ts`
+Source: `src/providers/github/services/discoverGitHubAuthenticatedUserRepositoriesAsync.ts:15:1`
+
+List repositories GitHub makes available to one request-scoped authenticated user.
+
+The result represents the caller's current GitHub access, which can be partial when OAuth scope,
+organization approval, SSO, or repository permissions restrict visibility.
+
+Security tests: `discoverGitHubAuthenticatedUserRepositoriesAsync.test.ts#fails closed for malformed public authenticated inventory credentials without network access`
+
+### Signatures
+
+- `(options: GitHubAuthenticatedUserRepositoryInventoryOptions) => Promise<GitHubAuthenticatedUserRepositoryInventoryResult>`
+  - options: `GitHubAuthenticatedUserRepositoryInventoryOptions`
+  - returns: `Promise<GitHubAuthenticatedUserRepositoryInventoryResult>`
+
 ## discoverGitHubRepositoriesAsync
 
 Kind: `function`
@@ -39,6 +58,31 @@ Source: `src/providers/github/services/discoverGitHubRepositoriesAsync.ts:7:1`
   - options: `GitHubRepositoryDiscoveryOptions`
   - returns: `Promise<GitHubRepositoryDiscoveryResult>`
 
+## GitHubAuthenticatedUserRepositoryInventoryOptions
+
+Kind: `type`
+Module: `src/providers/github/definitions/GitHubAuthenticatedUserRepositoryInventoryOptions.ts`
+Source: `src/providers/github/definitions/GitHubAuthenticatedUserRepositoryInventoryOptions.ts:4:1`
+
+### Members
+
+| Name | Kind | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| authentication | property | `GitHubRepositoryUserAuthentication` | yes |  |
+| signal | property | `AbortSignal \| undefined` | no |  |
+
+## GitHubAuthenticatedUserRepositoryInventoryResult
+
+Kind: `type`
+Module: `src/providers/github/definitions/GitHubAuthenticatedUserRepositoryInventoryResult.ts`
+Source: `src/providers/github/definitions/GitHubAuthenticatedUserRepositoryInventoryResult.ts:4:1`
+
+### Members
+
+| Name | Kind | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| repositories | property | `readonly GitHubRepositoryDiscoveryRepository[]` | yes |  |
+
 ## GitHubOwnerType
 
 Kind: `unknown`
@@ -49,7 +93,7 @@ Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts:1:1
 
 Kind: `unknown`
 Module: `src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts`
-Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts:2:1`
+Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts:8:1`
 
 ## GitHubRepositoryConnectionFailure
 
@@ -110,7 +154,7 @@ Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts:21:
 
 Kind: `type`
 Module: `src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts`
-Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts:6:1`
+Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts:12:1`
 
 ### Members
 
@@ -134,7 +178,7 @@ Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts:3:1
 | name | property | `string` | yes |  |
 | owner | property | `string` | yes |  |
 | url | property | `string` | yes |  |
-| visibility | property | `"private" \| "public"` | yes |  |
+| visibility | property | `GitHubRepositoryVisibility` | yes |  |
 
 ## GitHubRepositoryDiscoveryResult
 
@@ -223,6 +267,19 @@ Source: `src/providers/github/definitions/GitHubRepositoryRevisionResolutionResu
 | --- | --- | --- | --- | --- |
 | repository | property | `{ readonly id: string; readonly owner: string; readonly name: string; readonly url: string; readonly defaultBranch: string; }` | yes |  |
 | revision | property | `{ readonly commitSha: string; readonly ref: string; }` | yes |  |
+
+## GitHubRepositoryUserAuthentication
+
+Kind: `type`
+Module: `src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts`
+Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts:2:1`
+
+### Members
+
+| Name | Kind | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| accessToken | property | `string` | yes |  |
+| kind | property | `"user"` | yes |  |
 
 ## GitHubRepositoryVisibility
 
