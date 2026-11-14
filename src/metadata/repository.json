@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "kind": "library",
+  "title": "Ankhorage Repository",
+  "summary": "Connects an application project to a source repository through portable manifests, local snapshot boundaries, and GitHub provider operations.",
+  "purpose": "Provide an independently usable repository capability that can inspect, create, and synchronize project source without coupling application logic to one source-control mechanism.",
+  "domain": "application source repositories",
+  "responsibilities": [
+    "Read project snapshots and persist portable repository connection manifests.",
+    "Coordinate repository connection through explicit source-provider gateways.",
+    "Expose GitHub authentication, inventory, creation, inspection, and synchronization operations through public package boundaries."
+  ],
+  "boundaries": [
+    "Does not own application authoring, deployment, or organization-wide package indexing.",
+    "Does not embed repository credentials in portable manifests.",
+    "Does not require GitHub when a different repository gateway is supplied."
+  ],
+  "audience": [
+    "Applications and tooling that connect a project directory to a source repository.",
+    "Provider authors implementing source-repository gateways."
+  ],
+  "useCases": [
+    "Create a missing GitHub repository and publish a project's source snapshot.",
+    "Inspect repository readiness before connecting an application project.",
+    "Enumerate repositories available to an authenticated GitHub user."
+  ],
+  "architecture": {
+    "role": "Repository capability owner coordinating portable connection policy with replaceable local-state and source-provider ports.",
+    "invariants": [
+      "Portable repository manifests contain no live credentials or provider client objects.",
+      "GitHub-specific transport and authentication stay at provider adapter boundaries.",
+      "Project snapshots and manifests are accessed through explicit ports suitable for standalone use."
+    ]
+  },
+  "constraints": {
+    "configuration": [
+      "GitHub operations require explicit authentication with the scopes needed for the requested repository action."
+    ],
+    "security": [
+      "Repository credentials remain request-scoped provider inputs and are not persisted in portable repository manifests."
+    ]
+  }
+}
