@@ -6,7 +6,7 @@
       "name": "@ankhorage/repository",
       "dependencies": {
         "@ankhorage/ankh": "^0.13.3",
-        "@ankhorage/capability": "^0.2.2",
+        "@ankhorage/capability": "^0.2.3",
         "@ankhorage/contracts": "^26.11.1",
         "ignore": "^7.0.14",
       },
