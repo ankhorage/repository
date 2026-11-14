@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.10.5
+
+### Patch Changes
+
+- e8ac986: Add canonical authored repository metadata for organization-wide tooling and documentation consumers.
+
 ## 0.10.4
 
 ### Patch Changes
