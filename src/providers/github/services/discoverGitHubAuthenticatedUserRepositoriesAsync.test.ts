@@ -1,6 +1,6 @@
 import { expect, test } from 'bun:test';
 
-import { discoverGitHubAuthenticatedUserRepositoriesAsync } from './index.js';
+import { discoverGitHubAuthenticatedUserRepositoriesAsync } from '../../../github/index.js';
 
 test('fails closed for malformed public authenticated inventory credentials without network access', async () => {
   const originalToken = process.env.GITHUB_TOKEN;
