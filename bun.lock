@@ -5,13 +5,13 @@
     "": {
       "name": "@ankhorage/repository",
       "dependencies": {
-        "@ankhorage/ankh": "^0.13.3",
+        "@ankhorage/ankh": "^0.13.6",
         "@ankhorage/capability": "^0.2.2",
         "@ankhorage/contracts": "^26.11.1",
         "ignore": "^7.0.14",
       },
       "devDependencies": {
-        "@ankhorage/devtools": "^2.3.47",
+        "@ankhorage/devtools": "^2.7.0",
         "@ankhorage/paradox": "^0.4.0",
         "@types/bun": "^1.4.2",
         "@types/node": "^26.6.6",
