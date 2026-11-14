@@ -3,7 +3,7 @@
 
 # @ankhorage/repository
 
-![license: MIT](./paradox/badges/license.svg) ![npm: v0.10.2](./paradox/badges/npm.svg) ![runtime: bun](./paradox/badges/runtime.svg) ![typescript: strict](./paradox/badges/typescript.svg) ![eslint: checked](./paradox/badges/eslint.svg) ![prettier: checked](./paradox/badges/prettier.svg) ![build: checked](./paradox/badges/build.svg) ![tests: checked](./paradox/badges/tests.svg) ![paradox: warnings](./paradox/badges/docs.svg)
+![license: MIT](./paradox/badges/license.svg) ![npm: v0.10.3](./paradox/badges/npm.svg) ![runtime: bun](./paradox/badges/runtime.svg) ![typescript: strict](./paradox/badges/typescript.svg) ![eslint: checked](./paradox/badges/eslint.svg) ![prettier: checked](./paradox/badges/prettier.svg) ![build: checked](./paradox/badges/build.svg) ![tests: checked](./paradox/badges/tests.svg) ![paradox: warnings](./paradox/badges/docs.svg)
 
 Standalone repository capability for connecting and managing an app project's source repository.
 
@@ -32,11 +32,17 @@ whether the repository is ready for use.
 import { connectRepositoryAsync } from '@ankhorage/repository';
 ```
 
-## Generated documentation
+## Documentation
 
-- [Interactive documentation app](./paradox/index.html)
-- [Public API reference](./paradox/exports.md)
-- [Component registry](./paradox/components.md)
-- [Architecture overview](./paradox/diagrams/architecture-overview.mmd)
-- [Module relationships](./paradox/diagrams/module-relationships.mmd)
-- [Export graph](./paradox/diagrams/export-graph.mmd)
+Open `paradox/index.html` locally in your browser to browse the complete documentation.
+
+## Contributors
+
+<!-- readme: contributors -start -->
+<!-- readme: contributors -end -->
+
+## Donation
+
+If this project is useful to you, you can support its continued development.
+
+[Support @ankhorage](https://github.com/sponsors/ankhorage)

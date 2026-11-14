@@ -2,8 +2,10 @@
   "packageName": "@ankhorage/repository",
   "packageId": "@ankhorage/repository",
   "description": "Standalone repository capability for connecting and managing an app project's source repository.",
-  "collaborators": null,
-  "donation": null,
+  "collaborators": true,
+  "donation": {
+    "account": "ankhorage"
+  },
   "badges": [
     {
       "id": "license",
@@ -14,7 +16,7 @@
     {
       "id": "npm",
       "label": "npm",
-      "value": "v0.10.2",
+      "value": "v0.10.3",
       "color": "cb3837"
     },
     {
