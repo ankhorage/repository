@@ -1,7 +1,8 @@
 {
   "packageName": "@ankhorage/repository",
   "packageId": "@ankhorage/repository",
-  "description": "Standalone repository capability for connecting and managing an app project's source repository.",
+  "description": "Connects an application project to a source repository through portable manifests, local snapshot boundaries, and GitHub provider operations.",
+  "purpose": "Provide an independently usable repository capability that can inspect, create, and synchronize project source without coupling application logic to one source-control mechanism.",
   "collaborators": true,
   "donation": {
     "account": "ankhorage"
@@ -16,7 +17,7 @@
     {
       "id": "npm",
       "label": "npm",
-      "value": "v0.10.6",
+      "value": "v0.10.7",
       "color": "cb3837"
     },
     {
