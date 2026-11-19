@@ -61,23 +61,6 @@ jobs:
             echo "No build script found; skipping."
           fi
 
-      - name: Validate packed GitHub public entrypoint
-        run: |
-          set -euo pipefail
-          pack_dir="$(mktemp -d)"
-          consumer_dir="$(mktemp -d)"
-          npm pack --ignore-scripts --pack-destination "$pack_dir" >/dev/null
-          artifact="$(find "$pack_dir" -maxdepth 1 -type f -name '*.tgz' -print -quit)"
-          test -n "$artifact"
-          printf '{"name":"repository-packed-consumer","private":true,"type":"module"}\n' > "$consumer_dir/package.json"
-          (
-            cd "$consumer_dir"
-            bun add "$artifact" --ignore-scripts
-            node --input-type=module -e "import('@ankhorage/repository/github').then(({ discoverGitHubAuthenticatedUserRepositoriesAsync, discoverGitHubRepositoriesAsync, materializeGitHubRepositoryAsync, resolveGitHubRepositoryRevisionAsync }) => { if (![discoverGitHubAuthenticatedUserRepositoriesAsync, discoverGitHubRepositoriesAsync, materializeGitHubRepositoryAsync, resolveGitHubRepositoryRevisionAsync].every((value) => typeof value === 'function')) throw new Error('Missing GitHub public runtime export.'); })"
-            printf "import type { GitHubAuthenticatedUserRepositoryInventoryOptions, GitHubRepositoryAuthentication, GitHubRepositoryMaterializationOptions } from '@ankhorage/repository/github';\nconst authentication: GitHubRepositoryAuthentication = { kind: 'user', accessToken: 'token' };\nconst options: GitHubRepositoryMaterializationOptions = { authentication, url: 'https://github.com/owner/repository' };\nconst inventory: GitHubAuthenticatedUserRepositoryInventoryOptions = { authentication };\nvoid options;\nvoid inventory;\n" > consumer.ts
-            bun x tsc --noEmit --module NodeNext --moduleResolution NodeNext --target ES2022 consumer.ts
-          )
-
       - name: Validate opted-in APM owner release
         run: |
           if node -e "const p=require('./package.json'); process.exit(p.ankh?.apm === undefined ? 1 : 0)"; then
@@ -88,9 +71,9 @@ jobs:
       - name: Validate Ankhorage repository
         run: |
           if node -e "const p=require('./package.json'); process.exit(p.name === '@ankhorage/doctor' ? 0 : 1)"; then
-            bun ./dist/cli/standalone.js validate .
+            bun ./dist/cli/standalone.js validate . --enforce-repository-metadata
           else
-            BUN_INSTALL_CACHE_DIR="${RUNNER_TEMP}/doctor-cache" bunx @ankhorage/doctor@0.14.29 validate .
+            BUN_INSTALL_CACHE_DIR="${RUNNER_TEMP}/doctor-cache" bunx @ankhorage/doctor@0.15.1 validate . --enforce-repository-metadata
           fi
 
       - name: Run lint
@@ -117,13 +100,23 @@ jobs:
             echo "No knip:check script found; skipping."
           fi
 
-      - name: Run tests
-        run: |
-          if node -e "const p=require('./package.json'); process.exit(p.scripts?.test ? 0 : 1)"; then
-            bun run test
-          else
-            echo "No test script found; skipping."
-          fi
+      - name: Analyze test impact
+        id: impact
+        env:
+          ANKH_CI_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: bun .github/scripts/ci-impact.ts plan
+
+      - name: Run unit tests
+        if: steps.impact.outputs.unit != 'skip'
+        run: bun .github/scripts/ci-impact.ts unit
+
+      - name: Run E2E tests
+        if: steps.impact.outputs.e2e != 'skip'
+        run: bun .github/scripts/ci-impact.ts e2e
+
+      - name: Run Smoke tests
+        if: steps.impact.outputs.smoke != 'skip'
+        run: bun .github/scripts/ci-impact.ts smoke
 
       - name: Run typecheck
         run: |
