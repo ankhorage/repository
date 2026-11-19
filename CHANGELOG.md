@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.10.9
+
+### Patch Changes
+
+- ff525af: Update dependencies: `@ankhorage/ankh`, `@ankhorage/devtools`.
+
 ## 0.10.8
 
 ### Patch Changes

@@ -3,6 +3,7 @@
   "packageId": "@ankhorage/repository",
   "description": "Connects an application project to a source repository through portable manifests, local snapshot boundaries, and GitHub provider operations.",
   "purpose": "Provide an independently usable repository capability that can inspect, create, and synchronize project source without coupling application logic to one source-control mechanism.",
+  "productDocumentation": null,
   "collaborators": true,
   "donation": {
     "account": "ankhorage"
@@ -17,7 +18,7 @@
     {
       "id": "npm",
       "label": "npm",
-      "value": "v0.10.8",
+      "value": "v0.10.9",
       "color": "cb3837"
     },
     {
@@ -53,8 +54,8 @@
     {
       "id": "tests",
       "label": "tests",
-      "value": "checked",
-      "color": "0a7f3f"
+      "value": "configured",
+      "color": "6f42c1"
     },
     {
       "id": "docs",
