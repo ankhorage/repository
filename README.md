@@ -3,7 +3,7 @@
 
 # @ankhorage/repository
 
-![license: MIT](./paradox/badges/license.svg) ![npm: v0.10.10](./paradox/badges/npm.svg) ![runtime: bun](./paradox/badges/runtime.svg) ![typescript: strict](./paradox/badges/typescript.svg) ![eslint: checked](./paradox/badges/eslint.svg) ![prettier: checked](./paradox/badges/prettier.svg) ![build: checked](./paradox/badges/build.svg) ![tests: configured](./paradox/badges/tests.svg) ![paradox: warnings](./paradox/badges/docs.svg)
+![license: MIT](./paradox/badges/license.svg) ![npm: v0.10.11](./paradox/badges/npm.svg) ![runtime: bun](./paradox/badges/runtime.svg) ![typescript: strict](./paradox/badges/typescript.svg) ![eslint: checked](./paradox/badges/eslint.svg) ![prettier: checked](./paradox/badges/prettier.svg) ![build: checked](./paradox/badges/build.svg) ![tests: configured](./paradox/badges/tests.svg) ![paradox: warnings](./paradox/badges/docs.svg)
 
 Connects an application project to a source repository through portable manifests, local snapshot boundaries, and GitHub provider operations.
 

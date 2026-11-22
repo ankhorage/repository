@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.10.11
+
+### Patch Changes
+
+- fa48cb9: Update dependencies: `@ankhorage/contracts`.
+
 ## 0.10.10
 
 ### Patch Changes
