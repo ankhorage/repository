@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.10.14
+
+### Patch Changes
+
+- e1caf08: Update dependencies: `@ankhorage/contracts`.
+
 ## 0.10.13
 
 ### Patch Changes
