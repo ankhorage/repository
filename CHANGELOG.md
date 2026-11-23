@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.10.15
+
+### Patch Changes
+
+- 2df1099: Update dependencies: `@ankhorage/contracts`.
+
 ## 0.10.14
 
 ### Patch Changes
