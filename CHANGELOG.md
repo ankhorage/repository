@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.10.16
+
+### Patch Changes
+
+- b577308: Update dependencies: `ignore`.
+
 ## 0.10.15
 
 ### Patch Changes
