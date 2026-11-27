@@ -235,6 +235,12 @@ function requestError(
   if (response.status === 404 && subject === 'owner') {
     return new GitHubRepositoryDiscoveryError('owner-not-found', 'GitHub owner was not found.');
   }
+  if (response.status === 404 && (subject === 'repository metadata' || subject === 'branch list')) {
+    return new GitHubRepositoryDiscoveryError(
+      'repository-not-found',
+      'GitHub repository was not found.',
+    );
+  }
   if (response.status === 401 || response.status === 403) {
     return new GitHubRepositoryDiscoveryError(
       'permission-denied',

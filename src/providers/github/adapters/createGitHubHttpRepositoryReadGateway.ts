@@ -1,5 +1,6 @@
 import type {
   GitHubAuthenticatedUserRepositoryInventoryGateway,
+  GitHubRepositoryBranchDiscoveryGateway,
   GitHubRepositoryDiscoveryGateway,
 } from '../ports/GitHubRepositoryDiscoveryGateway.js';
 import type {
@@ -23,7 +24,8 @@ export function createGitHubHttpRepositoryReadGateway(
   options: GitHubHttpClientOptions = {},
 ): GitHubRepositoryReadGateway &
   GitHubRepositoryDiscoveryGateway &
-  GitHubAuthenticatedUserRepositoryInventoryGateway {
+  GitHubAuthenticatedUserRepositoryInventoryGateway &
+  GitHubRepositoryBranchDiscoveryGateway {
   const client = createGitHubHttpClient(fetcher, options);
   const discoveryGateway = createGitHubHttpRepositoryDiscoveryGateway((url, subject, signal) =>
     client.requestJsonResponseAsync(url, subject, signal),

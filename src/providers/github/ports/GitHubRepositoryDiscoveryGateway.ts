@@ -27,3 +27,11 @@ export interface GitHubAuthenticatedUserRepositoryInventoryGateway {
     signal?: AbortSignal,
   ): Promise<readonly GitHubDiscoveredRepository[]>;
 }
+
+/** Read-only provider boundary for branch names visible for one repository. */
+export interface GitHubRepositoryBranchDiscoveryGateway {
+  listRepositoryBranchesAsync(
+    target: { readonly owner: string; readonly name: string },
+    signal?: AbortSignal,
+  ): Promise<readonly string[]>;
+}

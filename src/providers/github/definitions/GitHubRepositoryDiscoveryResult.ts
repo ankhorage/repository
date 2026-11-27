@@ -25,6 +25,7 @@ export type GitHubRepositoryDiscoveryErrorCode =
   | 'owner-not-found'
   | 'permission-denied'
   | 'rate-limited'
+  | 'repository-not-found'
   | 'timeout';
 
 /** A stable, credential-free error reported by GitHub repository discovery. */

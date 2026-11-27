@@ -2,6 +2,7 @@ import { GitHubRepositoryDiscoveryError } from '../definitions/GitHubRepositoryD
 import type {
   GitHubAuthenticatedUserRepositoryInventoryGateway,
   GitHubDiscoveredRepository,
+  GitHubRepositoryBranchDiscoveryGateway,
   GitHubRepositoryDiscoveryGateway,
   GitHubRepositoryOwner,
 } from '../ports/GitHubRepositoryDiscoveryGateway.js';
@@ -14,6 +15,7 @@ type RequestJsonResponseAsync = (
 
 const API_ORIGIN = 'https://api.github.com';
 const MAX_REPOSITORY_PAGES = 1_000;
+const MAX_BRANCH_PAGES = 1_000;
 const AUTHENTICATED_INVENTORY_FILTERS = {
   affiliation: 'owner,collaborator,organization_member',
   per_page: '100',
@@ -23,7 +25,9 @@ const AUTHENTICATED_INVENTORY_FILTERS = {
 /** Create the discovery adapter from the shared GitHub HTTP requester. */
 export function createGitHubHttpRepositoryDiscoveryGateway(
   requestJsonResponseAsync: RequestJsonResponseAsync,
-): GitHubRepositoryDiscoveryGateway & GitHubAuthenticatedUserRepositoryInventoryGateway {
+): GitHubRepositoryDiscoveryGateway &
+  GitHubAuthenticatedUserRepositoryInventoryGateway &
+  GitHubRepositoryBranchDiscoveryGateway {
   return {
     resolveOwnerAsync: (owner, signal) =>
       resolveOwnerAsync(requestJsonResponseAsync, owner, signal),
@@ -31,7 +35,49 @@ export function createGitHubHttpRepositoryDiscoveryGateway(
       listOwnerRepositoriesAsync(requestJsonResponseAsync, owner, signal),
     listAuthenticatedUserRepositoriesAsync: (signal) =>
       listAuthenticatedUserRepositoriesAsync(requestJsonResponseAsync, signal),
+    listRepositoryBranchesAsync: (target, signal) =>
+      listRepositoryBranchesAsync(requestJsonResponseAsync, target, signal),
   };
+}
+
+/** Read every visible branch name from GitHub's repository branch endpoint. */
+async function listRepositoryBranchesAsync(
+  requestJsonResponseAsync: RequestJsonResponseAsync,
+  target: { readonly owner: string; readonly name: string },
+  signal: AbortSignal | undefined,
+): Promise<readonly string[]> {
+  let nextUrl: string | undefined =
+    `${API_ORIGIN}/repos/${encodeURIComponent(target.owner)}/${encodeURIComponent(target.name)}/branches?per_page=100`;
+  let previousPage = 1;
+  const branches = new Set<string>();
+  const visitedUrls = new Set<string>();
+  const path = `/repos/${encodeURIComponent(target.owner)}/${encodeURIComponent(target.name)}/branches`;
+  while (nextUrl !== undefined && visitedUrls.size < MAX_BRANCH_PAGES) {
+    if (visitedUrls.has(nextUrl)) {
+      throw new GitHubRepositoryDiscoveryError(
+        'api-failure',
+        'GitHub returned a repeated branch pagination URL.',
+      );
+    }
+    visitedUrls.add(nextUrl);
+    const page = await requestJsonResponseAsync(nextUrl, 'branch list', signal);
+    if (!Array.isArray(page.value)) {
+      throw new GitHubRepositoryDiscoveryError(
+        'api-failure',
+        'GitHub returned an invalid branch list.',
+      );
+    }
+    for (const value of page.value) branches.add(parseBranchName(value));
+    nextUrl = nextPageUrl(page.link, { path, filters: { per_page: '100' } }, previousPage);
+    if (nextUrl !== undefined) previousPage = pageNumber(new URL(nextUrl));
+  }
+  if (nextUrl !== undefined) {
+    throw new GitHubRepositoryDiscoveryError(
+      'api-failure',
+      'GitHub branch pagination exceeded the supported limit.',
+    );
+  }
+  return [...branches].sort((left, right) => left.localeCompare(right));
 }
 
 /** Resolve a login through GitHub rather than inferring whether it names a user or organization. */
@@ -148,6 +194,11 @@ function parseDiscoveredRepository(value: unknown): GitHubDiscoveredRepository {
     url: requireString(record.html_url, 'repository URL'),
     visibility: parseRepositoryVisibility(record),
   };
+}
+
+/** Parse one credential-free branch identity from GitHub's branch response. */
+function parseBranchName(value: unknown): string {
+  return requireString(requireRecord(value, 'branch').name, 'branch name');
 }
 
 /** Select the next GitHub pagination target while rejecting an unexpected cross-origin link. */

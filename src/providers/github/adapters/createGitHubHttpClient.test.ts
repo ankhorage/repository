@@ -57,6 +57,17 @@ test('rejects a blank request-scoped user access token before an HTTP request', 
   expect(requests).toBe(0);
 });
 
+test('keeps a missing repository distinct from permission and rate-limit failures', async () => {
+  const client = createGitHubHttpClient(((_input: string | URL | Request) =>
+    Promise.resolve(new Response('', { status: 404 }))) as typeof fetch);
+  await expect(
+    client.requestJsonResponseAsync(
+      'https://api.github.com/repos/owner/repository',
+      'repository metadata',
+    ),
+  ).rejects.toMatchObject({ code: 'repository-not-found' });
+});
+
 test('cancels an in-flight request through its combined fetch signal', () => {
   const controller = new AbortController();
   const client = createGitHubHttpClient(
