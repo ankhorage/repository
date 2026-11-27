@@ -58,6 +58,18 @@ Source: `src/providers/github/services/discoverGitHubRepositoriesAsync.ts:7:1`
   - options: `GitHubRepositoryDiscoveryOptions`
   - returns: `Promise<GitHubRepositoryDiscoveryResult>`
 
+## discoverGitHubRepositoryBranchesAsync
+
+Kind: `function`
+Module: `src/providers/github/services/discoverGitHubRepositoryBranchesAsync.ts`
+Source: `src/providers/github/services/discoverGitHubRepositoryBranchesAsync.ts:7:1`
+
+### Signatures
+
+- `(options: GitHubRepositoryBranchDiscoveryOptions) => Promise<GitHubRepositoryBranchDiscoveryResult>`
+  - options: `GitHubRepositoryBranchDiscoveryOptions`
+  - returns: `Promise<GitHubRepositoryBranchDiscoveryResult>`
+
 ## GitHubAuthenticatedUserRepositoryInventoryOptions
 
 Kind: `type`
@@ -94,6 +106,33 @@ Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts:1:1
 Kind: `unknown`
 Module: `src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts`
 Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryOptions.ts:8:1`
+
+## GitHubRepositoryBranchDiscoveryOptions
+
+Kind: `type`
+Module: `src/providers/github/definitions/GitHubRepositoryBranchDiscoveryOptions.ts`
+Source: `src/providers/github/definitions/GitHubRepositoryBranchDiscoveryOptions.ts:4:1`
+
+### Members
+
+| Name | Kind | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| authentication | property | `GitHubRepositoryAuthentication \| undefined` | no |  |
+| signal | property | `AbortSignal \| undefined` | no |  |
+| url | property | `string` | yes |  |
+
+## GitHubRepositoryBranchDiscoveryResult
+
+Kind: `type`
+Module: `src/providers/github/definitions/GitHubRepositoryBranchDiscoveryResult.ts`
+Source: `src/providers/github/definitions/GitHubRepositoryBranchDiscoveryResult.ts:2:1`
+
+### Members
+
+| Name | Kind | Type | Required | Description |
+| --- | --- | --- | --- | --- |
+| branches | property | `readonly string[]` | yes |  |
+| repository | property | `{ readonly id: string; readonly owner: string; readonly name: string; readonly url: string; readonly defaultBranch: string; }` | yes |  |
 
 ## GitHubRepositoryConnectionFailure
 
@@ -142,7 +181,7 @@ Source: `src/providers/github/definitions/GitHubRepositoryConnectionResult.ts:1:
 
 Kind: `type`
 Module: `src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts`
-Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts:31:1`
+Source: `src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts:32:1`
 
 ## GitHubRepositoryDiscoveryErrorCode
 

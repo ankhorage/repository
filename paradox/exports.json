@@ -164,6 +164,45 @@
     "structuredRows": []
   },
   {
+    "name": "discoverGitHubRepositoryBranchesAsync",
+    "title": null,
+    "description": null,
+    "isReadme": false,
+    "see": [],
+    "security": [],
+    "kind": "function",
+    "modulePath": "src/providers/github/services/discoverGitHubRepositoryBranchesAsync.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/services/discoverGitHubRepositoryBranchesAsync.ts",
+      "line": 7,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [
+      "GitHubRepositoryBranchDiscoveryOptions",
+      "GitHubRepositoryBranchDiscoveryResult"
+    ],
+    "signatures": [
+      {
+        "label": "(options: GitHubRepositoryBranchDiscoveryOptions) => Promise<GitHubRepositoryBranchDiscoveryResult>",
+        "parameters": [
+          {
+            "name": "options",
+            "type": "GitHubRepositoryBranchDiscoveryOptions",
+            "required": true,
+            "description": null
+          }
+        ],
+        "returnType": "Promise<GitHubRepositoryBranchDiscoveryResult>",
+        "returnDescription": null
+      }
+    ],
+    "members": [],
+    "structuredRows": []
+  },
+  {
     "name": "GitHubAuthenticatedUserRepositoryInventoryOptions",
     "title": null,
     "description": null,
@@ -276,6 +315,89 @@
     "relatedSymbols": [],
     "signatures": [],
     "members": [],
+    "structuredRows": []
+  },
+  {
+    "name": "GitHubRepositoryBranchDiscoveryOptions",
+    "title": null,
+    "description": null,
+    "isReadme": false,
+    "see": [],
+    "security": [],
+    "kind": "type",
+    "modulePath": "src/providers/github/definitions/GitHubRepositoryBranchDiscoveryOptions.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/definitions/GitHubRepositoryBranchDiscoveryOptions.ts",
+      "line": 4,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [
+      "GitHubRepositoryAuthentication"
+    ],
+    "signatures": [],
+    "members": [
+      {
+        "name": "authentication",
+        "kind": "property",
+        "type": "GitHubRepositoryAuthentication | undefined",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "signal",
+        "kind": "property",
+        "type": "AbortSignal | undefined",
+        "required": false,
+        "description": null
+      },
+      {
+        "name": "url",
+        "kind": "property",
+        "type": "string",
+        "required": true,
+        "description": null
+      }
+    ],
+    "structuredRows": []
+  },
+  {
+    "name": "GitHubRepositoryBranchDiscoveryResult",
+    "title": null,
+    "description": null,
+    "isReadme": false,
+    "see": [],
+    "security": [],
+    "kind": "type",
+    "modulePath": "src/providers/github/definitions/GitHubRepositoryBranchDiscoveryResult.ts",
+    "sourceLocation": {
+      "filePath": "src/providers/github/definitions/GitHubRepositoryBranchDiscoveryResult.ts",
+      "line": 2,
+      "column": 1
+    },
+    "exportPaths": [
+      "src/github/index.ts"
+    ],
+    "relatedSymbols": [],
+    "signatures": [],
+    "members": [
+      {
+        "name": "branches",
+        "kind": "property",
+        "type": "readonly string[]",
+        "required": true,
+        "description": null
+      },
+      {
+        "name": "repository",
+        "kind": "property",
+        "type": "{ readonly id: string; readonly owner: string; readonly name: string; readonly url: string; readonly defaultBranch: string; }",
+        "required": true,
+        "description": null
+      }
+    ],
     "structuredRows": []
   },
   {
@@ -444,7 +566,7 @@
     "modulePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
     "sourceLocation": {
       "filePath": "src/providers/github/definitions/GitHubRepositoryDiscoveryResult.ts",
-      "line": 31,
+      "line": 32,
       "column": 1
     },
     "exportPaths": [

@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.11.0
+
+### Minor Changes
+
+- 780a9f7: Add credential-safe GitHub repository branch discovery through the public GitHub API.
+
 ## 0.10.17
 
 ### Patch Changes
