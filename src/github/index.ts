@@ -1,5 +1,7 @@
 export type { GitHubAuthenticatedUserRepositoryInventoryOptions } from '../providers/github/definitions/GitHubAuthenticatedUserRepositoryInventoryOptions.js';
 export type { GitHubAuthenticatedUserRepositoryInventoryResult } from '../providers/github/definitions/GitHubAuthenticatedUserRepositoryInventoryResult.js';
+export type { GitHubRepositoryBranchDiscoveryOptions } from '../providers/github/definitions/GitHubRepositoryBranchDiscoveryOptions.js';
+export type { GitHubRepositoryBranchDiscoveryResult } from '../providers/github/definitions/GitHubRepositoryBranchDiscoveryResult.js';
 export type { GitHubRepositoryConnectionOptions } from '../providers/github/definitions/GitHubRepositoryConnectionOptions.js';
 export type {
   GitHubRepositoryConnectionFailure,
@@ -29,5 +31,6 @@ export type { GitHubRepositoryVisibility } from '../providers/github/definitions
 export { connectGitHubRepositoryAsync } from '../providers/github/services/connectGitHubRepositoryAsync.js';
 export { discoverGitHubAuthenticatedUserRepositoriesAsync } from '../providers/github/services/discoverGitHubAuthenticatedUserRepositoriesAsync.js';
 export { discoverGitHubRepositoriesAsync } from '../providers/github/services/discoverGitHubRepositoriesAsync.js';
+export { discoverGitHubRepositoryBranchesAsync } from '../providers/github/services/discoverGitHubRepositoryBranchesAsync.js';
 export { materializeGitHubRepositoryAsync } from '../providers/github/services/materializeGitHubRepositoryAsync.js';
 export { resolveGitHubRepositoryRevisionAsync } from '../providers/github/services/resolveGitHubRepositoryRevisionAsync.js';

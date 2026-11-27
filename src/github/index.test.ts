@@ -6,5 +6,6 @@ test('exports public GitHub operations', () => {
   expect(github.resolveGitHubRepositoryRevisionAsync).toBeFunction();
   expect(github.materializeGitHubRepositoryAsync).toBeFunction();
   expect(github.discoverGitHubRepositoriesAsync).toBeFunction();
+  expect(github.discoverGitHubRepositoryBranchesAsync).toBeFunction();
   expect(github.discoverGitHubAuthenticatedUserRepositoriesAsync).toBeFunction();
 });
