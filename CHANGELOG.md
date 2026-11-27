@@ -1,5 +1,11 @@
 # @ankhorage/repository
 
+## 0.10.17
+
+### Patch Changes
+
+- 9a3f801: Update dependencies: `@ankhorage/contracts`.
+
 ## 0.10.16
 
 ### Patch Changes
